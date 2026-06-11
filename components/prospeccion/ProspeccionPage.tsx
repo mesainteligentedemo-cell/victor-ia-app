@@ -68,13 +68,13 @@ export default function ProspeccionPage() {
   >([
     {
       id: "1",
-      from: "MarÃ­a GarcÃ­a",
+      from: "María García",
       timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
       status: "Shared video for campaign",
     },
     {
       id: "2",
-      from: "Carlos LÃ³pez",
+      from: "Carlos López",
       timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000),
       status: "Waiting on image approval",
     },
