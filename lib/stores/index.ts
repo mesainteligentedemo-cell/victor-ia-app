@@ -1,7 +1,10 @@
-/**
- * STORES MODULE — BARREL EXPORT
- * Central entry point for all store exports
- */
-
-export { useProspeccionStore } from './prospeccion.store';
-export type { ProspeccionState } from './prospeccion.store';
+export { useGeneratorsStore } from './generators.store';
+export { useAgentsStore } from './agents.store';
+export { useCRMStore } from './crm.store';
+export { useAutomationStore } from './automation.store';
+export { useAnalyticsStore } from './analytics.store';
+export { useTrainingStore } from './training.store';
+export { useHRStore } from './hr.store';
+export { useFinanceStore } from './finance.store';
+export { useIntegrationsStore } from './integrations.store';
+export { useUIStore } from './ui.store';

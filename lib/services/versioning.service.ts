@@ -1,38 +1,55 @@
-﻿export interface GenerationVersion {
+import { db } from '@/lib/db/supabase';
+
+export interface Version {
   id: string;
-  generationId: string;
-  timestamp: Date;
-  author: string;
+  projectId: string;
+  userId: string;
+  versionNumber: number;
   name: string;
-  metadata?: Record<string, any>;
+  description: string;
+  content: Record<string, any>;
+  createdAt: Date;
 }
 
-export class VersioningService {
-  private versions: Map<string, GenerationVersion[]> = new Map();
+export const VersioningService = {
+  async createVersion(projectId: string, userId: string, name: string, description: string, content: Record<string, any>): Promise<Version> {
+    const { data: lastVersion } = await db.from('versions').select('version_number').eq('project_id', projectId).order('version_number', { ascending: false }).limit(1);
 
-  async saveVersion(generationId: string, name: string, author: string): Promise<GenerationVersion> {
-    const version: GenerationVersion = {
-      id: `v-${Date.now()}`,
-      generationId,
-      timestamp: new Date(),
-      author,
+    const versionNumber = (lastVersion?.[0]?.version_number || 0) + 1;
+
+    const version: Version = {
+      id: Math.random().toString(36).substring(7),
+      projectId,
+      userId,
+      versionNumber,
       name,
+      description,
+      content,
+      createdAt: new Date()
     };
 
-    if (!this.versions.has(generationId)) {
-      this.versions.set(generationId, []);
-    }
-    this.versions.get(generationId)!.push(version);
-
+    await db.from('versions').insert(version);
     return version;
-  }
+  },
 
-  async getVersionHistory(generationId: string): Promise<GenerationVersion[]> {
-    return this.versions.get(generationId) || [];
-  }
+  async getVersions(projectId: string): Promise<Version[]> {
+    const { data } = await db.from('versions').select('*').eq('project_id', projectId).order('version_number', { ascending: false });
+    return data || [];
+  },
 
-  async rollback(generationId: string, versionIndex: number): Promise<GenerationVersion | null> {
-    const versions = this.versions.get(generationId);
-    return versions && versionIndex < versions.length ? versions[versionIndex] : null;
+  async restoreVersion(versionId: string): Promise<Version | null> {
+    const { data } = await db.from('versions').select('*').eq('id', versionId).single();
+    return data || null;
+  },
+
+  async compareVersions(versionId1: string, versionId2: string): Promise<any> {
+    const { data: v1 } = await db.from('versions').select('*').eq('id', versionId1).single();
+    const { data: v2 } = await db.from('versions').select('*').eq('id', versionId2).single();
+
+    return {
+      version1: v1,
+      version2: v2,
+      differences: []
+    };
   }
-}
+};

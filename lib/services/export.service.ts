@@ -1,42 +1,42 @@
-﻿export type ExportTarget = "instagram" | "tiktok" | "linkedin" | "youtube" | "email";
+import { db } from '@/lib/db/supabase';
 
-export interface ExportedAsset {
-  url: string;
-  platform: ExportTarget;
-  caption?: string;
-  hashtags?: string[];
-  scheduledFor?: Date;
+export interface ExportJob {
+  id: string;
+  userId: string;
+  type: 'csv' | 'json' | 'pdf' | 'excel';
+  dataType: 'prospects' | 'activities' | 'generations' | 'agents' | 'full';
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  downloadUrl?: string;
+  createdAt: Date;
+  completedAt?: Date;
 }
 
-export class ExportService {
-  async exportTo(assetUrl: string, platform: ExportTarget, prompt: string): Promise<ExportedAsset> {
-    const hashtags = this.generateHashtags(platform, prompt);
-    const caption = this.generateCaption(platform, prompt);
-
-    return {
-      url: assetUrl,
-      platform,
-      caption,
-      hashtags,
+export const ExportService = {
+  async createExport(userId: string, type: ExportJob['type'], dataType: ExportJob['dataType']): Promise<ExportJob> {
+    const job: ExportJob = {
+      id: Math.random().toString(36).substring(7),
+      userId,
+      type,
+      dataType,
+      status: 'pending',
+      createdAt: new Date()
     };
-  }
 
-  private generateHashtags(platform: ExportTarget, prompt: string): string[] {
-    const base = ["#creative", "#ai", "#media"];
-    if (platform === "tiktok") return [...base, "#foryou", "#viral", "#trending"];
-    if (platform === "instagram") return [...base, "#instagood", "#photooftheday"];
-    if (platform === "linkedin") return [...base, "#professional", "#business"];
-    return base;
-  }
+    await db.from('export_jobs').insert(job);
+    return job;
+  },
 
-  private generateCaption(platform: ExportTarget, prompt: string): string {
-    if (platform === "tiktok") return `Check this out! 🎬 #FYP #Viral`;
-    if (platform === "instagram") return `Created with AI 🎨 Link in bio`;
-    if (platform === "linkedin") return `Innovative content creation with AI technology`;
-    return prompt.substring(0, 100) + "...";
-  }
+  async getExportStatus(jobId: string): Promise<ExportJob | null> {
+    const { data } = await db.from('export_jobs').select('*').eq('id', jobId).single();
+    return data || null;
+  },
 
-  async schedulePublish(assetUrl: string, platform: ExportTarget, datetime: Date): Promise<void> {
-    console.log(`Scheduled ${platform} post for ${datetime}`);
+  async updateExportStatus(jobId: string, status: ExportJob['status'], downloadUrl?: string): Promise<void> {
+    await db.from('export_jobs').update({ status, downloadUrl, completedAt: status === 'completed' ? new Date() : undefined }).eq('id', jobId);
+  },
+
+  async listExports(userId: string, limit: number = 20): Promise<ExportJob[]> {
+    const { data } = await db.from('export_jobs').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(limit);
+    return data || [];
   }
-}
+};
