@@ -174,21 +174,21 @@ export default function ResultsGallery({
     switch (asset.status) {
       case "completed":
         return (
-          <div className="flex items-center gap-1 px-2 py-1 bg-green-500/20 text-gray-600 rounded-full text-xs font-medium">
+          <div className="flex items-center gap-1 px-2 py-1 bg-green-500/20 text-gray-600 dark:text-gray-200 rounded-full text-xs font-medium">
             <CheckCircle size={12} />
             Aprobado
           </div>
         );
       case "generating":
         return (
-          <div className="flex items-center gap-1 px-2 py-1 bg-blue-500/20 text-gray-600 rounded-full text-xs font-medium">
+          <div className="flex items-center gap-1 px-2 py-1 bg-blue-500/20 text-gray-600 dark:text-gray-200 rounded-full text-xs font-medium">
             <Loader size={12} className="animate-spin" />
             Generando
           </div>
         );
       case "failed":
         return (
-          <div className="flex items-center gap-1 px-2 py-1 bg-red-500/20 text-gray-600 rounded-full text-xs font-medium">
+          <div className="flex items-center gap-1 px-2 py-1 bg-red-500/20 text-gray-600 dark:text-gray-200 rounded-full text-xs font-medium">
             <AlertCircle size={12} />
             Error
           </div>
@@ -203,10 +203,10 @@ export default function ResultsGallery({
       score > 75 ? "Muy Alto" : score > 50 ? "Alto" : "Moderado";
     const color =
       score > 75
-        ? "text-gray-600"
+        ? "text-gray-600 dark:text-gray-200"
         : score > 50
           ? "text-black-400"
-          : "text-gray-600";
+          : "text-gray-600 dark:text-gray-200";
 
     return (
       <div className={`text-xs font-medium ${color}`}>
@@ -218,11 +218,11 @@ export default function ResultsGallery({
   if (assets.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 px-4">
-        <div className="text-gray-600 text-4xl mb-3">ðŸŽ¬</div>
-        <p className="text-gray-600 text-sm mb-2">
+        <div className="text-gray-600 dark:text-gray-200 text-4xl mb-3">ðŸŽ¬</div>
+        <p className="text-gray-600 dark:text-gray-200 text-sm mb-2">
           {isLoading ? "Generando..." : "Sin generaciones aÃºn"}
         </p>
-        <p className="text-gray-600 text-xs text-center">
+        <p className="text-gray-600 dark:text-gray-200 text-xs text-center">
           {isLoading
             ? "Tu contenido estarÃ¡ listo en unos momentos"
             : "Crea tu primer video o imagen con los generadores de arriba"}
@@ -236,30 +236,30 @@ export default function ResultsGallery({
       {/* Header with Title and Bulk Actions */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-warm flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-black dark:text-white flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-black" />
             Generaciones Recientes ({filteredAndSortedAssets.length})
           </h3>
           {selectedAssets.size > 0 && (
-            <span className="text-xs text-black font-medium">
+            <span className="text-xs text-black dark:text-white font-medium">
               {selectedAssets.size} seleccionado(s)
             </span>
           )}
         </div>
 
         {/* Filter & Sort Controls */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 p-4 rounded-lg bg-gray-100/40 border border-gray-300">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 p-4 rounded-lg bg-gray-100 dark:bg-gray-800/40 border border-gray-300 dark:border-gray-700">
           {/* Filter */}
           <div className="flex items-center gap-2 flex-wrap">
-            <Filter size={14} className="text-gray-600" />
+            <Filter size={14} className="text-gray-600 dark:text-gray-200" />
             {["all", "video", "image"].map((type) => (
               <button
                 key={type}
                 onClick={() => setFilterType(type as FilterType)}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                   filterType === type
-                    ? "bg-black text-gray-600"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-100"
+                    ? "bg-black text-gray-600 dark:text-gray-200"
+                    : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-200 hover:bg-gray-100 dark:bg-gray-800"
                 }`}
               >
                 {type === "all" ? "Todo" : type === "video" ? "Videos" : "ImÃ¡genes"}
@@ -269,11 +269,11 @@ export default function ResultsGallery({
 
           {/* Sort */}
           <div className="flex items-center gap-2 flex-wrap">
-            <ArrowUpDown size={14} className="text-gray-600" />
+            <ArrowUpDown size={14} className="text-gray-600 dark:text-gray-200" />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortBy)}
-              className="px-3 py-1 rounded-lg text-xs font-medium bg-gray-100 text-gray-600 border border-gray-300 hover:border-gray-400 transition-colors cursor-pointer"
+              className="px-3 py-1 rounded-lg text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-200 border border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:border-gray-700 transition-colors cursor-pointer"
             >
               <option value="date">MÃ¡s reciente</option>
               <option value="quality">Calidad</option>
@@ -287,8 +287,8 @@ export default function ResultsGallery({
             onClick={() => setCompareMode(!compareMode)}
             className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
               compareMode
-                ? "bg-black text-gray-600"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-100"
+                ? "bg-black text-gray-600 dark:text-gray-200"
+                : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-200 hover:bg-gray-100 dark:bg-gray-800"
             }`}
           >
             Comparar
@@ -298,7 +298,7 @@ export default function ResultsGallery({
           {selectedAssets.size > 0 && (
             <button
               onClick={handleBatchExport}
-              className="px-3 py-1 rounded-lg text-xs font-medium bg-green-500/20 text-gray-600 hover:bg-green-500/30 transition-colors"
+              className="px-3 py-1 rounded-lg text-xs font-medium bg-green-500/20 text-gray-600 dark:text-gray-200 hover:bg-green-500/30 transition-colors"
             >
               Exportar ({selectedAssets.size})
             </button>
@@ -308,14 +308,14 @@ export default function ResultsGallery({
 
       {/* Compare Mode Header */}
       {compareMode && selectedAssets.size > 1 && (
-        <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 text-xs text-gray-600 flex justify-between items-center">
+        <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 text-xs text-gray-600 dark:text-gray-200 flex justify-between items-center">
           <span>Comparando {selectedAssets.size} items</span>
           <button
             onClick={() => {
               setCompareMode(false);
               setSelectedAssets(new Set());
             }}
-            className="text-gray-600 hover:text-gray-600 font-medium"
+            className="text-gray-600 dark:text-gray-200 hover:text-gray-600 dark:text-gray-200 font-medium"
           >
             Cancelar
           </button>
@@ -334,8 +334,8 @@ export default function ResultsGallery({
               transition={{ delay: idx * 0.05 }}
               className={`group border rounded-lg overflow-hidden transition-all cursor-pointer ${
                 selectedAssets.has(asset.id)
-                  ? "border-gray-400 shadow-lg shadow-amber/30 bg-black"
-                  : "border-gray-300 hover:border-gray-400 hover:shadow-lg hover:shadow-amber/20 bg-gray-100/30"
+                  ? "border-gray-400 dark:border-gray-700 shadow-lg shadow-amber/30 bg-black"
+                  : "border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:border-gray-700 hover:shadow-lg hover:shadow-amber/20 bg-gray-100 dark:bg-gray-800/30"
               }`}
               onClick={() =>
                 compareMode ? toggleAssetSelection(asset.id) : null
@@ -351,12 +351,12 @@ export default function ResultsGallery({
                     }}
                     className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${
                       selectedAssets.has(asset.id)
-                        ? "bg-black border-gray-400"
-                        : "border-gray-300 hover:border-gray-400"
+                        ? "bg-black border-gray-400 dark:border-gray-700"
+                        : "border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:border-gray-700"
                     }`}
                   >
                     {selectedAssets.has(asset.id) && (
-                      <CheckCircle size={16} className="text-gray-600" />
+                      <CheckCircle size={16} className="text-gray-600 dark:text-gray-200" />
                     )}
                   </button>
                 </div>
@@ -409,8 +409,8 @@ export default function ResultsGallery({
               </div>
 
               {/* Info Section */}
-              <div className="p-3 space-y-2 border-t border-gray-300">
-                <p className="text-xs text-gray-600 line-clamp-2">
+              <div className="p-3 space-y-2 border-t border-gray-300 dark:border-gray-700">
+                <p className="text-xs text-gray-600 dark:text-gray-200 line-clamp-2">
                   {asset.params.prompt}
                 </p>
 
@@ -418,20 +418,20 @@ export default function ResultsGallery({
                 <div className="flex flex-wrap gap-2">
                   {asset.type === "video" && (
                     <>
-                      <span className="px-2 py-0.5 bg-gray-100 rounded text-xs text-gray-600">
+                      <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-xs text-gray-600 dark:text-gray-200">
                         {(asset.params as any).duration}s
                       </span>
-                      <span className="px-2 py-0.5 bg-gray-100 rounded text-xs text-gray-600">
+                      <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-xs text-gray-600 dark:text-gray-200">
                         {(asset.params as any).aspectRatio}
                       </span>
                     </>
                   )}
                   {asset.type === "image" && (
                     <>
-                      <span className="px-2 py-0.5 bg-gray-100 rounded text-xs text-gray-600">
+                      <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-xs text-gray-600 dark:text-gray-200">
                         {(asset.params as any).aspectRatio}
                       </span>
-                      <span className="px-2 py-0.5 bg-gray-100 rounded text-xs text-gray-600">
+                      <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-xs text-gray-600 dark:text-gray-200">
                         {asset.quality}
                       </span>
                     </>
@@ -444,12 +444,12 @@ export default function ResultsGallery({
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="pt-2 border-t border-gray-300 space-y-2"
+                    className="pt-2 border-t border-gray-300 dark:border-gray-700 space-y-2"
                   >
                     {renderEngagementPrediction(asset.engagementScore)}
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-gray-600">Est. Costo:</span>
-                      <span className="text-black font-medium">
+                      <span className="text-gray-600 dark:text-gray-200">Est. Costo:</span>
+                      <span className="text-black dark:text-white font-medium">
                         ${asset.estimatedCost.toFixed(2)}
                       </span>
                     </div>
@@ -458,7 +458,7 @@ export default function ResultsGallery({
 
                 {/* Meta Info */}
                 <div className="flex items-center justify-between">
-                  <p className="text-xs text-gray-600">
+                  <p className="text-xs text-gray-600 dark:text-gray-200">
                     {new Date(asset.createdAt).toLocaleDateString("es-MX")}
                   </p>
                   <button
@@ -467,7 +467,7 @@ export default function ResultsGallery({
                         showAnalytics === asset.id ? null : asset.id
                       )
                     }
-                    className="text-gray-600 hover:text-black transition-colors"
+                    className="text-gray-600 dark:text-gray-200 hover:text-black dark:text-white transition-colors"
                   >
                     <TrendingUp size={12} />
                   </button>
@@ -475,10 +475,10 @@ export default function ResultsGallery({
               </div>
 
               {/* Actions - Row 1 (Main Actions) */}
-              <div className="px-3 py-3 grid grid-cols-3 gap-2 border-t border-gray-300">
+              <div className="px-3 py-3 grid grid-cols-3 gap-2 border-t border-gray-300 dark:border-gray-700">
                 <button
                   onClick={() => handleDownload(asset.url, asset.type)}
-                  className="flex items-center justify-center gap-1 p-2 bg-black hover:bg-black text-black rounded-lg transition-colors text-xs font-medium"
+                  className="flex items-center justify-center gap-1 p-2 bg-black hover:bg-black text-black dark:text-white rounded-lg transition-colors text-xs font-medium"
                   title="Descargar"
                 >
                   <Download size={14} />
@@ -486,7 +486,7 @@ export default function ResultsGallery({
 
                 <button
                   onClick={() => handleCopyUrl(asset.url)}
-                  className="flex items-center justify-center gap-1 p-2 bg-gray-100 hover:bg-gray-100 text-gray-600 rounded-lg transition-colors text-xs font-medium"
+                  className="flex items-center justify-center gap-1 p-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-200 rounded-lg transition-colors text-xs font-medium"
                   title="Copiar URL"
                 >
                   <Copy size={14} />
@@ -494,7 +494,7 @@ export default function ResultsGallery({
 
                 <button
                   onClick={() => onDelete(asset.id)}
-                  className="flex items-center justify-center gap-1 p-2 hover:bg-red-500/10 text-gray-600 rounded-lg transition-colors"
+                  className="flex items-center justify-center gap-1 p-2 hover:bg-red-500/10 text-gray-600 dark:text-gray-200 rounded-lg transition-colors"
                   title="Eliminar"
                 >
                   <Trash2 size={14} />
@@ -502,10 +502,10 @@ export default function ResultsGallery({
               </div>
 
               {/* Actions - Row 2 (Quick Actions) */}
-              <div className="px-3 pb-3 grid grid-cols-2 gap-2 border-t border-gray-300">
+              <div className="px-3 pb-3 grid grid-cols-2 gap-2 border-t border-gray-300 dark:border-gray-700">
                 <button
                   onClick={() => onGenerateVariation?.(asset.id)}
-                  className="flex items-center justify-center gap-1 p-2 bg-blue-500/10 hover:bg-blue-500/20 text-gray-600 rounded-lg transition-colors text-xs font-medium"
+                  className="flex items-center justify-center gap-1 p-2 bg-blue-500/10 hover:bg-blue-500/20 text-gray-600 dark:text-gray-200 rounded-lg transition-colors text-xs font-medium"
                   title="Generar variaciÃ³n"
                 >
                   <Zap size={12} />
@@ -514,7 +514,7 @@ export default function ResultsGallery({
 
                 <button
                   onClick={() => onSchedulePublish?.(asset.id)}
-                  className="flex items-center justify-center gap-1 p-2 bg-green-500/10 hover:bg-green-500/20 text-gray-600 rounded-lg transition-colors text-xs font-medium"
+                  className="flex items-center justify-center gap-1 p-2 bg-green-500/10 hover:bg-green-500/20 text-gray-600 dark:text-gray-200 rounded-lg transition-colors text-xs font-medium"
                   title="Programar publicaciÃ³n"
                 >
                   <Clock size={12} />
@@ -523,29 +523,29 @@ export default function ResultsGallery({
               </div>
 
               {/* Actions - Row 3 (More Menu) */}
-              <div className="px-3 pb-3 border-t border-gray-300">
+              <div className="px-3 pb-3 border-t border-gray-300 dark:border-gray-700">
                 <details className="group/menu">
-                  <summary className="flex items-center justify-center gap-1 p-2 bg-gray-100 hover:bg-gray-100 text-gray-600 rounded-lg transition-colors text-xs font-medium cursor-pointer w-full">
+                  <summary className="flex items-center justify-center gap-1 p-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-200 rounded-lg transition-colors text-xs font-medium cursor-pointer w-full">
                     <MoreVertical size={12} />
                     <span>MÃ¡s</span>
                   </summary>
-                  <div className="absolute mt-1 w-40 bg-gray-100 border border-gray-300 rounded-lg shadow-xl z-20 overflow-hidden">
+                  <div className="absolute mt-1 w-40 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg shadow-xl z-20 overflow-hidden">
                     <button
                       onClick={() => onExport?.(asset)}
-                      className="w-full px-3 py-2 flex items-center gap-2 hover:bg-gray-100 text-gray-600 text-xs transition-colors text-left"
+                      className="w-full px-3 py-2 flex items-center gap-2 hover:bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-200 text-xs transition-colors text-left"
                     >
                       <Share2 size={12} />
                       Exportar para redes
                     </button>
                     <button
                       onClick={() => onCreateMerge?.([asset.id])}
-                      className="w-full px-3 py-2 flex items-center gap-2 hover:bg-gray-100 text-gray-600 text-xs transition-colors text-left"
+                      className="w-full px-3 py-2 flex items-center gap-2 hover:bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-200 text-xs transition-colors text-left"
                     >
                       <Zap size={12} />
                       Crear merge
                     </button>
                     <button
-                      className="w-full px-3 py-2 flex items-center gap-2 hover:bg-gray-100 text-gray-600 text-xs transition-colors text-left"
+                      className="w-full px-3 py-2 flex items-center gap-2 hover:bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-200 text-xs transition-colors text-left"
                       onClick={() =>
                         setShowVersionTimeline(
                           showVersionTimeline === asset.id ? null : asset.id
@@ -557,7 +557,7 @@ export default function ResultsGallery({
                     </button>
                     <button
                       onClick={() => navigator.share?.({ url: asset.url })}
-                      className="w-full px-3 py-2 flex items-center gap-2 hover:bg-gray-100 text-gray-600 text-xs transition-colors text-left"
+                      className="w-full px-3 py-2 flex items-center gap-2 hover:bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-200 text-xs transition-colors text-left"
                     >
                       <Share2 size={12} />
                       Compartir
@@ -572,13 +572,13 @@ export default function ResultsGallery({
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="px-3 pb-3 space-y-2 border-t border-gray-300"
+                  className="px-3 pb-3 space-y-2 border-t border-gray-300 dark:border-gray-700"
                 >
-                  <p className="text-xs font-semibold text-gray-600">
+                  <p className="text-xs font-semibold text-gray-600 dark:text-gray-200">
                     Versiones (1)
                   </p>
                   <div className="space-y-1 max-h-24 overflow-y-auto">
-                    <button className="w-full text-left p-2 rounded bg-gray-100 hover:bg-gray-100 text-xs text-gray-600 transition-colors">
+                    <button className="w-full text-left p-2 rounded bg-gray-100 dark:bg-gray-800 hover:bg-gray-100 dark:bg-gray-800 text-xs text-gray-600 dark:text-gray-200 transition-colors">
                       v1 Â· {new Date(asset.createdAt).toLocaleTimeString()}
                     </button>
                   </div>
@@ -591,3 +591,5 @@ export default function ResultsGallery({
     </div>
   );
 }
+
+

@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Victor IA",
   description: "Tu agencia de inteligencia artificial — panel de trabajo",
   icons: {
-    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230E0F12'/><text y='24' x='4' font-size='22' fill='%23FFAA17'>V</text></svg>",
+    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23000000'/><text y='24' x='4' font-size='22' fill='%23FFFFFF'>V</text></svg>",
   },
 };
 
@@ -14,13 +15,13 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0A0A0A" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
     { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
   ],
 };
 
 // Aplica el tema guardado ANTES del primer paint (sin flash)
-const themeInit = `(function(){try{var t=localStorage.getItem("vi-theme");if(t==="light")document.documentElement.classList.add("light");}catch(e){}})();`;
+const themeInit = `(function(){try{var t=localStorage.getItem("vi-theme");if(t==="dark"){document.documentElement.classList.add("dark")}else{document.documentElement.classList.remove("dark")}}catch(e){}})();`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -28,8 +29,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
       </head>
-      <body className="h-screen overflow-hidden bg-white text-black">
-        <script defer src="https://victor-ia-brain-tracker.vercel.app/vi-track.js" data-site="victor-ia-app" />{children}</body>
+      <body className="h-screen overflow-hidden bg-white dark:bg-black text-black dark:text-white transition-colors">
+        <ThemeProvider>
+          <script defer src="https://victor-ia-brain-tracker.vercel.app/vi-track.js" data-site="victor-ia-app" />
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

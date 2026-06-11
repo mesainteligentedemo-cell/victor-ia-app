@@ -1,7 +1,7 @@
 ﻿"use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { TrendingUp, Flame, RefreshCw } from "lucide-react";
+import { TrendingIcon as TrendingUp, TrendingIcon as Flame, RefreshIcon as RefreshCw } from "@/components/Icons/CustomIcons";
 import { TrendingService } from "@/lib/services/trending.service";
 
 interface TrendingItem {
@@ -41,14 +41,14 @@ export default function TrendingPanel({ intent, refreshInterval, onTrendSelect }
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-warm flex items-center gap-2">
-          <Flame size={16} className="text-black" />
+        <h3 className="text-sm font-semibold text-black dark:text-white flex items-center gap-2">
+          <Flame size={16} className="text-black dark:text-white" />
           Trending Now
         </h3>
         <button
           onClick={refresh}
           disabled={loading}
-          className="p-1 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+          className="p-1 hover:bg-gray-100 dark:bg-gray-800 rounded-lg transition-colors disabled:opacity-50"
         >
           <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
         </button>
@@ -60,7 +60,7 @@ export default function TrendingPanel({ intent, refreshInterval, onTrendSelect }
             key={item.id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-3 bg-gray-100/30 border border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 hover:bg-gray-100/50 transition-all"
+            className="p-3 bg-gray-100 dark:bg-gray-800/30 border border-gray-300 dark:border-gray-700 rounded-lg cursor-pointer hover:border-gray-400 dark:border-gray-700 hover:bg-gray-100 dark:bg-gray-800/50 transition-all"
             onClick={() => {
               if (onTrendSelect) {
                 onTrendSelect(item, `Create something with ${item.topic}`);
@@ -69,12 +69,12 @@ export default function TrendingPanel({ intent, refreshInterval, onTrendSelect }
           >
             <div className="flex items-start justify-between gap-2">
               <div className="flex-1">
-                <p className="text-xs font-medium text-warm">{item.topic}</p>
-                <p className="text-[10px] text-gray-600">{item.platform}</p>
+                <p className="text-xs font-medium text-black dark:text-white">{item.topic}</p>
+                <p className="text-[10px] text-gray-600 dark:text-gray-200">{item.platform}</p>
               </div>
               <div className="text-right">
-                <p className="text-xs font-bold text-black">{item.momentum}%</p>
-                <div className="w-8 h-1 bg-gray-100 rounded-full overflow-hidden mt-1">
+                <p className="text-xs font-bold text-black dark:text-white">{item.momentum}%</p>
+                <div className="w-8 h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden mt-1">
                   <div
                     className="h-full bg-black transition-all"
                     style={{ width: `${item.momentum}%` }}
@@ -88,4 +88,6 @@ export default function TrendingPanel({ intent, refreshInterval, onTrendSelect }
     </div>
   );
 }
+
+
 
