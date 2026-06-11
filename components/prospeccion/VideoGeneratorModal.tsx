@@ -1,6 +1,6 @@
-"use client";
+﻿"use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import type { VideoGenerationParams } from "@/lib/prospeccion-types";
 import { QUICK_PRESETS_VIDEO } from "@/lib/prospeccion-types";
@@ -85,7 +85,6 @@ export default function VideoGeneratorModal({
 
         {/* Content */}
         <div className="p-6 space-y-6">
-          {/* Error Alert */}
           {error && (
             <div className="flex gap-3 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
               <AlertCircle size={18} className="text-red-400 flex-shrink-0 mt-0.5" />
@@ -93,7 +92,7 @@ export default function VideoGeneratorModal({
             </div>
           )}
 
-          {/* SECCIÓN 1: Prompt */}
+          {/* Prompt */}
           <div>
             <label className="block text-sm font-medium text-warm mb-2">
               ¿Qué quieres crear?
@@ -101,8 +100,8 @@ export default function VideoGeneratorModal({
             <textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Describe el video en detalle. Incluye: acción, estilo, mood, colores, textos..."
-              className="w-full bg-warm-5 border border-warm-10 rounded-lg px-3 py-2 text-warm placeholder-warm-30 focus:border-amber focus:outline-none focus:ring-1 focus:ring-amber/50 resize-none h-24"
+              placeholder="Describe el video en detalle..."
+              className="w-full bg-warm-5 border border-warm-10 rounded-lg px-3 py-2 text-warm placeholder-warm-30 focus:border-amber focus:outline-none resize-none h-24"
               disabled={isGenerating}
             />
             <p className="text-xs text-warm-30 mt-1">
@@ -110,7 +109,7 @@ export default function VideoGeneratorModal({
             </p>
           </div>
 
-          {/* SECCIÓN 2: Presets Rápidos */}
+          {/* Presets */}
           <div>
             <label className="block text-sm font-medium text-warm mb-3">
               O usa un preset rápido:
@@ -127,7 +126,7 @@ export default function VideoGeneratorModal({
                     if (config.quality) setQuality(config.quality);
                   }}
                   disabled={isGenerating}
-                  className="p-3 border border-warm-10 hover:border-amber hover:bg-amber/5 rounded-lg transition-colors text-center disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-3 border border-warm-10 hover:border-amber hover:bg-amber/5 rounded-lg transition-colors text-center disabled:opacity-50"
                 >
                   <div className="text-lg mb-1">{preset.icon}</div>
                   <p className="text-xs font-medium text-warm">{preset.label}</p>
@@ -136,121 +135,42 @@ export default function VideoGeneratorModal({
             </div>
           </div>
 
-          {/* SECCIÓN 3: Formato */}
+          {/* Settings */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-warm mb-2">
-                Duración (segundos)
-              </label>
+              <label className="block text-sm font-medium text-warm mb-2">Duración</label>
               <select
                 value={duration}
                 onChange={(e) => setDuration(parseInt(e.target.value) as any)}
                 disabled={isGenerating}
-                className="w-full bg-warm-5 border border-warm-10 rounded-lg px-3 py-2 text-warm focus:border-amber focus:outline-none disabled:opacity-50"
+                className="w-full bg-warm-5 border border-warm-10 rounded-lg px-3 py-2 text-warm focus:border-amber focus:outline-none"
               >
                 {[5, 10, 15, 20, 25, 30].map((d) => (
-                  <option key={d} value={d}>
-                    {d}s
-                  </option>
+                  <option key={d} value={d}>{d}s</option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-warm mb-2">
-                Relación de aspecto
-              </label>
+              <label className="block text-sm font-medium text-warm mb-2">Aspecto</label>
               <select
                 value={aspectRatio}
                 onChange={(e) => setAspectRatio(e.target.value as any)}
                 disabled={isGenerating}
-                className="w-full bg-warm-5 border border-warm-10 rounded-lg px-3 py-2 text-warm focus:border-amber focus:outline-none disabled:opacity-50"
+                className="w-full bg-warm-5 border border-warm-10 rounded-lg px-3 py-2 text-warm focus:border-amber focus:outline-none"
               >
-                <option value="16:9">16:9 (Cine)</option>
-                <option value="9:16">9:16 (Reel)</option>
-                <option value="1:1">1:1 (Cuadrado)</option>
+                <option value="16:9">16:9</option>
+                <option value="9:16">9:16</option>
+                <option value="1:1">1:1</option>
               </select>
             </div>
           </div>
 
-          {/* SECCIÓN 4: Estilo Visual */}
-          <div>
-            <label className="block text-sm font-medium text-warm mb-3">
-              Estilo Visual
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {["cinematic", "animated", "realistic", "luxury", "minimal", "abstract"].map(
-                (s) => (
-                  <button
-                    key={s}
-                    onClick={() => setStyle(s)}
-                    disabled={isGenerating}
-                    className={`px-3 py-2 rounded-lg border transition-colors text-sm font-medium capitalize disabled:opacity-50 ${
-                      style === s
-                        ? "border-amber bg-amber/10 text-amber"
-                        : "border-warm-10 text-warm hover:border-warm-20"
-                    }`}
-                  >
-                    {s}
-                  </button>
-                )
-              )}
-            </div>
-          </div>
-
-          {/* SECCIÓN 5: Calidad */}
-          <div>
-            <label className="block text-sm font-medium text-warm mb-3">
-              Calidad de salida
-            </label>
-            <div className="flex gap-3">
-              {["draft", "standard", "premium"].map((q) => (
-                <label key={q} className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="quality"
-                    value={q}
-                    checked={quality === q}
-                    onChange={(e) => setQuality(e.target.value as any)}
-                    disabled={isGenerating}
-                    className="w-4 h-4 accent-amber"
-                  />
-                  <span className="text-sm capitalize text-warm">{q}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* SECCIÓN 6: Opciones Avanzadas (Collapsed) */}
-          <div className="border-t border-warm-10 pt-4">
-            <button
-              onClick={() => setShowAdvanced(!showAdvanced)}
-              className="text-sm text-warm-45 hover:text-warm transition-colors flex items-center gap-2"
-            >
-              {showAdvanced ? "▼" : "▶"} Opciones avanzadas
-            </button>
-
-            {showAdvanced && (
-              <div className="mt-4 space-y-4 pl-4 border-l border-warm-10">
-                <label className="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={includeAudio}
-                    onChange={(e) => setIncludeAudio(e.target.checked)}
-                    disabled={isGenerating}
-                    className="w-4 h-4 accent-amber"
-                  />
-                  <span className="text-sm text-warm">Incluir música y SFX</span>
-                </label>
-              </div>
-            )}
-          </div>
-
-          {/* SECCIÓN 7: CTA */}
+          {/* Generate Button */}
           <button
             onClick={handleGenerate}
             disabled={isGenerating || prompt.trim().length < 20}
-            className="w-full bg-gradient-to-r from-amber to-amber/80 hover:from-amber/90 hover:to-amber/70 disabled:from-warm-30 disabled:to-warm-30 disabled:cursor-not-allowed text-black font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-amber to-amber/80 hover:from-amber/90 disabled:from-warm-30 text-black font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
           >
             {isGenerating ? (
               <>
@@ -264,10 +184,6 @@ export default function VideoGeneratorModal({
               </>
             )}
           </button>
-
-          <p className="text-xs text-warm-30 text-center">
-            Genera videos de hasta 30 segundos con IA. Tiempos varían según complejidad.
-          </p>
         </div>
       </motion.div>
     </motion.div>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -65,7 +65,6 @@ export default function ImageGeneratorModal({
         className="bg-ink border border-warm-10 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-warm-10 sticky top-0 bg-ink/95 backdrop-blur">
           <h2 className="text-lg font-semibold text-warm flex items-center gap-2">
             <ImageIcon size={18} className="text-amber" />
@@ -80,9 +79,7 @@ export default function ImageGeneratorModal({
           </button>
         </div>
 
-        {/* Content */}
         <div className="p-6 space-y-6">
-          {/* Error Alert */}
           {error && (
             <div className="flex gap-3 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
               <AlertCircle size={18} className="text-red-400 flex-shrink-0 mt-0.5" />
@@ -90,7 +87,6 @@ export default function ImageGeneratorModal({
             </div>
           )}
 
-          {/* SECCIÓN 1: Prompt */}
           <div>
             <label className="block text-sm font-medium text-warm mb-2">
               ¿Qué quieres diseñar?
@@ -98,8 +94,8 @@ export default function ImageGeneratorModal({
             <textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Describe la imagen con detalle. Incluye: tema, estilo, colores, elementos, mood, iluminación..."
-              className="w-full bg-warm-5 border border-warm-10 rounded-lg px-3 py-2 text-warm placeholder-warm-30 focus:border-amber focus:outline-none focus:ring-1 focus:ring-amber/50 resize-none h-24"
+              placeholder="Describe la imagen con detalle..."
+              className="w-full bg-warm-5 border border-warm-10 rounded-lg px-3 py-2 text-warm placeholder-warm-30 focus:border-amber focus:outline-none resize-none h-24"
               disabled={isGenerating}
             />
             <p className="text-xs text-warm-30 mt-1">
@@ -107,7 +103,6 @@ export default function ImageGeneratorModal({
             </p>
           </div>
 
-          {/* SECCIÓN 2: Presets Rápidos */}
           <div>
             <label className="block text-sm font-medium text-warm mb-3">
               O usa un preset rápido:
@@ -124,7 +119,7 @@ export default function ImageGeneratorModal({
                     if (config.quantity) setQuantity(config.quantity);
                   }}
                   disabled={isGenerating}
-                  className="p-3 border border-warm-10 hover:border-amber hover:bg-amber/5 rounded-lg transition-colors text-center disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-3 border border-warm-10 hover:border-amber hover:bg-amber/5 rounded-lg transition-colors text-center disabled:opacity-50"
                 >
                   <div className="text-lg mb-1">{preset.icon}</div>
                   <p className="text-xs font-medium text-warm">{preset.label}</p>
@@ -133,13 +128,12 @@ export default function ImageGeneratorModal({
             </div>
           </div>
 
-          {/* SECCIÓN 3: Formato */}
           <div>
             <label className="block text-sm font-medium text-warm mb-3">
               Relación de aspecto
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {["1:1", "16:9", "9:16", "3:1", "4:3", "3:2"].map((ratio) => (
+              {["1:1", "16:9", "9:16"].map((ratio) => (
                 <button
                   key={ratio}
                   onClick={() => setAspectRatio(ratio as any)}
@@ -156,37 +150,6 @@ export default function ImageGeneratorModal({
             </div>
           </div>
 
-          {/* SECCIÓN 4: Estilo Visual */}
-          <div>
-            <label className="block text-sm font-medium text-warm mb-3">
-              Estilo de arte
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {[
-                "photorealistic",
-                "illustration",
-                "digital-art",
-                "concept-art",
-                "luxury",
-                "minimal",
-              ].map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setStyle(s)}
-                  disabled={isGenerating}
-                  className={`px-3 py-2 rounded-lg border transition-colors text-sm font-medium capitalize disabled:opacity-50 ${
-                    style === s
-                      ? "border-amber bg-amber/10 text-amber"
-                      : "border-warm-10 text-warm hover:border-warm-20"
-                  }`}
-                >
-                  {s.replace("-", " ")}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* SECCIÓN 5: Cantidad */}
           <div>
             <label className="block text-sm font-medium text-warm mb-3">
               ¿Cuántas imágenes?
@@ -209,55 +172,15 @@ export default function ImageGeneratorModal({
             </div>
           </div>
 
-          {/* SECCIÓN 6: Calidad */}
-          <div>
-            <label className="block text-sm font-medium text-warm mb-3">
-              Calidad
-            </label>
-            <div className="flex gap-3">
-              {["standard", "premium", "ultra"].map((q) => (
-                <label key={q} className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="quality"
-                    value={q}
-                    checked={quality === q}
-                    onChange={(e) => setQuality(e.target.value as any)}
-                    disabled={isGenerating}
-                    className="w-4 h-4 accent-amber"
-                  />
-                  <span className="text-sm capitalize text-warm">{q}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* SECCIÓN 7: Opciones Avanzadas (Collapsed) */}
-          <div className="border-t border-warm-10 pt-4">
-            <button
-              onClick={() => setShowAdvanced(!showAdvanced)}
-              className="text-sm text-warm-45 hover:text-warm transition-colors flex items-center gap-2"
-            >
-              {showAdvanced ? "▼" : "▶"} Opciones avanzadas
-            </button>
-
-            {showAdvanced && (
-              <div className="mt-4 space-y-3 pl-4 border-l border-warm-10 text-sm text-warm-30">
-                <p>Más opciones estarán disponibles en la próxima actualización.</p>
-              </div>
-            )}
-          </div>
-
-          {/* SECCIÓN 8: CTA */}
           <button
             onClick={handleGenerate}
             disabled={isGenerating || prompt.trim().length < 20}
-            className="w-full bg-gradient-to-r from-amber to-amber/80 hover:from-amber/90 hover:to-amber/70 disabled:from-warm-30 disabled:to-warm-30 disabled:cursor-not-allowed text-black font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-amber to-amber/80 hover:from-amber/90 disabled:from-warm-30 text-black font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
           >
             {isGenerating ? (
               <>
                 <Loader2 size={18} className="animate-spin" />
-                Generando... (~ {quality === "ultra" ? "2-3 min" : "30-60 seg"})
+                Generando...
               </>
             ) : (
               <>
@@ -266,10 +189,6 @@ export default function ImageGeneratorModal({
               </>
             )}
           </button>
-
-          <p className="text-xs text-warm-30 text-center">
-            Genera imágenes de alta calidad con IA. Perfecto para redes, web, y marketing.
-          </p>
         </div>
       </motion.div>
     </motion.div>

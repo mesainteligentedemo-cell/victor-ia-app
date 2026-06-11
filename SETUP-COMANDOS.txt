@@ -1,0 +1,146 @@
+================================================================================
+VICTOR IA — SETUP COMPLETO (COPIAR Y PEGAR)
+================================================================================
+
+PASO 1: CLERK AUTHENTICATION
+================================================================================
+1. Ir a https://clerk.com
+2. Sign up → Create App
+3. Copiar estas keys:
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+   CLERK_SECRET_KEY=sk_test_...
+
+4. Crear .env.local y pegar:
+
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxx
+   CLERK_SECRET_KEY=sk_test_xxx
+   NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+   SUPABASE_SERVICE_ROLE_KEY=eyJhbGc...
+   BLOB_READ_WRITE_TOKEN=vercel_blob_rw_...
+
+================================================================================
+PASO 2: SUPABASE DATABASE
+================================================================================
+1. Ir a https://supabase.com
+2. Create Project (FREE tier)
+3. Esperar a que se cree
+4. Copiar estas keys:
+   NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+   SUPABASE_SERVICE_ROLE_KEY=eyJhbGc...
+
+5. Pegar en .env.local (ya creado arriba)
+
+6. En Supabase Dashboard → SQL Editor → New Query
+7. Copiar TODO el contenido de: supabase/migrations/001_initial_schema.sql
+8. Pegar en SQL Editor y ejecutar (Command + Enter)
+
+✅ Resultado: 4 tablas creadas (users, generations, presets, credits)
+
+================================================================================
+PASO 3: VERCEL BLOB STORAGE
+================================================================================
+1. Ir a https://vercel.com/dashboard
+2. Settings → Storage → Blob → Create
+3. Copiar token:
+   BLOB_READ_WRITE_TOKEN=vercel_blob_rw_...
+
+4. Pegar en .env.local
+
+✅ Resultado: Almacenamiento automático en Blob
+
+================================================================================
+PASO 4: CORRER LA APP
+================================================================================
+
+# En terminal, en carpeta C:\Users\inbou\victor-ia-app:
+
+npm install
+npm run dev
+
+# Esperar a que compile (30-60 segundos)
+# Luego abrir: http://localhost:3000
+
+================================================================================
+PASO 5: PROBAR
+================================================================================
+
+1. Ir a http://localhost:3000
+2. Click en "Sign Up"
+3. Crear cuenta con email
+4. Ir a /#/prospeccion
+5. Click en "Generar Imagen" o "Generar Video"
+6. Escribir prompt (mínimo 20 caracteres)
+7. Click "Generar"
+
+✅ Resultado: Imagen/video se genera en 1-3 minutos
+
+================================================================================
+🎯 VALORES DE EJEMPLO (COPIAR)
+================================================================================
+
+Si quieres usar credenciales de TEST (para demo):
+
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_cGxhY2Vob2xkZXI=
+CLERK_SECRET_KEY=sk_test_cGxhY2Vob2xkZXI=
+
+NEXT_PUBLIC_SUPABASE_URL=https://placeholder.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=placeholder_service_role_key
+
+BLOB_READ_WRITE_TOKEN=vercel_blob_rw_placeholder
+
+⚠️ NOTA: Estos NO funcionarán en producción. Debes copiar los keys REALES de:
+  - https://clerk.com/dashboard
+  - https://supabase.com/dashboard
+  - https://vercel.com/dashboard
+
+================================================================================
+ERRORES COMUNES
+================================================================================
+
+❌ "Cannot find module '@clerk/nextjs'"
+→ Correr: npm install
+
+❌ "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY is undefined"
+→ Verificar que .env.local existe y tiene la key
+
+❌ "Supabase connection failed"
+→ Verificar que la SQL schema fue ejecutada en Supabase SQL Editor
+
+❌ "HTTP 413 — Payload too large"
+→ Vercel Blob token no válido o no está en .env.local
+
+================================================================================
+✅ CHECKLIST FINAL
+================================================================================
+
+Antes de decir "listo":
+
+[ ] npm install completó sin errores
+[ ] .env.local creado con 3 keys (Clerk, Supabase, Blob)
+[ ] SQL schema ejecutado en Supabase
+[ ] npm run dev funciona (no hay error en terminal)
+[ ] http://localhost:3000 carga sin errores (F12 → Console vacía)
+[ ] Puedo hacer Sign Up
+[ ] Puedo ir a /#/prospeccion
+[ ] Puedo generar imagen (probé y apareció en la galería)
+[ ] Puedo generar video (probé y tomó < 5 min)
+[ ] Créditos se deducen correctamente
+
+SI TODAS LAS CASILLAS ESTÁN CHEQUEADAS → ¡PRODUCCIÓN LISTA! 🚀
+
+================================================================================
+DEPLOYMENT A VERCEL (CUANDO ESTÉS LISTO)
+================================================================================
+
+1. git init
+2. git add .
+3. git commit -m "Initial commit"
+4. Conectar repo a GitHub
+5. Ir a https://vercel.com → Import Project → conectar repo
+6. Vercel auto-detecta Next.js
+7. En Settings → Environment Variables → copiar .env.local
+8. Deploy
+
+✅ App live en: https://tu-proyecto.vercel.app
+
+================================================================================

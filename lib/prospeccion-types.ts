@@ -1,4 +1,4 @@
-export type VideoStyle = "cinematic" | "animated" | "realistic" | "abstract" | "luxury" | "minimal";
+﻿export type VideoStyle = "cinematic" | "animated" | "realistic" | "abstract" | "luxury" | "minimal";
 export type VideoQuality = "draft" | "standard" | "premium";
 export type VideoAspectRatio = "16:9" | "9:16" | "1:1" | "4:3" | "3:4";
 export type ImageStyle = "photorealistic" | "illustration" | "digital-art" | "concept-art" | "luxury" | "minimal";
@@ -66,58 +66,35 @@ export const QUICK_PRESETS_VIDEO: QuickPreset[] = [
     label: "Instagram Reel",
     icon: "📱",
     type: "video",
-    config: {
-      duration: 15,
-      aspectRatio: "9:16",
-      quality: "premium",
-    },
+    config: { duration: 15, aspectRatio: "9:16", quality: "premium" },
   },
   {
     id: "tiktok",
     label: "TikTok Trend",
     icon: "🎭",
     type: "video",
-    config: {
-      duration: 10,
-      aspectRatio: "9:16",
-      style: "animated",
-      quality: "standard",
-    },
+    config: { duration: 10, aspectRatio: "9:16", style: "animated", quality: "standard" },
   },
   {
     id: "linkedin-post",
     label: "LinkedIn Post",
     icon: "💼",
     type: "video",
-    config: {
-      duration: 20,
-      aspectRatio: "16:9",
-      style: "cinematic",
-      quality: "premium",
-    },
+    config: { duration: 20, aspectRatio: "16:9", style: "cinematic", quality: "premium" },
   },
   {
     id: "youtube-short",
     label: "YouTube Short",
     icon: "▶️",
     type: "video",
-    config: {
-      duration: 30,
-      aspectRatio: "9:16",
-      quality: "premium",
-    },
+    config: { duration: 30, aspectRatio: "9:16", quality: "premium" },
   },
   {
     id: "web-hero",
     label: "Web Hero",
     icon: "🌐",
     type: "video",
-    config: {
-      duration: 25,
-      aspectRatio: "16:9",
-      style: "luxury",
-      quality: "premium",
-    },
+    config: { duration: 25, aspectRatio: "16:9", style: "luxury", quality: "premium" },
   },
 ];
 
@@ -127,56 +104,36 @@ export const QUICK_PRESETS_IMAGE: QuickPreset[] = [
     label: "Social Square",
     icon: "📸",
     type: "image",
-    config: {
-      aspectRatio: "1:1",
-      quality: "premium",
-      quantity: 1,
-    },
+    config: { aspectRatio: "1:1", quality: "premium", quantity: 1 },
   },
   {
     id: "og-image",
     label: "OG Image",
     icon: "🔗",
     type: "image",
-    config: {
-      aspectRatio: "16:9",
-      quality: "premium",
-      quantity: 1,
-    },
+    config: { aspectRatio: "16:9", quality: "premium", quantity: 1 },
   },
   {
     id: "hero-image",
     label: "Hero Banner",
     icon: "🎨",
     type: "image",
-    config: {
-      aspectRatio: "16:9",
-      quality: "ultra",
-      style: "luxury",
-      quantity: 1,
-    },
+    config: { aspectRatio: "16:9", quality: "ultra", style: "luxury", quantity: 1 },
   },
   {
     id: "product-showcase",
     label: "Product Showcase",
     icon: "📦",
     type: "image",
-    config: {
-      aspectRatio: "4:3",
-      quality: "premium",
-      quantity: 4,
-    },
+    config: { aspectRatio: "4:3", quality: "premium", quantity: 4 },
   },
   {
     id: "concept-art",
     label: "Concept Art",
     icon: "🎭",
     type: "image",
-    config: {
-      aspectRatio: "1:1",
-      style: "concept-art",
-      quality: "ultra",
-      quantity: 2,
-    },
+    config: { aspectRatio: "1:1", style: "concept-art", quality: "ultra", quantity: 2 },
   },
 ];
+
+export type { CreditsAccount } from "@/lib/types/store.types";
