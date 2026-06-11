@@ -2,59 +2,43 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./lib/**/*.{js,ts,jsx,tsx,mdx}"
   ],
-  darkMode: ["class"],
   theme: {
     extend: {
       colors: {
-        // Blanco y Negro únicamente
-        ink: "#ffffff",
-        dark: "#000000",
+        black: "#000000",
+        white: "#ffffff",
         gray: {
-          50: "#fafafa",
-          100: "#f5f5f5",
-          200: "#eeeeee",
-          300: "#e0e0e0",
-          400: "#bdbdbd",
-          500: "#9e9e9e",
-          600: "#757575",
-          700: "#616161",
-          800: "#424242",
-          900: "#212121",
-        },
+          50: "#f9fafb",
+          100: "#f3f4f6",
+          200: "#e5e7eb",
+          300: "#d1d5db",
+          400: "#9ca3af",
+          500: "#6b7280",
+          600: "#4b5563",
+          700: "#374151",
+          800: "#1f2937",
+          900: "#111827"
+        }
       },
       boxShadow: {
         sm: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
-        base: "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
-        md: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-        lg: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
-        xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-      },
-      fontFamily: {
-        serif: ["Instrument Serif", "Georgia", "serif"],
-        sans: ["Inter", "-apple-system", "sans-serif"],
+        md: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        lg: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+        xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1)"
       },
       animation: {
-        "fade-in":    "fadeIn 0.35s cubic-bezier(0.16,1,0.3,1)",
-        "slide-up":   "slideUp 0.4s cubic-bezier(0.16,1,0.3,1)",
-        "pulse-amber":"pulseAmber 2s ease-in-out infinite",
-      },
-      keyframes: {
-        fadeIn: { from: { opacity: "0" }, to: { opacity: "1" } },
-        slideUp: {
-          from: { opacity: "0", transform: "translateY(8px)" },
-          to:   { opacity: "1", transform: "translateY(0)" },
-        },
-        pulseAmber: {
-          "0%,100%": { opacity: "1" },
-          "50%":     { opacity: "0.35" },
-        },
-      },
-    },
+        pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        spin: "spin 1s linear infinite",
+        bounce: "bounce 1s infinite"
+      }
+    }
   },
-  plugins: [],
+  darkMode: "class",
+  plugins: []
 };
+
 export default config;
