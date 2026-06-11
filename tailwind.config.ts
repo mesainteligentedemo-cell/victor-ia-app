@@ -10,18 +10,28 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Todos mapeados a CSS variables (ver app/dark-mode.css)
-        ink: "rgb(var(--bg-rgb) / <alpha-value>)",
-        warm: "rgb(var(--text-rgb) / <alpha-value>)",
-        amber: "rgb(var(--amber-rgb) / <alpha-value>)",
-        "amber-dk": "var(--amber-dk)",
-        "amber-low": "var(--amber-low)",
-        "on-amber": "var(--on-amber)",
-        "warm-5": "var(--surface)",
-        "warm-10": "var(--border)",
-        "warm-20": "var(--text-20)",
-        "warm-45": "var(--text-45)",
-        "warm-60": "var(--text-60)",
+        // Blanco y Negro únicamente
+        ink: "#ffffff",
+        dark: "#000000",
+        gray: {
+          50: "#fafafa",
+          100: "#f5f5f5",
+          200: "#eeeeee",
+          300: "#e0e0e0",
+          400: "#bdbdbd",
+          500: "#9e9e9e",
+          600: "#757575",
+          700: "#616161",
+          800: "#424242",
+          900: "#212121",
+        },
+      },
+      boxShadow: {
+        sm: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+        base: "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
+        md: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+        lg: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+        xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
       },
       fontFamily: {
         serif: ["Instrument Serif", "Georgia", "serif"],

@@ -142,7 +142,7 @@ export default function ProspeccionPage() {
   const imageCount = assets.filter((a) => a.type === "image").length;
 
   return (
-    <div className="min-h-screen bg-ink p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-white p-4 sm:p-6 lg:p-8">
       {/* Header with Badges */}
       <div className="max-w-7xl mx-auto mb-8">
         <motion.div
@@ -152,19 +152,19 @@ export default function ProspeccionPage() {
         >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-3">
-              <span className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber to-amber/60 flex items-center justify-center">
+              <span className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shadow-md">
                 ✨
               </span>
-              <h1 className="text-3xl sm:text-4xl font-bold text-warm">
+              <h1 className="text-3xl sm:text-4xl font-bold text-black">
                 Prospección Media
               </h1>
             </div>
 
             {/* Trending Badges */}
             <div className="flex flex-wrap gap-2">
-              <div className="px-3 py-1 rounded-full bg-amber/20 border border-amber/40 flex items-center gap-1">
-                <Flame size={14} className="text-amber" />
-                <span className="text-xs font-medium text-amber">Trending</span>
+              <div className="px-3 py-1 rounded-full bg-black/20 border border-amber/40 flex items-center gap-1">
+                <Flame size={14} className="text-black" />
+                <span className="text-xs font-medium text-black">Trending</span>
               </div>
               <div className="px-3 py-1 rounded-full bg-blue-500/20 border border-blue-500/40 flex items-center gap-1">
                 <Clock size={14} className="text-blue-400" />
@@ -175,7 +175,7 @@ export default function ProspeccionPage() {
             </div>
           </div>
 
-          <p className="text-warm-45 text-sm sm:text-base">
+          <p className="text-black-45 text-sm sm:text-base">
             Genera videos e imágenes con IA. Perfecto para campañas, redes y propuestas.
           </p>
         </motion.div>
@@ -193,15 +193,15 @@ export default function ProspeccionPage() {
           >
             {/* Quick Stats */}
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-warm flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-black flex items-center gap-2">
                 <BarChart3 size={16} />
                 Quick Stats
               </h3>
 
-              <div className="p-4 bg-warm-5/30 border border-warm-10 rounded-lg space-y-2">
+              <div className="p-4 bg-gray-100/30 border border-gray-300 rounded-lg space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-warm-30">Credits</span>
-                  <span className="text-sm font-bold text-amber">
+                  <span className="text-xs text-black-30">Credits</span>
+                  <span className="text-sm font-bold text-black">
                     {analyticsData.creditsRemaining}
                   </span>
                 </div>
@@ -215,9 +215,9 @@ export default function ProspeccionPage() {
                 </div>
               </div>
 
-              <div className="p-4 bg-warm-5/30 border border-warm-10 rounded-lg text-center">
-                <p className="text-xs text-warm-30 mb-1">Today</p>
-                <p className="text-2xl font-bold text-amber">
+              <div className="p-4 bg-gray-100/30 border border-gray-300 rounded-lg text-center">
+                <p className="text-xs text-black-30 mb-1">Today</p>
+                <p className="text-2xl font-bold text-black">
                   {assets.filter((a) => {
                     const today = new Date();
                     const assetDate = new Date(a.createdAt);
@@ -232,7 +232,7 @@ export default function ProspeccionPage() {
             {/* Trending Now */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-warm flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-black flex items-center gap-2">
                   <TrendingUp size={16} />
                   Trending Now
                 </h3>
@@ -241,7 +241,7 @@ export default function ProspeccionPage() {
                   className="p-1 hover:bg-warm-10 rounded-lg transition-colors"
                   title="Refresh trending"
                 >
-                  <RefreshCw size={14} className="text-warm-45" />
+                  <RefreshCw size={14} className="text-black-45" />
                 </button>
               </div>
 
@@ -250,10 +250,10 @@ export default function ProspeccionPage() {
                   <motion.div
                     key={item.id}
                     layout
-                    className="p-3 bg-warm-5/30 border border-warm-10 rounded-lg"
+                    className="p-3 bg-gray-100/30 border border-gray-300 rounded-lg"
                   >
                     <div className="flex items-center justify-between gap-2 mb-1">
-                      <span className="text-xs font-medium text-warm line-clamp-1">
+                      <span className="text-xs font-medium text-black line-clamp-1">
                         {item.label}
                       </span>
                       {item.trend > 0 && (
@@ -267,28 +267,28 @@ export default function ProspeccionPage() {
                         </span>
                       )}
                     </div>
-                    <div className="text-2xl font-bold text-amber">
+                    <div className="text-2xl font-bold text-black">
                       {item.count}
                     </div>
                   </motion.div>
                 ))}
               </div>
 
-              <p className="text-xs text-warm-45 text-center">
+              <p className="text-xs text-black-45 text-center">
                 Updated {Math.round((Date.now() - lastTrendingUpdate.getTime()) / 1000)}s ago
               </p>
             </div>
 
             {/* Recent Templates */}
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-warm">
+              <h3 className="text-sm font-semibold text-black">
                 Recent Templates
               </h3>
               <div className="space-y-2">
                 {["Product Demo", "Social Reel", "Testimonial"].map((template) => (
                   <button
                     key={template}
-                    className="w-full px-3 py-2 text-left text-xs text-warm hover:bg-warm-5/50 rounded-lg border border-transparent hover:border-warm-10 transition-all"
+                    className="w-full px-3 py-2 text-left text-xs text-black hover:bg-gray-100/50 rounded-lg border border-transparent hover:border-gray-300 transition-all"
                   >
                     {template}
                   </button>
@@ -310,50 +310,50 @@ export default function ProspeccionPage() {
               <button
                 onClick={() => setVideoModalOpen(true)}
                 disabled={isGenerating}
-                className="group relative overflow-hidden rounded-xl border border-warm-10 p-6 hover:border-amber hover:shadow-lg hover:shadow-amber/20 hover:bg-warm-5/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-br from-warm-5/30 to-transparent"
+                className="group relative overflow-hidden rounded-xl border border-gray-300 p-6 hover:border-black hover:shadow-lg hover:bg-gray-100/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-br from-gray-100 to-white"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-amber/0 to-amber/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-br from-black/0 to-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
 
                 <div className="relative space-y-3">
-                  <div className="w-10 h-10 rounded-lg bg-amber/20 flex items-center justify-center group-hover:bg-amber/30 transition-colors">
-                    <Zap size={20} className="text-amber" />
+                  <div className="w-10 h-10 rounded-lg bg-black/20 flex items-center justify-center group-hover:bg-black/30 transition-colors">
+                    <Zap size={20} className="text-black" />
                   </div>
                   <div className="text-left">
-                    <h3 className="font-semibold text-warm mb-1">
+                    <h3 className="font-semibold text-black mb-1">
                       Generar Video
                     </h3>
-                    <p className="text-xs text-warm-30">
+                    <p className="text-xs text-black-30">
                       5-30 segundos con IA
                     </p>
                   </div>
                 </div>
 
-                <div className="absolute -bottom-12 -right-12 w-24 h-24 bg-amber/10 rounded-full group-hover:scale-150 transition-transform duration-500" />
+                <div className="absolute -bottom-12 -right-12 w-24 h-24 bg-black/10 rounded-full group-hover:scale-150 transition-transform duration-500" />
               </button>
 
               {/* Image Generator */}
               <button
                 onClick={() => setImageModalOpen(true)}
                 disabled={isGenerating}
-                className="group relative overflow-hidden rounded-xl border border-warm-10 p-6 hover:border-amber hover:shadow-lg hover:shadow-amber/20 hover:bg-warm-5/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-br from-warm-5/30 to-transparent"
+                className="group relative overflow-hidden rounded-xl border border-gray-300 p-6 hover:border-black hover:shadow-lg hover:bg-gray-100/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-br from-gray-100 to-white"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-amber/0 to-amber/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-br from-black/0 to-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
 
                 <div className="relative space-y-3">
-                  <div className="w-10 h-10 rounded-lg bg-amber/20 flex items-center justify-center group-hover:bg-amber/30 transition-colors">
-                    <ImageIcon size={20} className="text-amber" />
+                  <div className="w-10 h-10 rounded-lg bg-black/20 flex items-center justify-center group-hover:bg-black/30 transition-colors">
+                    <ImageIcon size={20} className="text-black" />
                   </div>
                   <div className="text-left">
-                    <h3 className="font-semibold text-warm mb-1">
+                    <h3 className="font-semibold text-black mb-1">
                       Generar Imagen
                     </h3>
-                    <p className="text-xs text-warm-30">
+                    <p className="text-xs text-black-30">
                       Cualquier resolución en minutos
                     </p>
                   </div>
                 </div>
 
-                <div className="absolute -bottom-12 -right-12 w-24 h-24 bg-amber/10 rounded-full group-hover:scale-150 transition-transform duration-500" />
+                <div className="absolute -bottom-12 -right-12 w-24 h-24 bg-black/10 rounded-full group-hover:scale-150 transition-transform duration-500" />
               </button>
             </div>
 
@@ -363,16 +363,16 @@ export default function ProspeccionPage() {
                 setBatchType("image");
                 setBatchModalOpen(true);
               }}
-              className="w-full p-4 bg-gradient-to-r from-amber/10 to-amber/5 border border-amber/20 hover:border-amber/40 hover:bg-amber/15 rounded-lg flex items-start gap-3 transition-all group"
+              className="w-full p-4 bg-gradient-to-r from-amber/10 to-amber/5 border border-amber/20 hover:border-amber/40 hover:bg-black/15 rounded-lg flex items-start gap-3 transition-all group"
             >
-              <div className="w-10 h-10 rounded-lg bg-amber/20 flex items-center justify-center group-hover:bg-amber/30 transition-colors flex-shrink-0">
-                <Upload size={18} className="text-amber" />
+              <div className="w-10 h-10 rounded-lg bg-black/20 flex items-center justify-center group-hover:bg-black/30 transition-colors flex-shrink-0">
+                <Upload size={18} className="text-black" />
               </div>
               <div className="text-left flex-1">
-                <p className="text-sm font-medium text-warm mb-1">
+                <p className="text-sm font-medium text-black mb-1">
                   Generación en Lote
                 </p>
-                <p className="text-xs text-warm-30">
+                <p className="text-xs text-black-30">
                   Sube múltiples prompts y genera imágenes/videos en paralelo
                 </p>
               </div>
@@ -410,24 +410,24 @@ export default function ProspeccionPage() {
 
             {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              <div className="p-4 bg-warm-5/30 border border-warm-10 rounded-lg text-center hover:border-amber/40 transition-colors">
-                <p className="text-2xl font-bold text-amber">{assets.length}</p>
-                <p className="text-xs text-warm-30 mt-1">Total Assets</p>
+              <div className="p-4 bg-gray-100/30 border border-gray-300 rounded-lg text-center hover:border-amber/40 transition-colors">
+                <p className="text-2xl font-bold text-black">{assets.length}</p>
+                <p className="text-xs text-black-30 mt-1">Total Assets</p>
               </div>
 
-              <div className="p-4 bg-warm-5/30 border border-warm-10 rounded-lg text-center hover:border-amber/40 transition-colors">
-                <p className="text-2xl font-bold text-amber">{videoCount}</p>
-                <p className="text-xs text-warm-30 mt-1">Videos</p>
+              <div className="p-4 bg-gray-100/30 border border-gray-300 rounded-lg text-center hover:border-amber/40 transition-colors">
+                <p className="text-2xl font-bold text-black">{videoCount}</p>
+                <p className="text-xs text-black-30 mt-1">Videos</p>
               </div>
 
-              <div className="p-4 bg-warm-5/30 border border-warm-10 rounded-lg text-center hover:border-amber/40 transition-colors">
-                <p className="text-2xl font-bold text-amber">{imageCount}</p>
-                <p className="text-xs text-warm-30 mt-1">Imágenes</p>
+              <div className="p-4 bg-gray-100/30 border border-gray-300 rounded-lg text-center hover:border-amber/40 transition-colors">
+                <p className="text-2xl font-bold text-black">{imageCount}</p>
+                <p className="text-xs text-black-30 mt-1">Imágenes</p>
               </div>
             </div>
 
             {/* Results Gallery */}
-            <div className="border border-warm-10 rounded-xl p-6 bg-warm-5/30">
+            <div className="border border-gray-300 rounded-xl p-6 bg-gray-100/30">
               <ResultsGallery
                 assets={assets}
                 onDelete={deleteAsset}
@@ -455,16 +455,16 @@ export default function ProspeccionPage() {
 
             {/* Performance Analytics */}
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-warm flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-black flex items-center gap-2">
                 <BarChart3 size={16} />
                 Performance
               </h3>
 
-              <div className="p-4 bg-warm-5/30 border border-warm-10 rounded-lg space-y-3">
+              <div className="p-4 bg-gray-100/30 border border-gray-300 rounded-lg space-y-3">
                 <div>
                   <div className="flex justify-between mb-1">
-                    <span className="text-xs text-warm-30">Avg. Time</span>
-                    <span className="text-sm font-bold text-amber">
+                    <span className="text-xs text-black-30">Avg. Time</span>
+                    <span className="text-sm font-bold text-black">
                       {analyticsData.avgTime}s
                     </span>
                   </div>
@@ -478,7 +478,7 @@ export default function ProspeccionPage() {
 
                 <div>
                   <div className="flex justify-between mb-1">
-                    <span className="text-xs text-warm-30">Success Rate</span>
+                    <span className="text-xs text-black-30">Success Rate</span>
                     <span className="text-sm font-bold text-green-400">
                       {analyticsData.successRate}%
                     </span>
@@ -491,10 +491,10 @@ export default function ProspeccionPage() {
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-warm-10">
+                <div className="pt-2 border-t border-gray-300">
                   <div className="flex justify-between text-xs">
-                    <span className="text-warm-30">Used Today</span>
-                    <span className="text-amber font-bold">
+                    <span className="text-black-30">Used Today</span>
+                    <span className="text-black font-bold">
                       {analyticsData.creditsUsed} credits
                     </span>
                   </div>
@@ -504,19 +504,19 @@ export default function ProspeccionPage() {
 
             {/* Export Quick Actions */}
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-warm">Export</h3>
+              <h3 className="text-sm font-semibold text-black">Export</h3>
 
               <div className="space-y-2">
-                <button className="w-full px-3 py-2 text-left text-xs text-warm hover:bg-warm-5/50 rounded-lg border border-warm-10 hover:border-amber/40 transition-all flex items-center gap-2 group">
-                  <Download size={14} className="text-warm-45 group-hover:text-amber transition-colors" />
+                <button className="w-full px-3 py-2 text-left text-xs text-black hover:bg-gray-100/50 rounded-lg border border-gray-300 hover:border-amber/40 transition-all flex items-center gap-2 group">
+                  <Download size={14} className="text-black-45 group-hover:text-black transition-colors" />
                   Download All
                 </button>
-                <button className="w-full px-3 py-2 text-left text-xs text-warm hover:bg-warm-5/50 rounded-lg border border-warm-10 hover:border-amber/40 transition-all flex items-center gap-2 group">
-                  <Download size={14} className="text-warm-45 group-hover:text-amber transition-colors" />
+                <button className="w-full px-3 py-2 text-left text-xs text-black hover:bg-gray-100/50 rounded-lg border border-gray-300 hover:border-amber/40 transition-all flex items-center gap-2 group">
+                  <Download size={14} className="text-black-45 group-hover:text-black transition-colors" />
                   Export as Zip
                 </button>
-                <button className="w-full px-3 py-2 text-left text-xs text-warm hover:bg-warm-5/50 rounded-lg border border-warm-10 hover:border-amber/40 transition-all flex items-center gap-2 group">
-                  <Download size={14} className="text-warm-45 group-hover:text-amber transition-colors" />
+                <button className="w-full px-3 py-2 text-left text-xs text-black hover:bg-gray-100/50 rounded-lg border border-gray-300 hover:border-amber/40 transition-all flex items-center gap-2 group">
+                  <Download size={14} className="text-black-45 group-hover:text-black transition-colors" />
                   Copy Share Link
                 </button>
               </div>
@@ -525,12 +525,12 @@ export default function ProspeccionPage() {
             {/* Collaboration — Pending Approvals */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-warm flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-black flex items-center gap-2">
                   <MessageSquare size={16} />
                   Approvals
                 </h3>
                 {pendingApprovals.length > 0 && (
-                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber/20 text-amber">
+                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-black/20 text-black">
                     {pendingApprovals.length}
                   </span>
                 )}
@@ -542,23 +542,23 @@ export default function ProspeccionPage() {
                     <motion.div
                       key={approval.id}
                       layout
-                      className="p-3 bg-warm-5/30 border border-warm-10 rounded-lg hover:border-amber/40 transition-colors"
+                      className="p-3 bg-gray-100/30 border border-gray-300 rounded-lg hover:border-amber/40 transition-colors"
                     >
                       <div className="flex items-start gap-2 mb-1">
                         <AlertCircle
                           size={14}
-                          className="text-amber mt-0.5 flex-shrink-0"
+                          className="text-black mt-0.5 flex-shrink-0"
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium text-warm truncate">
+                          <p className="text-xs font-medium text-black truncate">
                             {approval.from}
                           </p>
-                          <p className="text-xs text-warm-30 line-clamp-2">
+                          <p className="text-xs text-black-30 line-clamp-2">
                             {approval.status}
                           </p>
                         </div>
                       </div>
-                      <p className="text-xs text-warm-45 ml-5">
+                      <p className="text-xs text-black-45 ml-5">
                         {Math.floor(
                           (Date.now() - approval.timestamp.getTime()) / 60000
                         )}m ago
@@ -568,7 +568,7 @@ export default function ProspeccionPage() {
                 ) : (
                   <div className="p-3 text-center">
                     <CheckCircle size={16} className="text-green-400 mx-auto mb-1" />
-                    <p className="text-xs text-warm-30">All approved!</p>
+                    <p className="text-xs text-black-30">All approved!</p>
                   </div>
                 )}
               </div>
