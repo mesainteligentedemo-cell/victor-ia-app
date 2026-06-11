@@ -1,0 +1,67 @@
+/* ─────────────────────────────────────────────
+   Victor IA — Responsive System
+   Breakpoints:
+   · Mobile  <640px  — stack vertical, hamburguesa, 1 columna
+   · Tablet  ≥640px  — 2 columnas, sidebar 160px
+   · Desktop ≥1024px — 3 columnas, sidebar 200px fijo + panel agentes
+   (La mayoría del layout responsive vive en clases Tailwind;
+    aquí van las reglas globales que no caben en utilidades.)
+   ───────────────────────────────────────────── */
+
+/* ── Mobile <640px ── */
+@media (max-width: 639px) {
+  /* Tipografía de chat un punto menor para densidad móvil */
+  .prose-chat {
+    font-size: 0.86rem;
+  }
+  .prose-chat pre {
+    padding: 0.75rem;
+    border-radius: 8px;
+  }
+  .prose-chat table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* Evitar zoom automático de iOS al enfocar el textarea (<16px) */
+  textarea,
+  input {
+    font-size: 16px !important;
+  }
+
+  /* Respeto de safe areas (notch / home indicator) */
+  .vi-input-zone {
+    padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* ── Tablet 640–1023px — sidebar compacto 160px ── */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .vi-sidebar-docked {
+    width: 160px;
+  }
+  /* Compactar paddings dentro del sidebar de 160px */
+  .vi-sidebar-docked .vi-side-pad {
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
+  }
+}
+
+/* ── Desktop ≥1024px — sidebar fijo 200px ── */
+@media (min-width: 1024px) {
+  .vi-sidebar-docked {
+    width: 200px;
+  }
+}
+
+/* Scroll suave global excepto si el usuario prefiere menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

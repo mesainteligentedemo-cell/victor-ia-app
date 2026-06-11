@@ -4,16 +4,18 @@ import { useRef, useEffect, FormEvent } from "react";
 import { useChat } from "ai/react";
 import type { Message } from "ai";
 import MessageBubble, { TypingIndicator } from "./MessageBubble";
+import ThemeToggle from "./ThemeToggle";
+import { IconVideo, IconGlobe, IconZap, IconChart, IconPen, IconMic, IconGear } from "./Icons";
 import { PROJECTS } from "@/lib/projects";
 import { findSkillById } from "@/lib/skills";
 
 const SUGGESTED_PROMPTS = [
-  "¿En qué estado están los proyectos activos?",
-  "Redacta un follow-up para el cliente Seabird Hotel",
-  "Activa el skill Web 4.0 y mejora el hero section",
-  "¿Qué sigue pendiente con ROES & CO?",
-  "Crea una propuesta rápida para un nuevo cliente",
-  "Analiza las finanzas del mes actual",
+  { Icon: IconVideo, text: "Crea un spot de video para campaña de marca" },
+  { Icon: IconGlobe, text: "Construye el sitio web para un nuevo cliente" },
+  { Icon: IconZap, text: "Automatiza el pipeline de ventas completo" },
+  { Icon: IconChart, text: "Genera el dashboard BI del mes actual" },
+  { Icon: IconPen, text: "Redacta copy para redes sociales Q3" },
+  { Icon: IconMic, text: "Crea una narración de voz en IA para el spot" },
 ];
 
 interface ChatInterfaceProps {
@@ -22,6 +24,9 @@ interface ChatInterfaceProps {
   onOpenSidebar: () => void;
   onSelectProject: (id: string | null) => void;
   onSelectSkill: (id: string | null) => void;
+  onLoadingChange: (loading: boolean, query: string) => void;
+  agentsPanelVisible: boolean;
+  onToggleAgentsPanel: () => void;
 }
 
 export default function ChatInterface({
@@ -30,9 +35,13 @@ export default function ChatInterface({
   onOpenSidebar,
   onSelectProject,
   onSelectSkill,
+  onLoadingChange,
+  agentsPanelVisible,
+  onToggleAgentsPanel,
 }: ChatInterfaceProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const prevLoadingRef = useRef(false);
 
   const { messages, input, handleInputChange, handleSubmit, isLoading, setInput } = useChat({
     api: "/api/chat",
@@ -42,6 +51,14 @@ export default function ChatInterface({
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
+
+  useEffect(() => {
+    if (prevLoadingRef.current !== isLoading) {
+      prevLoadingRef.current = isLoading;
+      const lastUser = [...messages].reverse().find((m) => m.role === "user");
+      onLoadingChange(isLoading, lastUser?.content as string || "");
+    }
+  }, [isLoading, messages]);
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -60,78 +77,113 @@ export default function ChatInterface({
 
   const activeProjectData = activeProject ? PROJECTS.find((p) => p.id === activeProject) : null;
   const activeSkillData = activeSkill ? findSkillById(activeSkill) : null;
-
   const isEmpty = messages.length === 0;
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Top bar */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-warm-10 shrink-0">
-        <button
-          onClick={onOpenSidebar}
-          className="lg:hidden text-warm-45 hover:text-warm transition-colors p-1"
-          aria-label="Abrir menú"
-        >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-        </button>
+    <div className="flex flex-col h-full min-w-0">
 
-        <div className="flex items-center gap-2 flex-1 min-w-0 lg:ml-0 ml-2">
-          {activeProjectData || activeSkillData ? (
-            <div className="flex items-center gap-2 flex-wrap">
-              {activeProjectData && (
-                <button
-                  onClick={() => onSelectProject(null)}
-                  className="flex items-center gap-1.5 bg-amber-low border border-amber/20 rounded-full px-3 py-1 text-[11px] text-amber hover:bg-amber/15 transition-colors"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber" />
-                  {activeProjectData.name}
-                  <span className="text-amber/60 ml-0.5">×</span>
-                </button>
-              )}
-              {activeSkillData && (
-                <button
-                  onClick={() => onSelectSkill(null)}
-                  className="flex items-center gap-1.5 bg-warm-5 border border-warm-10 rounded-full px-3 py-1 text-[11px] text-warm-60 hover:bg-warm-10 transition-colors"
-                >
-                  <span className="text-[10px]">{activeSkillData.icon ?? "◈"}</span>
-                  {activeSkillData.name}
-                  <span className="text-warm-45 ml-0.5">×</span>
-                </button>
-              )}
-            </div>
-          ) : (
-            <span className="text-[12px] text-warm-45 tracking-[0.06em]">Chat general — selecciona un proyecto o skill</span>
-          )}
+      {/* ── Header ── */}
+      <div className="flex items-center justify-between px-5 py-3.5 border-b border-warm-10 shrink-0">
+        <div className="flex items-center gap-3">
+          {/* Mobile menu */}
+          <button
+            onClick={onOpenSidebar}
+            className="sm:hidden text-warm-45 hover:text-warm transition-colors"
+            aria-label="Abrir menú"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+            </svg>
+          </button>
+
+          {/* Context badges */}
+          <div className="flex items-center gap-2 flex-wrap">
+            {activeProjectData && (
+              <button
+                onClick={() => onSelectProject(null)}
+                className="flex items-center gap-1.5 bg-amber-low border border-amber/20 rounded-full px-3 py-1 text-[11px] text-amber hover:bg-amber/15 transition-colors"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-amber" />
+                {activeProjectData.name}
+                <span className="text-amber/50 ml-0.5">×</span>
+              </button>
+            )}
+            {activeSkillData && (
+              <button
+                onClick={() => onSelectSkill(null)}
+                className="flex items-center gap-1.5 bg-warm-5 border border-warm-10 rounded-full px-3 py-1 text-[11px] text-warm-60 hover:bg-warm-10 transition-colors"
+              >
+                {activeSkillData.name}
+                <span className="text-warm-45 ml-0.5">×</span>
+              </button>
+            )}
+            {!activeProjectData && !activeSkillData && (
+              <span className="text-[11px] text-warm-20 tracking-[0.04em]">Chat general</span>
+            )}
+          </div>
+        </div>
+
+        {/* Right actions */}
+        <div className="flex items-center gap-1">
+          <div className="hidden sm:flex items-center gap-1.5 mr-2 px-2.5 py-1 bg-warm-5 border border-warm-10 rounded-lg">
+            <div className="w-1.5 h-1.5 rounded-full bg-amber" />
+            <span className="text-[10px] text-warm-45">Claude 4 Opus</span>
+          </div>
+          <ThemeToggle />
+          <button
+            onClick={onToggleAgentsPanel}
+            title="Panel de agentes"
+            aria-label="Panel de agentes"
+            className={`hidden lg:block p-2 rounded-lg transition-all ${
+              agentsPanelVisible
+                ? "bg-amber-low border border-amber/20 text-amber"
+                : "text-warm-45 hover:text-warm hover:bg-warm-5"
+            }`}
+          >
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+              <rect x="1.5" y="3" width="4" height="9" rx="1" stroke="currentColor" strokeWidth="1.3"/>
+              <rect x="7" y="1.5" width="4" height="4" rx="1" stroke="currentColor" strokeWidth="1.3"/>
+              <rect x="7" y="7.5" width="4" height="6" rx="1" stroke="currentColor" strokeWidth="1.3"/>
+            </svg>
+          </button>
+          <button className="p-2 rounded-lg text-warm-45 hover:text-warm hover:bg-warm-5 transition-all" title="Configuración" aria-label="Configuración">
+            <IconGear size={15} />
+          </button>
         </div>
       </div>
 
-      {/* Messages area */}
+      {/* ── Messages ── */}
       <div className="flex-1 overflow-y-auto">
         {isEmpty ? (
-          <div className="flex flex-col items-center justify-center h-full px-6 py-12 text-center">
-            <div className="w-14 h-14 rounded-2xl bg-amber-low border border-amber/20 flex items-center justify-center mb-5">
-              <span className="text-amber font-serif text-2xl italic">V</span>
+          /* Empty state */
+          <div className="flex flex-col items-center justify-center h-full px-8 py-12 text-center">
+            <div className="mb-6">
+              <div className="w-16 h-16 rounded-2xl bg-amber-low border border-amber/20 flex items-center justify-center mx-auto mb-4">
+                <span className="text-amber font-serif text-3xl italic">V</span>
+              </div>
+              <h1 className="font-serif text-[22px] italic text-warm mb-1.5">
+                Hola, soy Victor IA
+              </h1>
+              <p className="text-[13px] text-warm-45 max-w-[340px] leading-relaxed">
+                El primer supercerebro de IA en LATAM. Dirijo ~200 agentes especializados para operar tu empresa.
+              </p>
             </div>
-            <h1 className="font-serif text-2xl italic text-warm mb-2">Hola, soy Victor IA</h1>
-            <p className="text-[13px] text-warm-45 max-w-sm leading-relaxed mb-8">
-              Tu agencia de inteligencia artificial. Puedo ayudarte con proyectos, clientes, diseño, código, automatización y mucho más.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full max-w-lg">
-              {SUGGESTED_PROMPTS.map((prompt) => (
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 w-full max-w-[640px]">
+              {SUGGESTED_PROMPTS.map((p) => (
                 <button
-                  key={prompt}
-                  onClick={() => handleSuggestion(prompt)}
-                  className="text-left px-4 py-3 rounded-xl border border-warm-10 hover:border-warm-20 hover:bg-warm-5 transition-all text-[12px] text-warm-60 hover:text-warm leading-snug"
+                  key={p.text}
+                  onClick={() => handleSuggestion(p.text)}
+                  className="text-left px-4 py-3 rounded-xl border border-warm-10 hover:border-warm-20 hover:bg-warm-5 transition-all group"
                 >
-                  {prompt}
+                  <p.Icon size={16} className="block mb-2 text-amber/70 group-hover:text-amber transition-colors" />
+                  <span className="text-[12px] text-warm-45 group-hover:text-warm-60 leading-snug transition-colors">{p.text}</span>
                 </button>
               ))}
             </div>
           </div>
         ) : (
-          <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
+          <div className="max-w-[720px] mx-auto px-5 py-6 space-y-6">
             {messages.map((m: Message) => (
               <MessageBubble key={m.id} message={m} />
             ))}
@@ -143,42 +195,60 @@ export default function ChatInterface({
         )}
       </div>
 
-      {/* Input bar */}
-      <div className="shrink-0 border-t border-warm-10 px-4 py-3">
-        <div className="max-w-3xl mx-auto">
+      {/* ── Input ── */}
+      <div className="shrink-0 px-5 pb-5 pt-3 vi-input-zone">
+        <div className="max-w-[720px] mx-auto">
           <form onSubmit={handleSubmit} className="relative">
-            <textarea
-              ref={inputRef}
-              value={input}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-              placeholder="Escribe tu mensaje... (Enter para enviar, Shift+Enter para nueva línea)"
-              rows={1}
-              className="w-full bg-warm-5 border border-warm-10 rounded-2xl px-4 py-3 pr-12 text-[14px] text-warm placeholder-warm-45 resize-none focus:outline-none focus:border-warm-20 focus:bg-warm-10 transition-all leading-relaxed"
-              style={{ minHeight: "48px", maxHeight: "160px", overflowY: "auto" }}
-              onInput={(e) => {
-                const el = e.currentTarget;
-                el.style.height = "auto";
-                el.style.height = Math.min(el.scrollHeight, 160) + "px";
-              }}
-            />
-            <button
-              type="submit"
-              disabled={!input.trim() || isLoading}
-              className="absolute right-3 bottom-3 w-8 h-8 rounded-xl bg-amber flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed hover:bg-amber-dk transition-colors"
-            >
-              {isLoading ? (
-                <span className="w-3.5 h-3.5 rounded-full border-2 border-ink/30 border-t-ink animate-spin" />
-              ) : (
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M7 12V2M2 7l5-5 5 5" stroke="#0E0F12" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              )}
-            </button>
+            <div className="relative bg-warm-5 border border-warm-10 rounded-2xl focus-within:border-warm-20 focus-within:bg-warm-10 transition-all">
+              <textarea
+                ref={inputRef}
+                value={input}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                placeholder="Escribe un mensaje o usa / para comandos..."
+                rows={1}
+                className="w-full bg-transparent px-4 py-3.5 pr-14 text-[14px] text-warm placeholder-warm-20 resize-none focus:outline-none leading-relaxed"
+                style={{ minHeight: "52px", maxHeight: "180px", overflowY: "auto" }}
+                onInput={(e) => {
+                  const el = e.currentTarget;
+                  el.style.height = "auto";
+                  el.style.height = Math.min(el.scrollHeight, 180) + "px";
+                }}
+              />
+              <div className="absolute right-3 bottom-3 flex items-center gap-1.5">
+                <button
+                  type="button"
+                  className="w-7 h-7 rounded-lg text-warm-45 hover:text-warm hover:bg-warm-10 transition-all flex items-center justify-center"
+                  title="Adjuntar"
+                >
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <path d="M11 6.5L6.5 11C5.1 12.4 2.9 12.4 1.5 11 0.1 9.6 0.1 7.4 1.5 6L7 0.5C8 -0.5 9.6 -0.5 10.5 0.5 11.5 1.5 11.5 3 10.5 4L5.5 9C5 9.5 4.3 9.5 3.8 9 3.3 8.5 3.3 7.8 3.8 7.3L8.5 2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                  </svg>
+                </button>
+                <button
+                  type="submit"
+                  disabled={!input.trim() || isLoading}
+                  className="w-8 h-8 rounded-xl bg-amber text-on-amber flex items-center justify-center disabled:opacity-25 disabled:cursor-not-allowed hover:bg-amber-dk transition-colors"
+                  aria-label="Enviar mensaje"
+                >
+                  {isLoading ? (
+                    <span className="w-3.5 h-3.5 rounded-full border-2 border-ink/30 border-t-ink animate-spin" />
+                  ) : (
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                      <path d="M6.5 11V2M2 6.5l4.5-4.5 4.5 4.5" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  )}
+                </button>
+              </div>
+            </div>
           </form>
-          <p className="text-[10px] text-warm-45 text-center mt-2 tracking-[0.04em]">
-            Victor IA puede cometer errores. Verifica información importante.
-          </p>
+          <div className="flex items-center justify-between mt-2 px-1">
+            <p className="text-[10px] text-warm-20">
+              <kbd className="border border-warm-10 rounded px-1 py-0.5 text-[9px]">Enter</kbd> enviar ·{" "}
+              <kbd className="border border-warm-10 rounded px-1 py-0.5 text-[9px]">⇧ Enter</kbd> nueva línea
+            </p>
+            <p className="text-[10px] text-warm-20">Victor IA puede cometer errores</p>
+          </div>
         </div>
       </div>
     </div>

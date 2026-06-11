@@ -1,0 +1,63 @@
+/* ─────────────────────────────────────────────
+   Victor IA — Dark Mode System
+   CSS variables · default: dark · html.light overrides
+   Persistencia: localStorage "vi-theme" (ver layout.tsx)
+   ───────────────────────────────────────────── */
+
+:root {
+  /* DARK (default) — spec: #0A0A0A bg, #FFF text */
+  --bg-rgb: 10 10 10;
+  --text-rgb: 255 255 255;
+  --bg: #0A0A0A;
+  --text: #FFFFFF;
+  --border: rgba(255, 255, 255, 0.10);
+
+  /* Derivados */
+  --surface: rgba(255, 255, 255, 0.05);
+  --text-20: rgba(255, 255, 255, 0.25);
+  --text-45: rgba(255, 255, 255, 0.48);
+  --text-60: rgba(255, 255, 255, 0.64);
+
+  /* Acento amber (canales RGB para alpha de Tailwind) */
+  --amber-rgb: 255 170 23;
+  --amber: #FFAA17;
+  --amber-dk: #CC8800;
+  --amber-low: rgba(255, 170, 23, 0.08);
+
+  /* Para botón de envío (texto sobre amber) */
+  --on-amber: #0A0A0A;
+
+  color-scheme: dark;
+}
+
+html.light {
+  /* LIGHT — spec: #FFF bg, #000 text */
+  --bg-rgb: 255 255 255;
+  --text-rgb: 0 0 0;
+  --bg: #FFFFFF;
+  --text: #000000;
+  --border: rgba(0, 0, 0, 0.10);
+
+  --surface: rgba(0, 0, 0, 0.04);
+  --text-20: rgba(0, 0, 0, 0.32);
+  --text-45: rgba(0, 0, 0, 0.52);
+  --text-60: rgba(0, 0, 0, 0.68);
+
+  /* Amber oscurecido para contraste AA sobre blanco */
+  --amber-rgb: 176 116 0;
+  --amber: #B07400;
+  --amber-dk: #8A5B00;
+  --amber-low: rgba(176, 116, 0, 0.08);
+
+  --on-amber: #FFFFFF;
+
+  color-scheme: light;
+}
+
+/* Transición suave al cambiar de tema */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease !important;
+}
