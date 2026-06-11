@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
@@ -31,9 +32,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="h-screen overflow-hidden bg-white dark:bg-black text-black dark:text-white transition-colors">
         <ThemeProvider>
-          <script defer src="https://victor-ia-brain-tracker.vercel.app/vi-track.js" data-site="victor-ia-app" />
           {children}
         </ThemeProvider>
+        <Script defer src="https://victor-ia-brain-tracker.vercel.app/vi-track.js" data-site="victor-ia-app" />
       </body>
     </html>
   );
