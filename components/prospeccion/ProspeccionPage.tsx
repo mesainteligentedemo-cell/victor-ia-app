@@ -20,6 +20,7 @@ import {
   RefreshIcon as RefreshCw,
   CheckIcon as CheckCircle,
   TrendingIcon as Flame,
+  TrendingIcon as TrendingUp,
   ChatIcon as MessageSquare,
   UploadIcon as Upload,
 } from "@/components/Icons/CustomIcons";
@@ -152,10 +153,10 @@ export default function ProspeccionPage() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-3">
               <span className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shadow-md">
-                âœ¨
+
               </span>
               <h1 className="text-3xl sm:text-4xl font-bold text-black dark:text-white">
-                ProspecciÃ³n Media
+                Prospección Media
               </h1>
             </div>
 
@@ -175,7 +176,7 @@ export default function ProspeccionPage() {
           </div>
 
           <p className="text-gray-600 dark:text-gray-200 text-sm sm:text-base">
-            Genera videos e imÃ¡genes con IA. Perfecto para campaÃ±as, redes y propuestas.
+            Genera videos e imágenes con IA. Perfecto para campañas, redes y propuestas.
           </p>
         </motion.div>
       </div>
@@ -183,7 +184,7 @@ export default function ProspeccionPage() {
       {/* Main 3-Column Layout */}
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* LEFT SIDEBAR â€” Quick Stats & Trending (25%) */}
+          {/* LEFT SIDEBAR — Quick Stats & Trending (25%) */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
