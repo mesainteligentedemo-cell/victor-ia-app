@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { IconSun, IconMoon } from "./Icons";
@@ -29,9 +29,9 @@ export default function ThemeToggle() {
       onClick={toggle}
       title={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
       aria-label={theme === "dark" ? "Activar modo claro" : "Activar modo oscuro"}
-      className="p-2 rounded-lg text-warm-45 hover:text-warm hover:bg-warm-5 transition-all"
+      className="p-2 rounded-lg text-gray-600 hover:text-warm hover:bg-gray-100 transition-all"
     >
-      {/* Evita mismatch de hidratación: icono fijo hasta montar */}
+      {/* Evita mismatch de hidrataciÃ³n: icono fijo hasta montar */}
       {!mounted || theme === "dark" ? <IconSun size={15} /> : <IconMoon size={15} />}
     </button>
   );

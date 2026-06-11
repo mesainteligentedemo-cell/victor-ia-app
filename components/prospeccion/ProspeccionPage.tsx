@@ -162,20 +162,20 @@ export default function ProspeccionPage() {
 
             {/* Trending Badges */}
             <div className="flex flex-wrap gap-2">
-              <div className="px-3 py-1 rounded-full bg-black/20 border border-amber/40 flex items-center gap-1">
+              <div className="px-3 py-1 rounded-full bg-gray-200 border border-gray-400 flex items-center gap-1">
                 <Flame size={14} className="text-black" />
                 <span className="text-xs font-medium text-black">Trending</span>
               </div>
-              <div className="px-3 py-1 rounded-full bg-blue-500/20 border border-blue-500/40 flex items-center gap-1">
-                <Clock size={14} className="text-blue-400" />
-                <span className="text-xs font-medium text-blue-300">
+              <div className="px-3 py-1 rounded-full bg-gray-200 border border-gray-400 flex items-center gap-1">
+                <Clock size={14} className="text-gray-600" />
+                <span className="text-xs font-medium text-gray-500">
                   Live Queue
                 </span>
               </div>
             </div>
           </div>
 
-          <p className="text-black-45 text-sm sm:text-base">
+          <p className="text-gray-600 text-sm sm:text-base">
             Genera videos e imágenes con IA. Perfecto para campañas, redes y propuestas.
           </p>
         </motion.div>
@@ -200,12 +200,12 @@ export default function ProspeccionPage() {
 
               <div className="p-4 bg-gray-100/30 border border-gray-300 rounded-lg space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-black-30">Credits</span>
+                  <span className="text-xs text-gray-500">Credits</span>
                   <span className="text-sm font-bold text-black">
                     {analyticsData.creditsRemaining}
                   </span>
                 </div>
-                <div className="w-full h-2 bg-warm-10 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-gradient-to-r from-amber to-amber/60 transition-all"
                     style={{
@@ -216,7 +216,7 @@ export default function ProspeccionPage() {
               </div>
 
               <div className="p-4 bg-gray-100/30 border border-gray-300 rounded-lg text-center">
-                <p className="text-xs text-black-30 mb-1">Today</p>
+                <p className="text-xs text-gray-500 mb-1">Today</p>
                 <p className="text-2xl font-bold text-black">
                   {assets.filter((a) => {
                     const today = new Date();
@@ -238,10 +238,10 @@ export default function ProspeccionPage() {
                 </h3>
                 <button
                   onClick={refreshTrending}
-                  className="p-1 hover:bg-warm-10 rounded-lg transition-colors"
+                  className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
                   title="Refresh trending"
                 >
-                  <RefreshCw size={14} className="text-black-45" />
+                  <RefreshCw size={14} className="text-gray-600" />
                 </button>
               </div>
 
@@ -257,12 +257,12 @@ export default function ProspeccionPage() {
                         {item.label}
                       </span>
                       {item.trend > 0 && (
-                        <span className="text-xs font-bold text-green-400">
+                        <span className="text-xs font-bold text-gray-600">
                           +{item.trend}%
                         </span>
                       )}
                       {item.trend < 0 && (
-                        <span className="text-xs font-bold text-red-400">
+                        <span className="text-xs font-bold text-gray-600">
                           {item.trend}%
                         </span>
                       )}
@@ -274,7 +274,7 @@ export default function ProspeccionPage() {
                 ))}
               </div>
 
-              <p className="text-xs text-black-45 text-center">
+              <p className="text-xs text-gray-600 text-center">
                 Updated {Math.round((Date.now() - lastTrendingUpdate.getTime()) / 1000)}s ago
               </p>
             </div>
@@ -322,7 +322,7 @@ export default function ProspeccionPage() {
                     <h3 className="font-semibold text-black mb-1">
                       Generar Video
                     </h3>
-                    <p className="text-xs text-black-30">
+                    <p className="text-xs text-gray-500">
                       5-30 segundos con IA
                     </p>
                   </div>
@@ -347,7 +347,7 @@ export default function ProspeccionPage() {
                     <h3 className="font-semibold text-black mb-1">
                       Generar Imagen
                     </h3>
-                    <p className="text-xs text-black-30">
+                    <p className="text-xs text-gray-500">
                       Cualquier resolución en minutos
                     </p>
                   </div>
@@ -363,7 +363,7 @@ export default function ProspeccionPage() {
                 setBatchType("image");
                 setBatchModalOpen(true);
               }}
-              className="w-full p-4 bg-gradient-to-r from-amber/10 to-amber/5 border border-amber/20 hover:border-amber/40 hover:bg-black/15 rounded-lg flex items-start gap-3 transition-all group"
+              className="w-full p-4 bg-gradient-to-r from-gray-100 to-white border border-gray-300 hover:border-black hover:bg-gray-50 rounded-lg flex items-start gap-3 transition-all group"
             >
               <div className="w-10 h-10 rounded-lg bg-black/20 flex items-center justify-center group-hover:bg-black/30 transition-colors flex-shrink-0">
                 <Upload size={18} className="text-black" />
@@ -372,7 +372,7 @@ export default function ProspeccionPage() {
                 <p className="text-sm font-medium text-black mb-1">
                   Generación en Lote
                 </p>
-                <p className="text-xs text-black-30">
+                <p className="text-xs text-gray-500">
                   Sube múltiples prompts y genera imágenes/videos en paralelo
                 </p>
               </div>
@@ -388,11 +388,11 @@ export default function ProspeccionPage() {
                   className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg"
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <p className="text-sm font-medium text-blue-300 flex items-center gap-2">
+                    <p className="text-sm font-medium text-gray-500 flex items-center gap-2">
                       <Clock size={16} />
                       Queue Status
                     </p>
-                    <span className="text-xs font-bold text-blue-400">
+                    <span className="text-xs font-bold text-gray-600">
                       {queueStats.pending} pending
                     </span>
                   </div>
@@ -412,17 +412,17 @@ export default function ProspeccionPage() {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               <div className="p-4 bg-gray-100/30 border border-gray-300 rounded-lg text-center hover:border-amber/40 transition-colors">
                 <p className="text-2xl font-bold text-black">{assets.length}</p>
-                <p className="text-xs text-black-30 mt-1">Total Assets</p>
+                <p className="text-xs text-gray-500 mt-1">Total Assets</p>
               </div>
 
               <div className="p-4 bg-gray-100/30 border border-gray-300 rounded-lg text-center hover:border-amber/40 transition-colors">
                 <p className="text-2xl font-bold text-black">{videoCount}</p>
-                <p className="text-xs text-black-30 mt-1">Videos</p>
+                <p className="text-xs text-gray-500 mt-1">Videos</p>
               </div>
 
               <div className="p-4 bg-gray-100/30 border border-gray-300 rounded-lg text-center hover:border-amber/40 transition-colors">
                 <p className="text-2xl font-bold text-black">{imageCount}</p>
-                <p className="text-xs text-black-30 mt-1">Imágenes</p>
+                <p className="text-xs text-gray-500 mt-1">Imágenes</p>
               </div>
             </div>
 
@@ -463,12 +463,12 @@ export default function ProspeccionPage() {
               <div className="p-4 bg-gray-100/30 border border-gray-300 rounded-lg space-y-3">
                 <div>
                   <div className="flex justify-between mb-1">
-                    <span className="text-xs text-black-30">Avg. Time</span>
+                    <span className="text-xs text-gray-500">Avg. Time</span>
                     <span className="text-sm font-bold text-black">
                       {analyticsData.avgTime}s
                     </span>
                   </div>
-                  <div className="w-full h-2 bg-warm-10 rounded-full overflow-hidden">
+                  <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-r from-blue-500 to-blue-400"
                       style={{ width: `${Math.min(analyticsData.avgTime / 120 * 100, 100)}%` }}
@@ -478,12 +478,12 @@ export default function ProspeccionPage() {
 
                 <div>
                   <div className="flex justify-between mb-1">
-                    <span className="text-xs text-black-30">Success Rate</span>
-                    <span className="text-sm font-bold text-green-400">
+                    <span className="text-xs text-gray-500">Success Rate</span>
+                    <span className="text-sm font-bold text-gray-600">
                       {analyticsData.successRate}%
                     </span>
                   </div>
-                  <div className="w-full h-2 bg-warm-10 rounded-full overflow-hidden">
+                  <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-r from-green-500 to-green-400"
                       style={{ width: `${analyticsData.successRate}%` }}
@@ -493,7 +493,7 @@ export default function ProspeccionPage() {
 
                 <div className="pt-2 border-t border-gray-300">
                   <div className="flex justify-between text-xs">
-                    <span className="text-black-30">Used Today</span>
+                    <span className="text-gray-500">Used Today</span>
                     <span className="text-black font-bold">
                       {analyticsData.creditsUsed} credits
                     </span>
@@ -508,15 +508,15 @@ export default function ProspeccionPage() {
 
               <div className="space-y-2">
                 <button className="w-full px-3 py-2 text-left text-xs text-black hover:bg-gray-100/50 rounded-lg border border-gray-300 hover:border-amber/40 transition-all flex items-center gap-2 group">
-                  <Download size={14} className="text-black-45 group-hover:text-black transition-colors" />
+                  <Download size={14} className="text-gray-600 group-hover:text-black transition-colors" />
                   Download All
                 </button>
                 <button className="w-full px-3 py-2 text-left text-xs text-black hover:bg-gray-100/50 rounded-lg border border-gray-300 hover:border-amber/40 transition-all flex items-center gap-2 group">
-                  <Download size={14} className="text-black-45 group-hover:text-black transition-colors" />
+                  <Download size={14} className="text-gray-600 group-hover:text-black transition-colors" />
                   Export as Zip
                 </button>
                 <button className="w-full px-3 py-2 text-left text-xs text-black hover:bg-gray-100/50 rounded-lg border border-gray-300 hover:border-amber/40 transition-all flex items-center gap-2 group">
-                  <Download size={14} className="text-black-45 group-hover:text-black transition-colors" />
+                  <Download size={14} className="text-gray-600 group-hover:text-black transition-colors" />
                   Copy Share Link
                 </button>
               </div>
@@ -553,12 +553,12 @@ export default function ProspeccionPage() {
                           <p className="text-xs font-medium text-black truncate">
                             {approval.from}
                           </p>
-                          <p className="text-xs text-black-30 line-clamp-2">
+                          <p className="text-xs text-gray-500 line-clamp-2">
                             {approval.status}
                           </p>
                         </div>
                       </div>
-                      <p className="text-xs text-black-45 ml-5">
+                      <p className="text-xs text-gray-600 ml-5">
                         {Math.floor(
                           (Date.now() - approval.timestamp.getTime()) / 60000
                         )}m ago
@@ -567,8 +567,8 @@ export default function ProspeccionPage() {
                   ))
                 ) : (
                   <div className="p-3 text-center">
-                    <CheckCircle size={16} className="text-green-400 mx-auto mb-1" />
-                    <p className="text-xs text-black-30">All approved!</p>
+                    <CheckCircle size={16} className="text-gray-600 mx-auto mb-1" />
+                    <p className="text-xs text-gray-500">All approved!</p>
                   </div>
                 )}
               </div>
@@ -581,7 +581,7 @@ export default function ProspeccionPage() {
                 animate={{ opacity: 1 }}
                 className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg"
               >
-                <p className="text-sm font-medium text-blue-300 flex items-center gap-2 mb-2">
+                <p className="text-sm font-medium text-gray-500 flex items-center gap-2 mb-2">
                   <span className="animate-spin">⏳</span>
                   Generating...
                 </p>

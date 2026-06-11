@@ -65,18 +65,18 @@ export default function VideoGeneratorModal({
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
-        className="bg-ink border border-warm-10 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+        className="bg-ink border border-gray-300 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-warm-10 sticky top-0 bg-ink/95 backdrop-blur">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-300 sticky top-0 bg-ink/95 backdrop-blur">
           <h2 className="text-lg font-semibold text-warm flex items-center gap-2">
-            <Zap size={18} className="text-amber" />
+            <Zap size={18} className="text-black" />
             Generar Video
           </h2>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-warm-10 rounded-lg transition-colors text-warm-45 hover:text-warm"
+            className="p-1 hover:bg-gray-100 rounded-lg transition-colors text-gray-600 hover:text-warm"
             aria-label="Cerrar"
           >
             <X size={18} />
@@ -87,8 +87,8 @@ export default function VideoGeneratorModal({
         <div className="p-6 space-y-6">
           {error && (
             <div className="flex gap-3 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
-              <AlertCircle size={18} className="text-red-400 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-red-300">{error}</p>
+              <AlertCircle size={18} className="text-gray-600 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-gray-600">{error}</p>
             </div>
           )}
 
@@ -101,10 +101,10 @@ export default function VideoGeneratorModal({
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="Describe el video en detalle..."
-              className="w-full bg-warm-5 border border-warm-10 rounded-lg px-3 py-2 text-warm placeholder-warm-30 focus:border-amber focus:outline-none resize-none h-24"
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-warm placeholder-warm-30 focus:border-gray-400 focus:outline-none resize-none h-24"
               disabled={isGenerating}
             />
-            <p className="text-xs text-warm-30 mt-1">
+            <p className="text-xs text-gray-600 mt-1">
               {prompt.length}/1000 caracteres · Mínimo 20
             </p>
           </div>
@@ -126,7 +126,7 @@ export default function VideoGeneratorModal({
                     if (config.quality) setQuality(config.quality);
                   }}
                   disabled={isGenerating}
-                  className="p-3 border border-warm-10 hover:border-amber hover:bg-amber/5 rounded-lg transition-colors text-center disabled:opacity-50"
+                  className="p-3 border border-gray-300 hover:border-gray-400 hover:bg-black rounded-lg transition-colors text-center disabled:opacity-50"
                 >
                   <div className="text-lg mb-1">{preset.icon}</div>
                   <p className="text-xs font-medium text-warm">{preset.label}</p>
@@ -143,7 +143,7 @@ export default function VideoGeneratorModal({
                 value={duration}
                 onChange={(e) => setDuration(parseInt(e.target.value) as any)}
                 disabled={isGenerating}
-                className="w-full bg-warm-5 border border-warm-10 rounded-lg px-3 py-2 text-warm focus:border-amber focus:outline-none"
+                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-warm focus:border-gray-400 focus:outline-none"
               >
                 {[5, 10, 15, 20, 25, 30].map((d) => (
                   <option key={d} value={d}>{d}s</option>
@@ -157,7 +157,7 @@ export default function VideoGeneratorModal({
                 value={aspectRatio}
                 onChange={(e) => setAspectRatio(e.target.value as any)}
                 disabled={isGenerating}
-                className="w-full bg-warm-5 border border-warm-10 rounded-lg px-3 py-2 text-warm focus:border-amber focus:outline-none"
+                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-warm focus:border-gray-400 focus:outline-none"
               >
                 <option value="16:9">16:9</option>
                 <option value="9:16">9:16</option>
@@ -170,7 +170,7 @@ export default function VideoGeneratorModal({
           <button
             onClick={handleGenerate}
             disabled={isGenerating || prompt.trim().length < 20}
-            className="w-full bg-gradient-to-r from-amber to-amber/80 hover:from-amber/90 disabled:from-warm-30 text-black font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-gray-100 to-white hover:from-gray-100 disabled:from-warm-30 text-black font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
           >
             {isGenerating ? (
               <>
@@ -189,3 +189,4 @@ export default function VideoGeneratorModal({
     </motion.div>
   );
 }
+

@@ -51,7 +51,7 @@ export default function BatchGeneratorModal({
       onClick={onClose}
     >
       <motion.div
-        className="bg-ink border border-warm-10 rounded-2xl max-w-lg w-full p-6 shadow-2xl"
+        className="bg-ink border border-gray-300 rounded-2xl max-w-lg w-full p-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-6">
@@ -60,7 +60,7 @@ export default function BatchGeneratorModal({
           </h2>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-warm-10 rounded-lg transition-colors"
+            className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <X size={18} />
           </button>
@@ -75,9 +75,9 @@ export default function BatchGeneratorModal({
               value={prompts}
               onChange={(e) => setPrompts(e.target.value)}
               placeholder="Prompt 1&#10;Prompt 2&#10;Prompt 3..."
-              className="w-full h-40 bg-warm-5 border border-warm-10 rounded-lg px-3 py-2 text-warm placeholder-warm-30 focus:border-amber focus:outline-none"
+              className="w-full h-40 bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-warm placeholder-warm-30 focus:border-gray-400 focus:outline-none"
             />
-            <p className="text-xs text-warm-30 mt-1">
+            <p className="text-xs text-gray-600 mt-1">
               {prompts.split("\n").filter((p) => p.trim()).length} prompts
             </p>
           </div>
@@ -85,7 +85,7 @@ export default function BatchGeneratorModal({
           <button
             onClick={handleGenerate}
             disabled={isGenerating || prompts.split("\n").filter((p) => p.trim()).length === 0}
-            className="w-full bg-gradient-to-r from-amber to-amber/80 hover:from-amber/90 disabled:from-warm-30 text-black font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-gray-100 to-white hover:from-gray-100 disabled:from-warm-30 text-black font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
           >
             {isGenerating ? (
               <>
@@ -104,3 +104,4 @@ export default function BatchGeneratorModal({
     </motion.div>
   );
 }
+

@@ -1,6 +1,6 @@
-// Victor IA — Set de iconos SVG custom
-// Grid 24px · stroke 1.5 · currentColor · esquinas redondeadas
-// Uso: <IconGrid size={16} className="text-amber" />
+﻿// Victor IA â€” Set de iconos SVG custom
+// Grid 24px Â· stroke 1.5 Â· currentColor Â· esquinas redondeadas
+// Uso: <IconGrid size={16} className="text-black" />
 
 interface IconProps {
   size?: number;
@@ -24,7 +24,7 @@ function base(props: IconProps) {
   };
 }
 
-/* ── Set principal (spec) ── */
+/* â”€â”€ Set principal (spec) â”€â”€ */
 
 export function IconGrid(props: IconProps) {
   return (
@@ -83,7 +83,7 @@ export function IconUser(props: IconProps) {
   );
 }
 
-/* ── Extras del producto ── */
+/* â”€â”€ Extras del producto â”€â”€ */
 
 export function IconVideo(props: IconProps) {
   return (

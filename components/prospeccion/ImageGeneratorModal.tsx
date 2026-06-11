@@ -62,17 +62,17 @@ export default function ImageGeneratorModal({
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
-        className="bg-ink border border-warm-10 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+        className="bg-ink border border-gray-300 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-warm-10 sticky top-0 bg-ink/95 backdrop-blur">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-300 sticky top-0 bg-ink/95 backdrop-blur">
           <h2 className="text-lg font-semibold text-warm flex items-center gap-2">
-            <ImageIcon size={18} className="text-amber" />
+            <ImageIcon size={18} className="text-black" />
             Generar Imagen
           </h2>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-warm-10 rounded-lg transition-colors text-warm-45 hover:text-warm"
+            className="p-1 hover:bg-gray-100 rounded-lg transition-colors text-gray-600 hover:text-warm"
             aria-label="Cerrar"
           >
             <X size={18} />
@@ -82,8 +82,8 @@ export default function ImageGeneratorModal({
         <div className="p-6 space-y-6">
           {error && (
             <div className="flex gap-3 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
-              <AlertCircle size={18} className="text-red-400 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-red-300">{error}</p>
+              <AlertCircle size={18} className="text-gray-600 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-gray-600">{error}</p>
             </div>
           )}
 
@@ -95,10 +95,10 @@ export default function ImageGeneratorModal({
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="Describe la imagen con detalle..."
-              className="w-full bg-warm-5 border border-warm-10 rounded-lg px-3 py-2 text-warm placeholder-warm-30 focus:border-amber focus:outline-none resize-none h-24"
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-warm placeholder-warm-30 focus:border-gray-400 focus:outline-none resize-none h-24"
               disabled={isGenerating}
             />
-            <p className="text-xs text-warm-30 mt-1">
+            <p className="text-xs text-gray-600 mt-1">
               {prompt.length}/1000 caracteres · Mínimo 20
             </p>
           </div>
@@ -119,7 +119,7 @@ export default function ImageGeneratorModal({
                     if (config.quantity) setQuantity(config.quantity);
                   }}
                   disabled={isGenerating}
-                  className="p-3 border border-warm-10 hover:border-amber hover:bg-amber/5 rounded-lg transition-colors text-center disabled:opacity-50"
+                  className="p-3 border border-gray-300 hover:border-gray-400 hover:bg-black rounded-lg transition-colors text-center disabled:opacity-50"
                 >
                   <div className="text-lg mb-1">{preset.icon}</div>
                   <p className="text-xs font-medium text-warm">{preset.label}</p>
@@ -140,8 +140,8 @@ export default function ImageGeneratorModal({
                   disabled={isGenerating}
                   className={`px-3 py-2 rounded-lg border transition-colors text-sm font-medium disabled:opacity-50 ${
                     aspectRatio === ratio
-                      ? "border-amber bg-amber/10 text-amber"
-                      : "border-warm-10 text-warm hover:border-warm-20"
+                      ? "border-gray-400 bg-black text-black"
+                      : "border-gray-300 text-warm hover:border-gray-300"
                   }`}
                 >
                   {ratio}
@@ -162,8 +162,8 @@ export default function ImageGeneratorModal({
                   disabled={isGenerating}
                   className={`px-6 py-2 rounded-lg border transition-colors font-medium disabled:opacity-50 ${
                     quantity === q
-                      ? "border-amber bg-amber/10 text-amber"
-                      : "border-warm-10 text-warm hover:border-warm-20"
+                      ? "border-gray-400 bg-black text-black"
+                      : "border-gray-300 text-warm hover:border-gray-300"
                   }`}
                 >
                   {q} imagen{q > 1 ? "s" : ""}
@@ -175,7 +175,7 @@ export default function ImageGeneratorModal({
           <button
             onClick={handleGenerate}
             disabled={isGenerating || prompt.trim().length < 20}
-            className="w-full bg-gradient-to-r from-amber to-amber/80 hover:from-amber/90 disabled:from-warm-30 text-black font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-gray-100 to-white hover:from-gray-100 disabled:from-warm-30 text-black font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
           >
             {isGenerating ? (
               <>
@@ -194,3 +194,4 @@ export default function ImageGeneratorModal({
     </motion.div>
   );
 }
+

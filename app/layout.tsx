@@ -28,7 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
       </head>
-      <body className="h-screen overflow-hidden bg-ink text-warm">
+      <body className="h-screen overflow-hidden bg-white text-black">
         <script defer src="https://victor-ia-brain-tracker.vercel.app/vi-track.js" data-site="victor-ia-app" />{children}</body>
     </html>
   );

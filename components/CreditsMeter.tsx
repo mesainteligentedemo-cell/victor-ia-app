@@ -1,4 +1,4 @@
-/**
+﻿/**
  * CreditsMeter Component
  * Visual display of user's credit balance, usage metrics, and generation cost preview
  */
@@ -68,9 +68,9 @@ export function CreditsMeter({
 
   // Determine color based on balance status
   const getBalanceColor = () => {
-    if (hasInsufficientCredits || isCritical) return "text-red-400";
+    if (hasInsufficientCredits || isCritical) return "text-gray-600";
     if (isLowBalance) return "text-yellow-400";
-    return "text-green-400";
+    return "text-gray-600";
   };
 
   const getProgressColor = () => {
@@ -138,23 +138,23 @@ export function CreditsMeter({
               <p className="text-xs text-gray-400">Generation Cost</p>
               <p className={`text-lg font-semibold ${
                 hasInsufficientCredits
-                  ? "text-red-400"
-                  : "text-blue-400"
+                  ? "text-gray-600"
+                  : "text-gray-600"
               }`}>
                 {estimatedCost} credits
               </p>
             </div>
             {hasInsufficientCredits && (
               <div className="text-right">
-                <p className="text-xs text-red-400">Insufficient</p>
-                <p className="text-xs text-red-300">
+                <p className="text-xs text-gray-600">Insufficient</p>
+                <p className="text-xs text-gray-600">
                   Need {estimatedCost - metrics.currentBalance} more
                 </p>
               </div>
             )}
             {!hasInsufficientCredits && estimatedCost > 0 && (
               <div className="text-right">
-                <p className="text-xs text-green-400">Available</p>
+                <p className="text-xs text-gray-600">Available</p>
                 <p className="text-xs text-gray-400">
                   {(metrics.currentBalance - estimatedCost).toLocaleString()} left
                 </p>
@@ -216,8 +216,8 @@ export function CreditsMeter({
       {/* Warnings */}
       {hasInsufficientCredits && (
         <div className="bg-red-500 bg-opacity-20 border border-red-500 border-opacity-50 rounded-lg p-3">
-          <p className="text-sm text-red-400 font-semibold">⚠️ Insufficient Credits</p>
-          <p className="text-xs text-red-300 mt-1">
+          <p className="text-sm text-gray-600 font-semibold">âš ï¸ Insufficient Credits</p>
+          <p className="text-xs text-gray-600 mt-1">
             You need {estimatedCost - metrics.currentBalance} more credits for this generation.
           </p>
         </div>
@@ -225,7 +225,7 @@ export function CreditsMeter({
 
       {exceedsDaily && !hasInsufficientCredits && (
         <div className="bg-yellow-500 bg-opacity-20 border border-yellow-500 border-opacity-50 rounded-lg p-3">
-          <p className="text-sm text-yellow-400 font-semibold">⚠️ Daily Limit Exceeded</p>
+          <p className="text-sm text-yellow-400 font-semibold">âš ï¸ Daily Limit Exceeded</p>
           <p className="text-xs text-yellow-300 mt-1">
             This generation would exceed your daily usage limit.
           </p>
@@ -234,7 +234,7 @@ export function CreditsMeter({
 
       {exceedsMonthly && !hasInsufficientCredits && !exceedsDaily && (
         <div className="bg-yellow-500 bg-opacity-20 border border-yellow-500 border-opacity-50 rounded-lg p-3">
-          <p className="text-sm text-yellow-400 font-semibold">⚠️ Monthly Quota Exceeded</p>
+          <p className="text-sm text-yellow-400 font-semibold">âš ï¸ Monthly Quota Exceeded</p>
           <p className="text-xs text-yellow-300 mt-1">
             This generation would exceed your monthly quota.
           </p>
@@ -244,7 +244,7 @@ export function CreditsMeter({
       {metrics.projectedRunoutDate && metrics.currentBalance > 0 && (
         <div className="bg-blue-500 bg-opacity-10 border border-blue-500 border-opacity-50 rounded-lg p-3">
           <p className="text-xs text-gray-400">Projected runout date</p>
-          <p className="text-sm text-blue-400 font-semibold">
+          <p className="text-sm text-gray-600 font-semibold">
             {new Date(metrics.projectedRunoutDate).toLocaleDateString()}
           </p>
         </div>
