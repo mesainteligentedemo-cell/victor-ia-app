@@ -1,125 +1,106 @@
-/**
- * TYPES MODULE — BARREL EXPORT
- * Central export point for all TypeScript type definitions
- * Version: 1.0.0 | Last Updated: 2026-06-10
- */
-
-// Credits System Types
-export type {
-  CreditCost,
-  CreditTransaction,
-  CreditsBalance,
-  CreditsMetrics,
-  UsageHistoryEntry,
-  GenerationType,
-  ImageQuality,
-  VideoQuality,
-} from './credits';
-
-// ============================================================================
-// CORE GENERATION TYPES (120+)
-// ============================================================================
+// Export all types from central location
 
 export type {
-  JobStatus,
-  GenerationJob,
+  GeneratorType,
+  StylePreset,
+  QualityLevel,
   GenerationParams,
+  PresentationParams,
+  EmailParams,
+  LandingPageParams,
+  SocialPostParams,
+  AudioParams,
+  PDFParams,
   GenerationResult,
-  GenerationError,
-  JobMetadata,
-  Platform,
-  ContentStyle,
-  ToneOption,
-  AudioConfig,
-  TrendInsight,
-  DemographicTarget,
-  QualityPreset,
-  MediaType,
-  ExportFormat,
-  AnalyticsMetric,
-  CacheEntry,
-} from './prospeccion.types';
+  GeneratorTemplate,
+} from './generators.types';
 
-/**
- * Type guard utilities - use these to narrow types safely
- */
 export type {
-  GeneratedAsset,
-  BatchGenerationJob,
-  VideoGenerationParams,
-  ImageGenerationParams,
-  BatchGenerationParams,
-} from './prospeccion.types';
+  AgentCategory,
+  AgentStatus,
+  Agent,
+  AgentInput,
+  AgentExecution,
+  AgentResult,
+} from './agents.types';
 
-/**
- * Analytics and tracking types
- */
 export type {
-  AnalyticsEvent,
-  GenerationEvent,
-  BatchEvent,
-  ExportEvent,
-  AnalyticsData,
-  MetricsSnapshot,
-} from './prospeccion.types';
+  PipelineStage,
+  Prospect,
+  ProspectNote,
+  ProspectActivity,
+  CRMMetrics,
+} from './crm.types';
 
-/**
- * Rate limiting and quota types
- */
 export type {
-  RateLimitConfig,
-  RateLimitCheckResult,
-  QuotaInfo,
-  CreditsBalance,
-} from './prospeccion.types';
+  WorkflowStatus,
+  WebhookMethod,
+  N8nWorkflow,
+  N8nWebhook,
+  WebhookExecution,
+  WorkflowExecutionLog,
+} from './automation.types';
 
-/**
- * Filter and search types
- */
 export type {
-  FilterState,
-  SearchQuery,
-  SortOption,
-  PaginationState,
-} from './prospeccion.types';
+  EventType,
+  MetricType,
+  ActivityLog,
+  TimeTracking,
+  Metric,
+  AnalyticsDashboard,
+  ExportData,
+} from './analytics.types';
 
-/**
- * UI and preference types
- */
 export type {
-  UserPreferences,
-  ModalState,
-  ViewMode,
-  NotificationPreference,
-} from './prospeccion.types';
+  CourseStatus,
+  EnrollmentStatus,
+  Course,
+  Lesson,
+  CourseEnrollment,
+  Quiz,
+  QuizQuestion,
+  QuizResult,
+  Certificate,
+} from './training.types';
 
-/**
- * Export and versioning types
- */
 export type {
-  ExportOptions,
-  ExportResult,
-  VersionSnapshot,
-  VersionHistory,
-  CollaborationSession,
-} from './prospeccion.types';
+  EmploymentStatus,
+  PayFrequency,
+  TeamMember,
+  Role,
+  Payroll,
+  Schedule,
+  OrgChart,
+} from './hr.types';
 
-/**
- * Subscription and billing types
- */
 export type {
-  SubscriptionTier,
-  BillingInfo,
-  UsageStats,
-  LimitInfo,
-} from './prospeccion.types';
+  ExpenseCategory,
+  InvoiceStatus,
+  Budget,
+  Expense,
+  Invoice,
+  InvoiceItem,
+  PandLStatement,
+  CashFlow,
+  FinancialReport,
+} from './finance.types';
 
-/**
- * Trending and recommendation types
- */
 export type {
-  TrendingContent,
-  TrendingCategory,
-  ContentRecommendation,
-  InsightData,
-} from './prospeccion.types';
+  IntegrationType,
+  SyncStatus,
+  Integration,
+  SyncLog,
+  FigmaAsset,
+  AEProject,
+  GoogleDriveFile,
+  HubSpotContact,
+} from './integrations.types';
+
+export type {
+  ApiRequest,
+  ApiResponse,
+  PaginatedResponse,
+  ApiError,
+} from './api.types';
+
+export { ApiErrorCodes } from './api.types';
