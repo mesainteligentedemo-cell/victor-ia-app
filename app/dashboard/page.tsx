@@ -1,167 +1,232 @@
-import { UserButton } from "@clerk/nextjs";
+'use client';
+
+import Link from 'next/link';
+import { useState } from 'react';
 
 export default function DashboardPage() {
+  const [activeTab, setActiveTab] = useState('overview');
+
   return (
-    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white">
-      {/* Header */}
-      <header className="border-b border-gray-200 dark:border-gray-800 p-6 sticky top-0 bg-white dark:bg-black/95 backdrop-blur z-10">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+    <div className="space-y-6">
+      {/* Welcome & Stats */}
+      <div>
+        <h2 className="text-3xl font-bold mb-2">Bienvenido a tu agencia</h2>
+        <p className="text-gray-600 dark:text-gray-400 mb-6">155 especialistas listos para trabajar</p>
+
+        {/* KPI Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {[
+            { label: 'Plan actual', value: 'PRO', subtitle: '3 sitios activos' },
+            { label: 'Especialistas', value: '15', subtitle: '24/7 disponibles' },
+            { label: 'Proyectos', value: '0', subtitle: 'Crea tu primero' },
+            { label: 'Assets', value: '45K+', subtitle: 'Listos para usar' }
+          ].map((stat, i) => (
+            <div key={i} className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900/50 hover:shadow-md transition">
+              <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider font-medium mb-2">{stat.label}</p>
+              <p className="text-2xl font-bold mb-1">{stat.value}</p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">{stat.subtitle}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="border-b border-gray-200 dark:border-gray-800">
+        <div className="flex gap-8 overflow-x-auto">
+          {['overview', 'crm', 'generators', 'analytics', 'team'].map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`py-4 px-1 border-b-2 transition font-medium text-sm uppercase tracking-wider ${
+                activeTab === tab
+                  ? 'border-black dark:border-white text-black dark:text-white'
+                  : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white'
+              }`}
+            >
+              {tab === 'overview' && 'Inicio'}
+              {tab === 'crm' && 'CRM'}
+              {tab === 'generators' && 'Generadores'}
+              {tab === 'analytics' && 'Analytics'}
+              {tab === 'team' && 'Equipo'}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Content */}
+      {activeTab === 'overview' && (
+        <div className="space-y-8">
+          {/* Quick Actions */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Link href="/dashboard/crm" className="p-6 border-2 border-black dark:border-white rounded-lg bg-black dark:bg-white text-white dark:text-black hover:shadow-lg transition">
+              <div className="text-3xl mb-3">👥</div>
+              <h3 className="font-bold mb-2">Nuevo Cliente</h3>
+              <p className="text-sm opacity-80">Registra un prospecto o cliente existente</p>
+            </Link>
+            <Link href="/dashboard/generators" className="p-6 border-2 border-black dark:border-white rounded-lg bg-black dark:bg-white text-white dark:text-black hover:shadow-lg transition">
+              <div className="text-3xl mb-3">✨</div>
+              <h3 className="font-bold mb-2">Generar Contenido</h3>
+              <p className="text-sm opacity-80">Crea sitios, videos, imágenes y más</p>
+            </Link>
+            <Link href="/dashboard/analytics" className="p-6 border-2 border-black dark:border-white rounded-lg bg-black dark:bg-white text-white dark:text-black hover:shadow-lg transition">
+              <div className="text-3xl mb-3">📊</div>
+              <h3 className="font-bold mb-2">Ver Métricas</h3>
+              <p className="text-sm opacity-80">ROI, actividad y performance</p>
+            </Link>
+          </div>
+
+          {/* Especialistas */}
           <div>
-            <h1 className="text-3xl font-bold">Victor IA</h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Tu agencia creativa IA</p>
+            <h3 className="text-xl font-bold mb-4">Tu equipo: 155 especialistas</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {[
+                { icon: '🎨', name: 'Diseño', count: 40 },
+                { icon: '🎬', name: 'Video', count: 15 },
+                { icon: '💻', name: 'Dev', count: 25 },
+                { icon: '📝', name: 'Copy', count: 8 },
+                { icon: '🔐', name: 'Seguridad', count: 38 },
+                { icon: '⚙️', name: 'Automation', count: 15 },
+                { icon: '📊', name: 'Marketing', count: 12 },
+                { icon: '+', name: '20 más', count: 2 }
+              ].map((cat, i) => (
+                <div key={i} className="p-4 border border-gray-200 dark:border-gray-800 rounded-lg text-center hover:bg-gray-50 dark:hover:bg-gray-900 transition">
+                  <div className="text-2xl mb-2">{cat.icon}</div>
+                  <p className="text-sm font-medium">{cat.name}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{cat.count} esp.</p>
+                </div>
+              ))}
+            </div>
           </div>
-          <UserButton />
-        </div>
-      </header>
 
-      {/* Main */}
-      <main className="max-w-7xl mx-auto p-6">
-        {/* Welcome */}
-        <div className="mb-8">
-          <h2 className="text-4xl font-bold mb-2">Bienvenido a tu agencia</h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400">155 especialistas listos para trabajar en tu próximo proyecto</p>
-        </div>
-
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Plan actual</p>
-            <p className="text-2xl font-bold">PRO</p>
-            <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">3 sitios web activos</p>
-          </div>
-          <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Especialistas disponibles</p>
-            <p className="text-2xl font-bold">15</p>
-            <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">Trabajando 24/7</p>
-          </div>
-          <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Proyectos completados</p>
-            <p className="text-2xl font-bold">0</p>
-            <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">Comienza tu primero hoy</p>
-          </div>
-          <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Assets disponibles</p>
-            <p className="text-2xl font-bold">45K+</p>
-            <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">Componentes + imágenes</p>
+          {/* Assets */}
+          <div>
+            <h3 className="text-xl font-bold mb-4">Tu librería: 45,000+ assets</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {[
+                { icon: '📦', title: '222 React Components', desc: 'Copy-paste ready' },
+                { icon: '🖼️', title: '2,800+ Imágenes', desc: 'WebP optimizadas' },
+                { icon: '🎬', title: '4,254 Videos 4K', desc: 'Listos para editar' },
+                { icon: '✨', title: '133 Animaciones', desc: 'GSAP + Framer' },
+                { icon: '🔤', title: 'Premium Fonts', desc: 'Garamond, Inter' },
+                { icon: '🎨', title: 'Estilos', desc: 'Luxury, Minimal' }
+              ].map((asset, i) => (
+                <div key={i} className="p-4 border border-gray-200 dark:border-gray-800 rounded-lg">
+                  <div className="text-2xl mb-2">{asset.icon}</div>
+                  <h4 className="font-semibold text-sm">{asset.title}</h4>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{asset.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
+      )}
 
-        {/* New Project CTA */}
-        <div className="mb-8 p-8 border-2 border-black dark:border-white rounded-lg bg-black dark:bg-white text-white dark:text-black">
-          <h3 className="text-2xl font-bold mb-3">Crear nuevo proyecto</h3>
-          <p className="mb-6 text-gray-200 dark:text-gray-800">
-            Cuéntale a Victor IA qué necesitas. En 60 minutos, tendrás un sitio web completo, hermoso y seguro.
-          </p>
-          <input
-            type="text"
-            placeholder='Ej: "Sitio web luxury para Costa Negra"'
-            className="w-full px-4 py-3 rounded bg-white dark:bg-black text-black dark:text-white border border-gray-300 dark:border-gray-700 mb-4"
-          />
-          <button className="px-6 py-3 bg-white dark:bg-black text-black dark:text-white rounded font-semibold hover:shadow-lg transition w-full">
-            Comenzar proyecto →
-          </button>
+      {activeTab === 'crm' && (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Link href="/dashboard/crm" className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg hover:shadow-md transition">
+              <div className="text-3xl mb-3">📋</div>
+              <h3 className="font-bold">Proyectos</h3>
+              <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">Gestiona tus proyectos activos</p>
+            </Link>
+            <Link href="/dashboard/crm" className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg hover:shadow-md transition">
+              <div className="text-3xl mb-3">👥</div>
+              <h3 className="font-bold">Clientes</h3>
+              <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">Base de datos completa</p>
+            </Link>
+            <Link href="/dashboard/crm" className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg hover:shadow-md transition">
+              <div className="text-3xl mb-3">✅</div>
+              <h3 className="font-bold">Tareas</h3>
+              <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">Workflow y asignaciones</p>
+            </Link>
+          </div>
         </div>
+      )}
 
-        {/* 155 Especialistas */}
-        <div className="mb-8">
-          <h3 className="text-2xl font-bold mb-6">Tu equipo: 155 especialistas en 27 categorías</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {activeTab === 'generators' && (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { cat: "Diseño & Creatividad", count: "40 especialistas", icon: "🎨" },
-              { cat: "Video & Audio", count: "15 especialistas", icon: "🎬" },
-              { cat: "Seguridad", count: "38 especialistas", icon: "🔐" },
-              { cat: "Automatización", count: "15 especialistas", icon: "⚙️" },
-              { cat: "Desarrollo", count: "25 especialistas", icon: "💻" },
-              { cat: "Marketing", count: "12 especialistas", icon: "📊" },
-              { cat: "Copy & Contenido", count: "8 especialistas", icon: "✍️" },
-              { cat: "+ 20 más", count: "2 especialistas c/una", icon: "+" }
-            ].map((cat, idx) => (
-              <div key={idx} className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg hover:shadow-lg transition cursor-pointer">
-                <div className="text-3xl mb-3">{cat.icon}</div>
-                <h4 className="font-bold mb-1">{cat.cat}</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">{cat.count}</p>
-              </div>
+              { emoji: '🌐', title: 'Sitios Web', desc: '60 min completo' },
+              { emoji: '🎬', title: 'Videos', desc: 'Con VO y música' },
+              { emoji: '🖼️', title: 'Imágenes', desc: '4K de calidad' },
+              { emoji: '📄', title: 'Documentos', desc: 'PDFs y presentaciones' },
+              { emoji: '✉️', title: 'Emails', desc: 'HTML premium' },
+              { emoji: '🎤', title: 'Audio/VO', desc: 'ElevenLabs IA' }
+            ].map((gen, i) => (
+              <Link key={i} href="/dashboard/generators" className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg hover:shadow-md transition">
+                <div className="text-3xl mb-3">{gen.emoji}</div>
+                <h3 className="font-bold">{gen.title}</h3>
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">{gen.desc}</p>
+              </Link>
             ))}
           </div>
         </div>
+      )}
 
-        {/* Proyectos activos */}
-        <div className="mb-8">
-          <h3 className="text-2xl font-bold mb-6">Tus proyectos</h3>
-          <div className="p-8 border border-gray-200 dark:border-gray-800 rounded-lg text-center">
-            <p className="text-gray-600 dark:text-gray-400 mb-4">No tienes proyectos activos</p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-              Crea tu primer proyecto arriba. El equipo trabajará en paralelo para entregarlo en ~60 minutos.
-            </p>
-            <a href="#" className="inline-block px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded font-semibold hover:shadow-lg transition">
-              Ver ejemplos →
-            </a>
-          </div>
-        </div>
-
-        {/* Assets Library */}
-        <div className="mb-8">
-          <h3 className="text-2xl font-bold mb-6">Tu librería: 45,000+ assets</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {activeTab === 'analytics' && (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg">
-              <div className="text-3xl mb-3">📦</div>
-              <h4 className="font-bold mb-2">222 Componentes React</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Buttons, cards, animations. Todo en dark mode. Copy-paste directo.</p>
+              <h3 className="font-bold mb-4">Actividad Última Semana</h3>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>Proyectos creados</span>
+                  <span className="font-bold">0</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Clientes registrados</span>
+                  <span className="font-bold">0</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Assets generados</span>
+                  <span className="font-bold">0</span>
+                </div>
+              </div>
             </div>
             <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg">
-              <div className="text-3xl mb-3">🖼️</div>
-              <h4 className="font-bold mb-2">2,800+ Imágenes</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Optimizadas en WebP. Desde Cloudinary CDN (50ms en cualquier país).</p>
-            </div>
-            <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg">
-              <div className="text-3xl mb-3">🎬</div>
-              <h4 className="font-bold mb-2">4,254 Videos 4K</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Heroes, intros, explicaciones. Listos para editar.</p>
-            </div>
-            <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg">
-              <div className="text-3xl mb-3">✨</div>
-              <h4 className="font-bold mb-2">133 Animaciones</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Scroll effects, hover interactions. GSAP + Framer Motion.</p>
-            </div>
-            <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg">
-              <div className="text-3xl mb-3">🔤</div>
-              <h4 className="font-bold mb-2">Tipografía Premium</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Cormorant Garamond, Inter. Fallbacks incluidos.</p>
-            </div>
-            <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg">
-              <div className="text-3xl mb-3">🎨</div>
-              <h4 className="font-bold mb-2">Estilos predefinidos</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Luxury, minimalist, playful. Listos para aplicar.</p>
+              <h3 className="font-bold mb-4">Uso del Plan</h3>
+              <div className="space-y-3">
+                <div>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>Sitios activos</span>
+                    <span>3/3</span>
+                  </div>
+                  <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2">
+                    <div className="bg-black dark:bg-white h-2 rounded-full" style={{ width: '100%' }}></div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>Especialistas activos</span>
+                    <span>15/15</span>
+                  </div>
+                  <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2">
+                    <div className="bg-black dark:bg-white h-2 rounded-full" style={{ width: '100%' }}></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      )}
 
-        {/* Machine Learning */}
-        <div className="p-8 border border-gray-200 dark:border-gray-800 rounded-lg bg-gray-50 dark:bg-gray-900">
-          <h3 className="text-2xl font-bold mb-4">Aprendizaje automático</h3>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Victor IA aprende de cada proyecto. Tu segundo proyecto cuesta 25% menos tiempo. Tu quinto proyecto es 50% más rápido.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center text-sm">
-            <div>
-              <p className="font-bold text-lg">Proyecto 1</p>
-              <p className="text-gray-600 dark:text-gray-400">60 min</p>
-            </div>
-            <div>
-              <p className="font-bold text-lg">Proyecto 2</p>
-              <p className="text-gray-600 dark:text-gray-400">45 min</p>
-            </div>
-            <div>
-              <p className="font-bold text-lg">Proyecto 5</p>
-              <p className="text-gray-600 dark:text-gray-400">30 min</p>
-            </div>
-            <div>
-              <p className="font-bold text-lg">Proyecto 10+</p>
-              <p className="text-gray-600 dark:text-gray-400">~10 min</p>
+      {activeTab === 'team' && (
+        <div className="space-y-6">
+          <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg">
+            <h3 className="font-bold mb-4">Miembros del Equipo</h3>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-800 rounded">
+                <div>
+                  <p className="font-medium text-sm">Tú</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">Admin</p>
+                </div>
+                <span className="text-xs bg-black dark:bg-white text-white dark:text-black px-3 py-1 rounded">Propietario</span>
+              </div>
             </div>
           </div>
         </div>
-      </main>
+      )}
     </div>
   );
 }
