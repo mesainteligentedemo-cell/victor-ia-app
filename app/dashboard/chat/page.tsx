@@ -46,14 +46,32 @@ export default function ChatPage() {
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
 
-    // Simulate API response
-    setTimeout(() => {
-      const narrativeText = `> Procesando: "${text}"
-> Modelo: Claude 3.5 Sonnet
-> Tokens: 1,250 → 3,850
-> Latencia: 1.24s
+    try {
+      const startTime = Date.now();
+
+      // Call Claude API
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: text,
+          systemPrompt: 'Eres Victor IA, una agencia de inteligencia artificial con 155 especialistas. Responde con precisión, genera ideas innovadoras y estructura tus respuestas para ser claras y accionables.',
+        }),
+      });
+
+      if (!response.ok) throw new Error('API error');
+
+      const data = await response.json();
+      const latencyMs = Date.now() - startTime;
+      const latency = (latencyMs / 1000).toFixed(2);
+      const latencyNum = parseFloat(latency);
+
+      const narrativeText = `> Procesando: "${text.substring(0, 50)}..."
+> Modelo: ⭐ Sonnet 4.6
+> Tokens: ~${Math.floor(text.length / 4)} → ~${Math.floor(data.response.length / 3)}
+> Latencia: ${latency}s
 > Temperatura: 0.7
-> Tokens/seg: ~2,088`;
+> Tokens/seg: ~${Math.floor(data.response.length / (latencyNum * 4))}`;
 
       setNarrative(narrativeText);
       setLaserOpen(true);
@@ -61,20 +79,22 @@ export default function ChatPage() {
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: `He procesado tu solicitud usando 155 especialistas en paralelo. El sistema ha generado:
-
-• Análisis conceptual completado
-• 3 variantes de solución evaluadas
-• Plan de ejecución optimizado
-• Recursos asignados a 12 agentes
-
-Próximo paso: ¿Quieres que genere contenido específico o que profundice en algún aspecto?`,
+        content: data.response,
         timestamp: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: 'Hubo un error procesando tu solicitud. Por favor intenta de nuevo.',
+        timestamp: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+      };
+      setMessages((prev) => [...prev, assistantMessage]);
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   return (

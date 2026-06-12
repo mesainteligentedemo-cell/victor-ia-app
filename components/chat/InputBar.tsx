@@ -29,26 +29,45 @@ export default function InputBar({ onSendMessage, isLoading }: InputBarProps) {
   };
 
   const startVoiceInput = () => {
-    if (!('webkitSpeechRecognition' in window)) {
-      alert('Speech Recognition no disponible en este navegador');
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      console.error('Speech Recognition no disponible');
       return;
     }
 
     if (!recognitionRef.current) {
-      const SpeechRecognition = (window as any).webkitSpeechRecognition;
+      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = true;
       recognitionRef.current.language = 'es-ES';
 
-      recognitionRef.current.onresult = (event: any) => {
-        const transcript = Array.from(event.results)
-          .map((result: any) => result[0].transcript)
-          .join('');
-        setTranscript(transcript);
-        setMessage(transcript);
+      recognitionRef.current.onstart = () => {
+        setIsListening(true);
       };
 
-      recognitionRef.current.onerror = () => {
+      recognitionRef.current.onresult = (event: any) => {
+        let interimTranscript = '';
+        let finalTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript + ' ';
+          } else {
+            interimTranscript += transcript;
+          }
+        }
+
+        if (finalTranscript) {
+          setMessage((prev) => (prev + ' ' + finalTranscript).trim());
+          setTranscript('');
+        } else if (interimTranscript) {
+          setTranscript(interimTranscript);
+        }
+      };
+
+      recognitionRef.current.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
         setIsListening(false);
       };
 
@@ -61,6 +80,7 @@ export default function InputBar({ onSendMessage, isLoading }: InputBarProps) {
       recognitionRef.current.stop();
       setIsListening(false);
     } else {
+      setTranscript('');
       setIsListening(true);
       recognitionRef.current.start();
     }

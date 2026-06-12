@@ -1,64 +1,66 @@
-import { createOpenAI } from "@ai-sdk/openai";
-import { anthropic } from "@ai-sdk/anthropic";
-import { streamText } from "ai";
-import { buildSystemPrompt } from "@/lib/system-prompt";
+import { NextResponse } from "next/server";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const maxDuration = 60;
 
-// Cadena de fallback nativa de OpenRouter: si un modelo falla
-// (rate limit, créditos, caída), enruta automáticamente al siguiente.
-// OPENROUTER_MODEL (env) permite anteponer un modelo premium cuando haya créditos.
-// OpenRouter acepta máximo 3 modelos en el array de fallback
-const FALLBACK_MODELS = [
-  ...(process.env.OPENROUTER_MODEL ? [process.env.OPENROUTER_MODEL] : []),
-  "openai/gpt-oss-120b:free",
-  "nvidia/nemotron-3-ultra-550b-a55b:free",
-  "meta-llama/llama-3.3-70b-instruct:free",
-].slice(0, 3);
-
-// Inyecta el array `models` (routing con fallback) en cada request a OpenRouter
-const fetchWithFallback: typeof fetch = async (input, init) => {
-  if (init?.body && typeof init.body === "string") {
-    try {
-      const body = JSON.parse(init.body);
-      body.models = FALLBACK_MODELS;
-      return fetch(input, { ...init, body: JSON.stringify(body) });
-    } catch {
-      /* body no-JSON: seguir sin tocar */
-    }
-  }
-  return fetch(input, init);
-};
-
-const openrouter = createOpenAI({
-  baseURL: "https://openrouter.ai/api/v1",
-  apiKey: process.env.OPENROUTER_API_KEY ?? "",
-  fetch: fetchWithFallback,
-  headers: {
-    "HTTP-Referer": "https://victor-ia-app.vercel.app",
-    "X-Title": "Victor IA App",
-  },
-});
-
 export async function POST(req: Request) {
-  const { messages, activeSkill, activeProject } = await req.json();
-  const system = buildSystemPrompt(activeSkill, activeProject);
+  try {
+    const { message, systemPrompt } = await req.json();
 
-  // OPENROUTER_API_KEY es el principal; ANTHROPIC_API_KEY queda como fallback
-  const model = process.env.OPENROUTER_API_KEY
-    ? openrouter(FALLBACK_MODELS[0])
-    : anthropic("claude-sonnet-4-6");
+    if (!message) {
+      return NextResponse.json({ error: "Message is required" }, { status: 400 });
+    }
 
-  const result = await streamText({
-    model,
-    system,
-    messages,
-    maxTokens: 2048,
-  });
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "x-api-key": process.env.ANTHROPIC_API_KEY || "",
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "claude-3-5-sonnet-20241022",
+        max_tokens: 1024,
+        system:
+          systemPrompt ||
+          `Eres Victor IA, una agencia de inteligencia artificial con 155 especialistas.
+Tienes expertise en diseño, desarrollo, video, marketing, copywriting y más.
+Responde con precisión, genera ideas innovadoras y estructura tus respuestas para ser claras y accionables.
+Siempre sugiere pasos concretos y próximas acciones.`,
+        messages: [
+          {
+            role: "user",
+            content: message,
+          },
+        ],
+      }),
+    });
 
-  return result.toDataStreamResponse({
-    getErrorMessage: (error) =>
-      error instanceof Error ? error.message : JSON.stringify(error),
-  });
+    if (!response.ok) {
+      const error = await response.text();
+      console.error("Anthropic API error:", error);
+      return NextResponse.json(
+        { error: "Failed to get response from Claude" },
+        { status: response.status }
+      );
+    }
+
+    const data = await response.json();
+    const responseText =
+      data.content?.[0]?.text || "Sin respuesta";
+
+    return NextResponse.json({
+      response: responseText,
+      usage: {
+        inputTokens: data.usage?.input_tokens || 0,
+        outputTokens: data.usage?.output_tokens || 0,
+      },
+    });
+  } catch (error) {
+    console.error("Chat API error:", error);
+    return NextResponse.json(
+      { error: "Failed to process chat message" },
+      { status: 500 }
+    );
+  }
 }
