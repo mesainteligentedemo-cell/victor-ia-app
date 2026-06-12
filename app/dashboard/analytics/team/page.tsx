@@ -16,14 +16,14 @@ export default function TeamPage() {
 
   const velocityData = specialists.map(s => ({ nombre: s.nombre.split(' ')[0], velocidad: s.velocidad }));
 
-  const getVelocityColor = (vel) => {
+  const getVelocityColor = (vel: number) => {
     if (vel >= 1.4) return 'bg-green-500/10 border-green-500/20';
     if (vel >= 1.2) return 'bg-blue-500/10 border-blue-500/20';
     if (vel >= 1.0) return 'bg-yellow-500/10 border-yellow-500/20';
     return 'bg-gray-500/10 border-gray-500/20';
   };
 
-  const getVelocityBadge = (vel) => {
+  const getVelocityBadge = (vel: number) => {
     if (vel >= 1.4) return { color: 'text-green-400', bg: 'bg-green-500/20' };
     if (vel >= 1.2) return { color: 'text-blue-400', bg: 'bg-blue-500/20' };
     if (vel >= 1.0) return { color: 'text-yellow-400', bg: 'bg-yellow-500/20' };

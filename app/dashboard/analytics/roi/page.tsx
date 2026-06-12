@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useUser } from '@clerk/nextjs';
 
+type RoiRow = { mes: string; ahorrado: number; horas: number };
+
 export default function ROIPage() {
   const { user } = useUser();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<RoiRow[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

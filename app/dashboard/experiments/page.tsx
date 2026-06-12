@@ -30,7 +30,7 @@ export default function ExperimentsPage() {
     },
   ]);
 
-  const getEstadoColor = (estado) => {
+  const getEstadoColor = (estado: string) => {
     if (estado === 'En progreso') return 'bg-blue-500/10 border-blue-500/20 text-blue-400';
     if (estado === 'Completado') return 'bg-green-500/10 border-green-500/20 text-green-400';
     return 'bg-gray-500/10 border-gray-500/20 text-gray-400';

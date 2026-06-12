@@ -12,6 +12,10 @@ const MODULES = [
   { name: "CRM", path: "/dashboard/crm", icon: "📊" },
   { name: "Automation", path: "/dashboard/automation", icon: "⚙️" },
   { name: "Analytics", path: "/dashboard/analytics", icon: "📈" },
+  { name: "ROI", path: "/dashboard/analytics/roi", icon: "💰" },
+  { name: "Team Performance", path: "/dashboard/analytics/team", icon: "🏆" },
+  { name: "Recomendaciones", path: "/dashboard/analytics/recommendations", icon: "💡" },
+  { name: "Experimentos", path: "/dashboard/experiments", icon: "🧪" },
 ];
 
 const TOOLS = [
