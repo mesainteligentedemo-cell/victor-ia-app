@@ -74,7 +74,7 @@ export const GeneratorsService = {
     return this.generateAndSave(userId, 'pdf', params, credits);
   },
 
-  private async generateAndSave(userId: string, type: GeneratorType, params: any, credits: number): Promise<GenerationResult> {
+  async generateAndSave(userId: string, type: GeneratorType, params: any, credits: number): Promise<GenerationResult> {
     const id = Math.random().toString(36).substring(7);
     const now = new Date();
 
@@ -90,7 +90,7 @@ export const GeneratorsService = {
     return { id, userId, type, status: 'pending', prompt: params.prompt, creditsUsed: credits, createdAt: now };
   },
 
-  private async calculateCost(type: string, quality?: string): Promise<number> {
+  async calculateCost(type: string, quality?: string): Promise<number> {
     const costs: Record<string, Record<string, number>> = {
       image: { standard: 2, premium: 5, ultra: 8 },
       video: { standard: 10, premium: 25, ultra: 50 }

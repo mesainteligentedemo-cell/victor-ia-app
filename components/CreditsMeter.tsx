@@ -7,6 +7,11 @@
 
 import React, { useState, useEffect } from "react";
 import type { CreditsMetrics } from "@/lib/types/credits";
+import {
+  INITIAL_FREE_CREDITS,
+  MONTHLY_CREDIT_QUOTA,
+  DAILY_CREDIT_LIMIT,
+} from "@/lib/types/credits";
 import { CreditsService } from "@/lib/services/credits.service";
 
 interface CreditsMeterProps {
@@ -27,17 +32,34 @@ export function CreditsMeter({
 
   useEffect(() => {
     // Load initial metrics
-    const loadMetrics = () => {
+    const loadMetrics = async () => {
       try {
-        const newMetrics = CreditsService.getMetrics(userId);
+        const balance = await CreditsService.getBalance(userId);
+        const totalAvailable = Math.max(balance, INITIAL_FREE_CREDITS);
+        const spent = Math.max(0, totalAvailable - balance);
+
+        const newMetrics: CreditsMetrics = {
+          userId,
+          currentBalance: balance,
+          totalAvailable,
+          percentageUsed: totalAvailable > 0 ? (spent / totalAvailable) * 100 : 0,
+          monthlyUsage: {
+            spent,
+            remaining: Math.max(0, MONTHLY_CREDIT_QUOTA - spent),
+            percentageOfQuota: MONTHLY_CREDIT_QUOTA > 0 ? (spent / MONTHLY_CREDIT_QUOTA) * 100 : 0,
+          },
+          dailyUsage: {
+            today: 0,
+            limit: DAILY_CREDIT_LIMIT,
+            percentageOfDaily: 0,
+          },
+        };
+
         setMetrics(newMetrics);
         setIsLoading(false);
 
         // Check if user can afford the estimated cost
-        if (
-          estimatedCost > 0 &&
-          !CreditsService.canAfford(userId, estimatedCost)
-        ) {
+        if (estimatedCost > 0 && balance < estimatedCost) {
           onInsufficientCredits?.(estimatedCost, newMetrics.currentBalance);
         }
       } catch (error) {
@@ -62,9 +84,9 @@ export function CreditsMeter({
 
   const isLowBalance = metrics.currentBalance < 100;
   const isCritical = metrics.currentBalance < 50;
-  const hasInsufficientCredits = estimatedCost > 0 && !CreditsService.canAfford(userId, estimatedCost);
-  const exceedsDaily = estimatedCost > 0 && !CreditsService.canUseDaily(userId, estimatedCost);
-  const exceedsMonthly = estimatedCost > 0 && !CreditsService.canUseMonthly(userId, estimatedCost);
+  const hasInsufficientCredits = estimatedCost > 0 && metrics.currentBalance < estimatedCost;
+  const exceedsDaily = estimatedCost > 0 && metrics.dailyUsage.today + estimatedCost > metrics.dailyUsage.limit;
+  const exceedsMonthly = estimatedCost > 0 && metrics.monthlyUsage.remaining < estimatedCost;
 
   // Determine color based on balance status
   const getBalanceColor = () => {

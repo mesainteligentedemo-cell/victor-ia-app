@@ -11,8 +11,7 @@ export function SearchBar() {
   const [results, setResults] = useState<any[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [recent, setRecent] = useState<string[]>([]);
-  const ref = useRef<HTMLDivElement>(null);
-  useClickOutside(ref, () => setIsOpen(false));
+  const ref = useClickOutside<HTMLDivElement>(() => setIsOpen(false));
 
   useEffect(() => {
     setRecent(getRecentSearches());

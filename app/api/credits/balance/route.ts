@@ -24,34 +24,14 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Initialize user if first time
-    const balance = CreditsService.getBalanceInfo(userId);
-
-    // Get metrics
-    const metrics = CreditsService.getMetrics(userId);
-
-    // Get recent transaction history
-    const recentTransactions = CreditsService.getTransactionHistory(userId, 10);
+    // Get user balance
+    const balance = await CreditsService.getBalance(userId);
 
     return NextResponse.json(
       {
         success: true,
         userId,
-        balance: {
-          current: balance.balance,
-          total: balance.totalEarned,
-          spent: balance.totalSpent,
-          lastUpdated: balance.lastUpdated,
-        },
-        metrics,
-        recentTransactions: recentTransactions.map((txn) => ({
-          id: txn.id,
-          amount: txn.amount,
-          type: txn.type,
-          reason: txn.reason,
-          timestamp: txn.timestamp,
-          generationType: txn.generationType,
-        })),
+        balance: balance,
       },
       {
         headers: {
@@ -108,18 +88,13 @@ export async function POST(request: NextRequest) {
     //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     // }
 
-    const transaction = CreditsService.addCredits(userId, amount, reason);
-    const newBalance = CreditsService.getBalance(userId);
+    await CreditsService.addCredits(userId, amount);
+    const newBalance = await CreditsService.getBalance(userId);
 
     return NextResponse.json(
       {
         success: true,
-        transaction: {
-          id: transaction.id,
-          amount: transaction.amount,
-          reason: transaction.reason,
-          timestamp: transaction.timestamp,
-        },
+        message: `Added ${amount} credits to user ${userId}`,
         newBalance,
       },
       { status: 201 }

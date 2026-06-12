@@ -7,7 +7,9 @@ import { Input } from "@/components/shared/Input";
 import { Modal } from "@/components/shared/Modal";
 import { useState, useEffect } from "react";
 
-const PIPELINE_STAGES = ["lead", "contacted", "qualified", "proposal", "negotiation", "won", "lost"];
+import type { PipelineStage } from "@/lib/types";
+
+const PIPELINE_STAGES: PipelineStage[] = ["lead", "contacted", "qualified", "proposal", "negotiation", "won", "lost"];
 
 export default function CRMPage() {
   const { prospects, metrics, setMetrics, addProspect } = useCRMStore();
@@ -100,7 +102,7 @@ export default function CRMPage() {
               }`}
             >
               <p className="text-xs font-semibold capitalize">{stage}</p>
-              <p className="text-lg font-bold">{metrics?.prospectsPerStage[stage as keyof typeof PIPELINE_STAGES] || 0}</p>
+              <p className="text-lg font-bold">{metrics?.prospectsPerStage[stage] || 0}</p>
             </button>
           ))}
         </div>

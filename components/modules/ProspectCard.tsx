@@ -32,9 +32,9 @@ export function ProspectCard({ prospect, onMove }: ProspectCardProps) {
         <p><span className="font-medium">Valor:</span> ${prospect.value}</p>
       </div>
 
-      {prospect.notes && (
+      {prospect.nextAction && (
         <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-800">
-          <p className="text-xs text-gray-500 dark:text-gray-500 italic">{prospect.notes}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-500 italic">{prospect.nextAction}</p>
         </div>
       )}
     </div>

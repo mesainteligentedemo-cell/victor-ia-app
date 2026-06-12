@@ -4,9 +4,10 @@ import { FinanceService } from '@/lib/services';
 export async function GET(request: NextRequest) {
   try {
     const userId = request.nextUrl.searchParams.get('userId');
+    const period = request.nextUrl.searchParams.get('period') || 'monthly';
     if (!userId) return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
 
-    const pandl = await FinanceService.generatePandL(userId);
+    const pandl = await FinanceService.generatePandL(userId, period);
     return NextResponse.json(pandl);
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 });

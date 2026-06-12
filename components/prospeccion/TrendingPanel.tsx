@@ -20,11 +20,10 @@ interface TrendingPanelProps {
 export default function TrendingPanel({ intent, refreshInterval, onTrendSelect }: TrendingPanelProps) {
   const [trending, setTrending] = useState<TrendingItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const trendingService = new TrendingService();
 
   useEffect(() => {
     const loadTrending = async () => {
-      const topics = await trendingService.getTrendingTopics();
+      const topics = await TrendingService.getTrendingTopics();
       setTrending(topics);
       setLoading(false);
     };
@@ -33,7 +32,7 @@ export default function TrendingPanel({ intent, refreshInterval, onTrendSelect }
 
   const refresh = async () => {
     setLoading(true);
-    const topics = await trendingService.getTrendingTopics();
+    const topics = await TrendingService.getTrendingTopics();
     setTrending(topics);
     setLoading(false);
   };

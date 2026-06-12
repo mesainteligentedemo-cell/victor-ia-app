@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-interface PopoverProps extends React.HTMLAttributes<HTMLDivElement> {
+interface PopoverProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'content'> {
   trigger: React.ReactNode;
   content: React.ReactNode;
 }

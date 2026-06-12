@@ -70,15 +70,15 @@ export default function AnalyticsPage() {
       {dashboard && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900 hover:shadow-md transition">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Total Events</p>
-            <p className="text-4xl font-bold text-black dark:text-white">{dashboard.totalEvents}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Total Generations</p>
+            <p className="text-4xl font-bold text-black dark:text-white">{dashboard.totalGenerations}</p>
             <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">+12% from yesterday</p>
           </div>
 
           <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900 hover:shadow-md transition">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Time Invested</p>
-            <p className="text-4xl font-bold text-black dark:text-white">{(dashboard.totalTimeSpent / 3600).toFixed(1)}h</p>
-            <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">+2.5h from yesterday</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Agent Executions</p>
+            <p className="text-4xl font-bold text-black dark:text-white">{dashboard.totalAgentExecutions}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">+15 from yesterday</p>
           </div>
 
           <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900 hover:shadow-md transition">

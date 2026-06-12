@@ -37,6 +37,8 @@ export const TrainingService = {
       .eq('id', quizId)
       .single();
 
+    if (!quiz || !quiz.questions?.length) return 0;
+
     let score = 0;
     quiz.questions.forEach((q: any, i: number) => {
       if (answers[i] === q.correctAnswer) score++;

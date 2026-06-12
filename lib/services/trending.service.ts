@@ -10,7 +10,24 @@ export interface Trend {
   lastUpdated: Date;
 }
 
+export interface TrendingTopic {
+  id: string;
+  topic: string;
+  momentum: number;
+  platform: string;
+}
+
 export const TrendingService = {
+  async getTrendingTopics(limit: number = 10): Promise<TrendingTopic[]> {
+    const { data } = await db.from('trends').select('*').order('score', { ascending: false }).limit(limit);
+    return (data || []).map((t: Trend) => ({
+      id: t.id,
+      topic: t.itemId,
+      momentum: Math.min(100, Math.round(t.score)),
+      platform: t.category
+    }));
+  },
+
   async recordInteraction(category: Trend['category'], itemId: string, type: 'view' | 'use'): Promise<void> {
     const { data: existing } = await db.from('trends').select('*').eq('category', category).eq('item_id', itemId).single();
 

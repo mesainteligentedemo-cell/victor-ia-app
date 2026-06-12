@@ -3,14 +3,16 @@ import { db } from '@/lib/db/supabase';
 
 export const CRMService = {
   async createProspect(userId: string, data: Partial<Prospect>): Promise<Prospect> {
-    const prospect = {
+    const prospect: Prospect = {
+      name: '',
+      email: '',
+      ...data,
       id: Math.random().toString(36).substring(7),
       userId,
-      stage: 'lead' as PipelineStage,
-      value: 0,
+      stage: data.stage ?? ('lead' as PipelineStage),
+      value: data.value ?? 0,
       createdAt: new Date(),
-      updatedAt: new Date(),
-      ...data
+      updatedAt: new Date()
     };
 
     await db.from('prospects').insert(prospect);
@@ -74,8 +76,10 @@ export const CRMService = {
       lost: 0
     };
 
-    prospects?.forEach((p: any) => {
-      stages[p.stage]++;
+    prospects?.forEach((p: { stage: PipelineStage }) => {
+      if (p.stage in stages) {
+        stages[p.stage]++;
+      }
     });
 
     const totalValue = prospects?.reduce((sum: number, p: any) => sum + (p.value || 0), 0) || 0;

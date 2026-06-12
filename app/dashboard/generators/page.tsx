@@ -4,7 +4,7 @@ import { useGeneratorsStore } from "@/lib/stores";
 import { GeneratorCard } from "@/components/modules";
 import { useState } from "react";
 
-const GENERATORS = [
+const GENERATORS: Array<{ type: "presentation" | "email" | "landing-page" | "social-post" | "audio" | "pdf" | "image" | "video"; title: string; description: string; icon: string }> = [
   { type: "image", title: "Generador de Imágenes", description: "Crea imágenes con IA", icon: "🖼️" },
   { type: "video", title: "Generador de Videos", description: "Produce videos profesionales", icon: "🎬" },
   { type: "presentation", title: "Presentaciones", description: "Crea decks impactantes", icon: "📊" },

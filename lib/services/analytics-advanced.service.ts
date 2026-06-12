@@ -6,11 +6,11 @@ export const AnalyticsAdvancedService = {
     const activityLog: ActivityLog = {
       id: Math.random().toString(36).substring(7),
       userId,
-      eventName,
-      eventData,
-      timestamp: new Date(),
-      ipAddress: '',
-      userAgent: ''
+      eventType: 'system',
+      action: eventName,
+      module: 'general',
+      metadata: eventData,
+      createdAt: new Date()
     };
 
     await db.from('activity_logs').insert(activityLog);
@@ -28,12 +28,15 @@ export const AnalyticsAdvancedService = {
   },
 
   async trackTimeSpent(userId: string, moduleId: string, duration: number): Promise<TimeTracking> {
+    const now = new Date();
     const tracking: TimeTracking = {
       id: Math.random().toString(36).substring(7),
       userId,
-      moduleId,
+      taskId: moduleId,
+      taskName: moduleId,
       duration,
-      timestamp: new Date()
+      startTime: new Date(now.getTime() - duration * 1000),
+      endTime: now
     };
 
     await db.from('time_tracking').insert(tracking);
@@ -60,13 +63,20 @@ export const AnalyticsAdvancedService = {
       eventCounts[a.event_name] = (eventCounts[a.event_name] || 0) + 1;
     });
 
+    const totalEvents = activities?.length || 0;
+
     return {
-      userId,
-      totalEvents: activities?.length || 0,
-      totalTimeSpent: totalTime,
-      topEvents: Object.entries(eventCounts).sort((a, b) => b[1] - a[1]).slice(0, 5),
-      metrics: [],
-      lastUpdated: new Date()
+      totalGenerations: totalEvents,
+      totalAgentExecutions: eventCounts['agent_execution'] || 0,
+      averageGenerationTime: totalEvents > 0 ? totalTime / totalEvents : 0,
+      successRate: 100,
+      creditsUsed: 0,
+      creditsRemaining: 0,
+      topGenerators: Object.entries(eventCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .map(([type, count]) => ({ type, count })),
+      topAgents: []
     };
   },
 

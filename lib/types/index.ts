@@ -12,7 +12,6 @@ export type {
   AudioParams,
   PDFParams,
   GenerationResult,
-  GeneratorTemplate,
 } from './generators.types';
 
 export type {

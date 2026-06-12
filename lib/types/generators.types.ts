@@ -1,6 +1,6 @@
 // Generators: 6 media generation types
 
-export type GeneratorType = 'presentation' | 'email' | 'landing-page' | 'social-post' | 'audio' | 'pdf';
+export type GeneratorType = 'presentation' | 'email' | 'landing-page' | 'social-post' | 'audio' | 'pdf' | 'image' | 'video';
 export type StylePreset = 'corporate' | 'creative' | 'minimal' | 'luxury' | 'playful' | 'professional';
 export type QualityLevel = 'standard' | 'premium' | 'ultra';
 
