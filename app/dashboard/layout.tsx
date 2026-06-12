@@ -1,155 +1,184 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { SearchBar } from "@/components/search/SearchBar";
-import { useRequireAuth } from "@/lib/hooks/useRequireAuth";
-import { useAuthUser } from "@/lib/hooks/useAuthUser";
+import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import BottomNav from '@/components/navigation/BottomNav';
+import LaserOverlay from '@/components/panels/LaserOverlay';
 
-const MODULES = [
-  { name: "Generators", path: "/dashboard/generators", icon: "✨" },
-  { name: "Agents", path: "/dashboard/agents", icon: "🤖" },
-  { name: "CRM", path: "/dashboard/crm", icon: "📊" },
-  { name: "Automation", path: "/dashboard/automation", icon: "⚙️" },
-  { name: "Analytics", path: "/dashboard/analytics", icon: "📈" },
-  { name: "ROI", path: "/dashboard/analytics/roi", icon: "💰" },
-  { name: "Team Performance", path: "/dashboard/analytics/team", icon: "🏆" },
-  { name: "Recomendaciones", path: "/dashboard/analytics/recommendations", icon: "💡" },
-  { name: "Experimentos", path: "/dashboard/experiments", icon: "🧪" },
-];
-
-const TOOLS = [
-  { name: "Team", path: "/dashboard/team", icon: "🤝" },
-  { name: "Templates", path: "/dashboard/templates", icon: "📋" },
-  { name: "Billing", path: "/dashboard/billing", icon: "💳" },
+const DESKTOP_MENU = [
+  { id: 'brain-tracker', label: 'Brain Tracker', icon: '🧠', href: '/dashboard' },
+  { id: 'chat', label: 'Chat', icon: '💬', href: '/dashboard/chat' },
+  { id: 'agentes', label: 'Agentes', icon: '🤖', href: '/dashboard/agents' },
+  { id: 'biblioteca', label: 'Biblioteca', icon: '📚', href: '/dashboard/library' },
+  { id: 'dashboard', label: 'Dashboard', icon: '📊', href: '/dashboard' },
+  { id: 'capacitaciones', label: 'Capacitaciones', icon: '🎓', href: '/dashboard/training' },
+  { id: 'rh', label: 'RH', icon: '👥', href: '/dashboard/hr' },
+  { id: 'marketing', label: 'Marketing', icon: '📢', href: '/dashboard/marketing' },
+  { id: 'ventas', label: 'Ventas', icon: '💰', href: '/dashboard/sales' },
+  { id: 'servicio', label: 'Servicio al Cliente', icon: '🎧', href: '/dashboard/support' },
+  { id: 'config', label: 'Configuración', icon: '⚙️', href: '/dashboard/settings' },
+  { id: 'legal', label: 'Legal y Finanzas', icon: '⚖️', href: '/dashboard/finance' },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { isLoading } = useRequireAuth();
-  const { user } = useAuthUser();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const [laserOpen, setLaserOpen] = useState(false);
+  const [laserContent, setLaserContent] = useState('');
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
-        <div className="animate-pulse">
-          <div className="w-12 h-12 bg-gray-300 dark:bg-gray-700 rounded-full" />
-        </div>
-      </div>
-    );
-  }
+  const handleOpenLaser = (content: string) => {
+    setLaserContent(content);
+    setLaserOpen(true);
+  };
 
   return (
-    <div className="flex h-screen bg-white dark:bg-black">
-      {/* Mobile Menu Button */}
-      <button
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded"
+    <div style={{ background: 'var(--bg)', color: 'var(--p)', minHeight: '100vh' }}>
+      {/* DESKTOP SIDEBAR (900px+) */}
+      <div
+        id="deskbar"
+        style={{
+          display: 'none',
+          position: 'fixed',
+          left: 0,
+          top: 0,
+          width: '220px',
+          height: '100vh',
+          background: 'var(--bg1)',
+          borderRight: '1px solid var(--b)',
+          flexDirection: 'column',
+          zIndex: 100,
+          overflow: 'hidden',
+        }}
       >
-        ☰
-      </button>
-
-      {/* Sidebar */}
-      <aside
-        className={`${
-          sidebarOpen ? "w-64" : "w-20"
-        } border-r border-gray-200 dark:border-gray-800 transition-all duration-300 flex flex-col overflow-hidden ${
-          mobileMenuOpen ? "fixed inset-0 z-40 w-64" : "hidden lg:flex"
-        }`}
-      >
-        <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
-          {(sidebarOpen || mobileMenuOpen) && (
-            <h1 className="font-bold text-lg text-black dark:text-white">Victor IA</h1>
-          )}
-          <button
-            onClick={() => {
-              setSidebarOpen(!sidebarOpen);
-              setMobileMenuOpen(false);
-            }}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded"
-          >
-            {sidebarOpen || mobileMenuOpen ? "←" : "→"}
-          </button>
+        {/* Logo */}
+        <div style={{ padding: '20px', borderBottom: '1px solid var(--b)' }}>
+          <h1 style={{ fontSize: '16px', fontWeight: 700, fontFamily: 'var(--font-display)' }}>
+            Victor IA
+          </h1>
+          <p style={{ fontSize: '11px', color: 'var(--t3)', marginTop: '4px' }}>Brain Tracker</p>
         </div>
 
-        <nav className="flex-1 overflow-y-auto p-4 space-y-1">
-          {MODULES.map((module) => (
-            <Link
-              key={module.path}
-              href={module.path}
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-900 transition text-black dark:text-white text-sm"
-            >
-              <span className="text-lg min-w-6">{module.icon}</span>
-              {(sidebarOpen || mobileMenuOpen) && <span>{module.name}</span>}
-            </Link>
-          ))}
-
-          <div className="pt-4 border-t border-gray-200 dark:border-gray-800">
-            {(sidebarOpen || mobileMenuOpen) && (
-              <h3 className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase mb-2 px-2">
-                Tools
-              </h3>
-            )}
-            {TOOLS.map((tool) => (
+        {/* Menu Items */}
+        <nav style={{ flex: 1, overflowY: 'auto', padding: '10px' }}>
+          {DESKTOP_MENU.map((item) => {
+            const isActive = pathname === item.href || (item.id === 'dashboard' && pathname === '/dashboard');
+            return (
               <Link
-                key={tool.path}
-                href={tool.path}
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-900 transition text-black dark:text-white text-sm"
+                key={item.id}
+                href={item.href}
+                className="dk-item"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '10px 13px',
+                  borderRadius: '10px',
+                  fontSize: '14px',
+                  fontWeight: isActive ? 600 : 500,
+                  color: isActive ? 'var(--t1)' : 'var(--t2)',
+                  background: isActive ? 'var(--bg2)' : 'transparent',
+                  cursor: 'pointer',
+                  textDecoration: 'none',
+                  transition: 'background 0.12s, color 0.12s',
+                  borderLeft: isActive ? '2px solid var(--blue)' : 'transparent',
+                  paddingLeft: isActive ? '11px' : '13px',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'var(--bg2)';
+                  e.currentTarget.style.color = 'var(--t1)';
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = 'var(--t2)';
+                  }
+                }}
               >
-                <span className="text-lg min-w-6">{tool.icon}</span>
-                {(sidebarOpen || mobileMenuOpen) && <span>{tool.name}</span>}
+                <span style={{ width: '22px', fontSize: '18px' }}>{item.icon}</span>
+                <span>{item.label}</span>
               </Link>
-            ))}
-          </div>
+            );
+          })}
         </nav>
 
-        <div className="p-4 border-t border-gray-200 dark:border-gray-800">
-          {user && (
-            <div className={`text-xs text-gray-600 dark:text-gray-400 mb-2 ${sidebarOpen || mobileMenuOpen ? "" : "hidden"}`}>
-              <p className="truncate font-semibold text-black dark:text-white">{user.name}</p>
-              <p className="truncate">💎 {user.credits} credits</p>
-            </div>
-          )}
-          <button className="w-full px-3 py-2 bg-black dark:bg-white text-white dark:text-black rounded font-semibold hover:shadow-md transition text-sm">
-            {sidebarOpen || mobileMenuOpen ? "Logout" : "🚪"}
+        {/* Footer */}
+        <div
+          style={{
+            padding: '15px',
+            borderTop: '1px solid var(--b)',
+            display: 'flex',
+            gap: '8px',
+          }}
+        >
+          <button
+            style={{
+              flex: 1,
+              padding: '8px 12px',
+              background: 'var(--bg2)',
+              border: '1px solid var(--b)',
+              borderRadius: '8px',
+              color: 'var(--t2)',
+              cursor: 'pointer',
+              fontSize: '12px',
+            }}
+          >
+            🌓 Tema
+          </button>
+          <button
+            style={{
+              flex: 1,
+              padding: '8px 12px',
+              background: 'var(--bg2)',
+              border: '1px solid var(--b)',
+              borderRadius: '8px',
+              color: 'var(--t2)',
+              cursor: 'pointer',
+              fontSize: '12px',
+            }}
+          >
+            👤 Perfil
           </button>
         </div>
-      </aside>
+      </div>
 
-      {/* Mobile Overlay */}
-      {mobileMenuOpen && (
-        <button
-          onClick={() => setMobileMenuOpen(false)}
-          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
-        />
-      )}
-
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Bar */}
-        <div className="border-b border-gray-200 dark:border-gray-800 p-3 md:p-4 flex items-center justify-between gap-4 bg-white dark:bg-gray-900">
-          <div className="hidden md:flex flex-1 max-w-md">
-            <SearchBar />
-          </div>
-          <div className="flex items-center gap-2 md:gap-4">
-            <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded">🔔</button>
-            <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded">👤</button>
-          </div>
-        </div>
-
-        {/* Mobile Search */}
-        <div className="md:hidden px-3 py-2 border-b border-gray-200 dark:border-gray-800">
-          <SearchBar />
-        </div>
-
-        {/* Page Content */}
-        <div className="flex-1 overflow-auto p-3 md:p-8 w-full">
-          <div className="max-w-7xl mx-auto w-full">{children}</div>
+      {/* MAIN CONTENT */}
+      <main
+        style={{
+          marginLeft: 0,
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          paddingBottom: 'var(--nav-h)',
+        }}
+      >
+        {/* Content Area */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>{children}</div>
         </div>
       </main>
+
+      {/* BOTTOM NAVIGATION (Mobile < 600px) */}
+      <BottomNav />
+
+      {/* LASER OVERLAY */}
+      <LaserOverlay
+        isOpen={laserOpen}
+        onClose={() => setLaserOpen(false)}
+        title="Vista Previa"
+        content={laserContent}
+      />
+
+      {/* Responsive styles */}
+      <style>{`
+        @media (min-width: 900px) {
+          main {
+            margin-left: 220px !important;
+          }
+          #deskbar {
+            display: flex !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
