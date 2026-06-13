@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import { Wand2, Loader } from 'lucide-react';
 import { useAnalytics, ANALYTICS_EVENTS } from '@/lib/hooks/useAnalytics';
+import ImageGeneratorModal from '@/components/prospeccion/ImageGeneratorModal';
+import VideoGeneratorModal from '@/components/prospeccion/VideoGeneratorModal';
+import type { ImageGenerationParams, VideoGenerationParams } from '@/lib/prospeccion-types';
 
 const GENERATORS = [
   {
@@ -78,6 +81,15 @@ export default function GeneratorsPage() {
   const [formData, setFormData] = useState<Record<string, any>>({});
   const { track } = useAnalytics();
 
+  // Modal states
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  const [imageGenerating, setImageGenerating] = useState(false);
+  const [videoGenerating, setVideoGenerating] = useState(false);
+  const [imageError, setImageError] = useState<string | null>(null);
+  const [videoError, setVideoError] = useState<string | null>(null);
+  const [lastResult, setLastResult] = useState<any>(null);
+
   const currentGenerator = GENERATORS.find(g => g.id === selectedGenerator);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -134,6 +146,102 @@ export default function GeneratorsPage() {
       alert('❌ Error en la generación. Intenta nuevamente.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Handlers para imagen
+  const handleOpenImageModal = () => {
+    setImageError(null);
+    setShowImageModal(true);
+  };
+
+  const handleCloseImageModal = () => {
+    setShowImageModal(false);
+    setImageError(null);
+  };
+
+  const handleGenerateImage = async (params: ImageGenerationParams) => {
+    setImageGenerating(true);
+    setImageError(null);
+
+    try {
+      const response = await fetch('/api/generate/image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(params),
+      });
+
+      if (!response.ok) {
+        throw new Error('Image generation failed');
+      }
+
+      const result = await response.json();
+      setLastResult({
+        type: 'image',
+        ...result,
+      });
+
+      // Track analytics
+      await track(ANALYTICS_EVENTS.GENERATOR_USED, {
+        generatorType: 'images',
+        jobId: result.jobId,
+        timestamp: new Date().toISOString(),
+      });
+
+      handleCloseImageModal();
+    } catch (error) {
+      console.error('Image generation error:', error);
+      setImageError(error instanceof Error ? error.message : 'Error al generar imagen');
+    } finally {
+      setImageGenerating(false);
+    }
+  };
+
+  // Handlers para video
+  const handleOpenVideoModal = () => {
+    setVideoError(null);
+    setShowVideoModal(true);
+  };
+
+  const handleCloseVideoModal = () => {
+    setShowVideoModal(false);
+    setVideoError(null);
+  };
+
+  const handleGenerateVideo = async (params: VideoGenerationParams) => {
+    setVideoGenerating(true);
+    setVideoError(null);
+
+    try {
+      const response = await fetch('/api/generate/video', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(params),
+      });
+
+      if (!response.ok) {
+        throw new Error('Video generation failed');
+      }
+
+      const result = await response.json();
+      setLastResult({
+        type: 'video',
+        ...result,
+      });
+
+      // Track analytics
+      await track(ANALYTICS_EVENTS.GENERATOR_USED, {
+        generatorType: 'videos',
+        jobId: result.jobId,
+        timestamp: new Date().toISOString(),
+      });
+
+      handleCloseVideoModal();
+    } catch (error) {
+      console.error('Video generation error:', error);
+      setVideoError(error instanceof Error ? error.message : 'Error al generar video');
+    } finally {
+      setVideoGenerating(false);
     }
   };
 
@@ -225,7 +333,15 @@ export default function GeneratorsPage() {
         {GENERATORS.map(gen => (
           <button
             key={gen.id}
-            onClick={() => setSelectedGenerator(gen.id)}
+            onClick={() => {
+              if (gen.id === 'images') {
+                handleOpenImageModal();
+              } else if (gen.id === 'videos') {
+                handleOpenVideoModal();
+              } else {
+                setSelectedGenerator(gen.id);
+              }
+            }}
             className="text-left p-6 border border-gray-200 dark:border-gray-800 rounded-lg hover:shadow-lg transition hover:border-black dark:hover:border-white"
           >
             <div className="text-4xl mb-4">{gen.icon}</div>
@@ -239,12 +355,53 @@ export default function GeneratorsPage() {
         ))}
       </div>
 
+      {/* Resultado de generación */}
+      {lastResult && (
+        <div className="border-t border-gray-200 dark:border-gray-800 pt-8">
+          <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-6">
+            <h3 className="font-bold text-green-700 dark:text-green-400 mb-2">
+              ✅ {lastResult.type === 'image' ? 'Imagen' : 'Video'} generado
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Job ID: {lastResult.jobId}
+            </p>
+            {lastResult.url && (
+              <a
+                href={lastResult.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-3 px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg text-sm font-medium hover:opacity-90"
+              >
+                Ver {lastResult.type === 'image' ? 'imagen' : 'video'}
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="border-t border-gray-200 dark:border-gray-800 pt-8">
         <h2 className="text-xl font-bold mb-6">Generaciones Recientes</h2>
         <div className="p-8 text-center border border-gray-200 dark:border-gray-800 rounded-lg">
           <p className="text-gray-600 dark:text-gray-400">Sin generaciones aún. ¡Crea tu primera!</p>
         </div>
       </div>
+
+      {/* Modales */}
+      <ImageGeneratorModal
+        isOpen={showImageModal}
+        onClose={handleCloseImageModal}
+        onGenerate={handleGenerateImage}
+        isGenerating={imageGenerating}
+        error={imageError}
+      />
+
+      <VideoGeneratorModal
+        isOpen={showVideoModal}
+        onClose={handleCloseVideoModal}
+        onGenerate={handleGenerateVideo}
+        isGenerating={videoGenerating}
+        error={videoError}
+      />
     </div>
   );
 }
