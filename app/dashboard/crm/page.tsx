@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, X, Edit2, Trash2 } from 'lucide-react';
 
 interface Prospect {
@@ -15,23 +15,17 @@ interface Prospect {
   notes: string;
 }
 
-const MOCK_PROSPECTS: Prospect[] = [
-  { id: '1', name: 'Juan García', company: 'TechCorp MX', email: 'juan@techcorp.mx', phone: '+52 55 1234 5678', stage: 'proposal', value: 50000, createdAt: 'Hoy', notes: 'Propuesta enviada, espera feedback' },
-  { id: '2', name: 'María López', company: 'Innovatech', email: 'maria@innovatech.com', phone: '+52 33 9876 5432', stage: 'qualified', value: 75000, createdAt: 'Ayer', notes: 'Reunión positiva, datos técnicos' },
-  { id: '3', name: 'Carlos Rodríguez', company: 'Digital Solutions', email: 'carlos@digital.com', phone: '+1 408 123 4567', stage: 'won', value: 100000, createdAt: 'Hace 2 días', notes: 'Contrato firmado' },
-  { id: '4', name: 'Ana Martínez', company: 'CreativeAgency', email: 'ana@creative.mx', phone: '+52 55 5555 5555', stage: 'lead', value: 30000, createdAt: 'Hace 3 días', notes: 'Primer contacto, mostrar demo' },
-  { id: '5', name: 'Roberto Sánchez', company: 'StartupHub', email: 'roberto@startuphub.com', phone: '+52 81 1111 2222', stage: 'contacted', value: 45000, createdAt: 'Hace 4 días', notes: 'Llamada programada para mañana' },
-  { id: '6', name: 'Sofia Gómez', company: 'BrandCo', email: 'sofia@brandco.com', phone: '+52 33 3333 3333', stage: 'lost', value: 20000, createdAt: 'Hace 5 días', notes: 'Budget insuficiente' },
-];
-
 const PIPELINE_STAGES = ['lead', 'contacted', 'qualified', 'proposal', 'negotiation', 'won', 'lost'];
 
 export default function CRMPage() {
-  const [prospects, setProspects] = useState<Prospect[]>(MOCK_PROSPECTS);
+  const [prospects, setProspects] = useState<Prospect[]>([]);
   const [stageFilter, setStageFilter] = useState<string | null>(null);
   const [showNewModal, setShowNewModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingProspect, setEditingProspect] = useState<Prospect | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadingAction, setLoadingAction] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     company: '',
@@ -40,6 +34,30 @@ export default function CRMPage() {
     value: '',
     notes: '',
   });
+
+  // Cargar prospectos al montar
+  useEffect(() => {
+    fetchProspects();
+  }, []);
+
+  const fetchProspects = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch('/api/crm');
+      if (!response.ok) {
+        throw new Error('Error al cargar prospectos');
+      }
+      const data = await response.json();
+      setProspects(data);
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
+      setError(errorMsg);
+      console.error('Error loading prospects:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredProspects = stageFilter
     ? prospects.filter((p) => p.stage === stageFilter)
@@ -54,20 +72,47 @@ export default function CRMPage() {
 
   const handleNewProspect = () => {
     setFormData({ name: '', company: '', email: '', phone: '', value: '', notes: '' });
+    setError(null);
     setShowNewModal(true);
   };
 
-  const handleSaveNew = () => {
-    if (formData.name && formData.company) {
-      const newProspect: Prospect = {
-        id: Math.random().toString(36),
-        ...formData,
-        stage: 'lead',
-        value: parseInt(formData.value) || 0,
-        createdAt: 'Hoy',
-      };
+  const handleSaveNew = async () => {
+    if (!formData.name || !formData.company) {
+      setError('Nombre y empresa son requeridos');
+      return;
+    }
+
+    try {
+      setLoadingAction('creating');
+      setError(null);
+
+      const response = await fetch('/api/crm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          company: formData.company,
+          email: formData.email,
+          phone: formData.phone,
+          value: parseInt(formData.value) || 0,
+          notes: formData.notes,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al crear prospecto');
+      }
+
+      const newProspect = await response.json();
       setProspects([newProspect, ...prospects]);
       setShowNewModal(false);
+      setFormData({ name: '', company: '', email: '', phone: '', value: '', notes: '' });
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
+      setError(errorMsg);
+      console.error('Error creating prospect:', err);
+    } finally {
+      setLoadingAction(null);
     }
   };
 
@@ -81,32 +126,112 @@ export default function CRMPage() {
       value: prospect.value.toString(),
       notes: prospect.notes,
     });
+    setError(null);
     setShowEditModal(true);
   };
 
-  const handleSaveEdit = () => {
-    if (editingProspect) {
+  const handleSaveEdit = async () => {
+    if (!editingProspect || !formData.name || !formData.company) {
+      setError('Nombre y empresa son requeridos');
+      return;
+    }
+
+    try {
+      setLoadingAction('editing');
+      setError(null);
+
+      const response = await fetch(`/api/crm/${editingProspect.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          company: formData.company,
+          email: formData.email,
+          phone: formData.phone,
+          value: parseInt(formData.value) || 0,
+          notes: formData.notes,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al actualizar prospecto');
+      }
+
+      const updatedProspect = await response.json();
       setProspects(
         prospects.map((p) =>
-          p.id === editingProspect.id
-            ? { ...p, ...formData, value: parseInt(formData.value) || 0 }
-            : p
+          p.id === editingProspect.id ? updatedProspect : p
         )
       );
       setShowEditModal(false);
+      setEditingProspect(null);
+      setFormData({ name: '', company: '', email: '', phone: '', value: '', notes: '' });
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
+      setError(errorMsg);
+      console.error('Error updating prospect:', err);
+    } finally {
+      setLoadingAction(null);
     }
   };
 
-  const handleDeleteProspect = (id: string) => {
-    setProspects(prospects.filter((p) => p.id !== id));
+  const handleDeleteProspect = async (id: string) => {
+    if (!window.confirm('¿Estás seguro de que deseas eliminar este prospecto?')) {
+      return;
+    }
+
+    try {
+      setLoadingAction(`deleting-${id}`);
+      setError(null);
+
+      const response = await fetch(`/api/crm/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al eliminar prospecto');
+      }
+
+      setProspects(prospects.filter((p) => p.id !== id));
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
+      setError(errorMsg);
+      console.error('Error deleting prospect:', err);
+    } finally {
+      setLoadingAction(null);
+    }
   };
 
-  const handleChangeStage = (prospectId: string, newStage: string) => {
-    setProspects(
-      prospects.map((p) =>
-        p.id === prospectId ? { ...p, stage: newStage as any } : p
-      )
-    );
+  const handleChangeStage = async (prospectId: string, newStage: string) => {
+    try {
+      setLoadingAction(`stage-${prospectId}`);
+      setError(null);
+
+      const response = await fetch(`/api/crm/${prospectId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ stage: newStage }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al cambiar etapa');
+      }
+
+      const updatedProspect = await response.json();
+      setProspects(
+        prospects.map((p) =>
+          p.id === prospectId ? updatedProspect : p
+        )
+      );
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
+      setError(errorMsg);
+      console.error('Error changing stage:', err);
+      // Recargar para asegurar consistencia
+      fetchProspects();
+    } finally {
+      setLoadingAction(null);
+    }
   };
 
   const getStageColor = (stage: string) => {
@@ -137,25 +262,60 @@ export default function CRMPage() {
 
   return (
     <div style={{ padding: '24px' }}>
+      {/* Error Alert */}
+      {error && (
+        <div style={{
+          marginBottom: '16px',
+          padding: '12px 16px',
+          background: '#FEE2E2',
+          border: '1px solid #FCA5A5',
+          borderRadius: '8px',
+          color: '#DC2626',
+          fontSize: '14px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+          <span>{error}</span>
+          <button
+            onClick={() => setError(null)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'inherit',
+              cursor: 'pointer',
+              fontSize: '18px',
+              padding: '0',
+            }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
         <div>
           <h1 style={{ fontSize: '32px', fontWeight: 700, marginBottom: '8px' }}>💼 CRM</h1>
-          <p style={{ fontSize: '14px', color: 'var(--t3)' }}>Gestiona tu pipeline de {prospects.length} prospectos</p>
+          <p style={{ fontSize: '14px', color: 'var(--t3)' }}>
+            {loading ? 'Cargando...' : `Gestiona tu pipeline de ${prospects.length} prospectos`}
+          </p>
         </div>
         <button
           onClick={handleNewProspect}
+          disabled={loading || loadingAction !== null}
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
             padding: '10px 20px',
-            background: 'var(--blue)',
+            background: loading || loadingAction !== null ? 'var(--t3)' : 'var(--blue)',
             color: 'white',
             border: 'none',
             borderRadius: '8px',
-            cursor: 'pointer',
+            cursor: loading || loadingAction !== null ? 'not-allowed' : 'pointer',
             fontWeight: 600,
+            opacity: loading || loadingAction !== null ? 0.6 : 1,
           }}
         >
           <Plus size={16} />
@@ -225,7 +385,11 @@ export default function CRMPage() {
 
       {/* Prospects Table */}
       <div style={{ background: 'var(--bg2)', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--b)' }}>
-        {filteredProspects.length > 0 ? (
+        {loading ? (
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--t3)' }}>
+            <p>Cargando prospectos...</p>
+          </div>
+        ) : filteredProspects.length > 0 ? (
           <>
             <div style={{
               display: 'grid',
@@ -271,6 +435,7 @@ export default function CRMPage() {
                 <select
                   value={prospect.stage}
                   onChange={(e) => handleChangeStage(prospect.id, e.target.value)}
+                  disabled={loadingAction !== null}
                   style={{
                     padding: '6px 8px',
                     background: 'var(--bg2)',
@@ -279,7 +444,8 @@ export default function CRMPage() {
                     borderRadius: '4px',
                     fontSize: '12px',
                     fontWeight: 600,
-                    cursor: 'pointer',
+                    cursor: loadingAction !== null ? 'not-allowed' : 'pointer',
+                    opacity: loadingAction !== null ? 0.6 : 1,
                   }}
                 >
                   {PIPELINE_STAGES.map((stage) => (
@@ -291,26 +457,30 @@ export default function CRMPage() {
                 <div style={{ display: 'flex', gap: '6px' }}>
                   <button
                     onClick={() => handleEditProspect(prospect)}
+                    disabled={loadingAction !== null}
                     style={{
                       padding: '6px',
                       background: 'var(--bg)',
                       border: '1px solid var(--b)',
                       borderRadius: '4px',
-                      cursor: 'pointer',
+                      cursor: loadingAction !== null ? 'not-allowed' : 'pointer',
                       color: 'var(--t2)',
+                      opacity: loadingAction !== null ? 0.6 : 1,
                     }}
                   >
                     <Edit2 size={14} />
                   </button>
                   <button
                     onClick={() => handleDeleteProspect(prospect.id)}
+                    disabled={loadingAction !== null}
                     style={{
                       padding: '6px',
                       background: 'rgba(239, 68, 68, 0.1)',
                       border: '1px solid #EF4444',
                       borderRadius: '4px',
-                      cursor: 'pointer',
+                      cursor: loadingAction !== null ? 'not-allowed' : 'pointer',
                       color: '#EF4444',
+                      opacity: loadingAction !== null ? 0.6 : 1,
                     }}
                   >
                     <Trash2 size={14} />
@@ -341,7 +511,7 @@ export default function CRMPage() {
             justifyContent: 'center',
             zIndex: 100,
           }}
-          onClick={() => setShowNewModal(false)}
+          onClick={() => !loadingAction && setShowNewModal(false)}
         >
           <div
             style={{
@@ -354,6 +524,19 @@ export default function CRMPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <h2 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>Nuevo Prospecto</h2>
+            {error && (
+              <div style={{
+                marginBottom: '16px',
+                padding: '10px 12px',
+                background: '#FEE2E2',
+                border: '1px solid #FCA5A5',
+                borderRadius: '6px',
+                color: '#DC2626',
+                fontSize: '13px',
+              }}>
+                {error}
+              </div>
+            )}
             {['name', 'company', 'email', 'phone', 'value', 'notes'].map((field) => (
               <input
                 key={field}
@@ -361,6 +544,7 @@ export default function CRMPage() {
                 placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
                 value={formData[field as keyof typeof formData]}
                 onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+                disabled={loadingAction === 'creating'}
                 style={{
                   width: '100%',
                   padding: '12px',
@@ -370,27 +554,32 @@ export default function CRMPage() {
                   color: 'var(--fg)',
                   fontSize: '14px',
                   marginBottom: '12px',
+                  opacity: loadingAction === 'creating' ? 0.6 : 1,
+                  cursor: loadingAction === 'creating' ? 'not-allowed' : 'text',
                 }}
               />
             ))}
             <div style={{ display: 'flex', gap: '12px' }}>
               <button
                 onClick={handleSaveNew}
+                disabled={loadingAction === 'creating'}
                 style={{
                   flex: 1,
                   padding: '12px',
-                  background: 'var(--blue)',
+                  background: loadingAction === 'creating' ? 'var(--t3)' : 'var(--blue)',
                   color: 'white',
                   border: 'none',
                   borderRadius: '8px',
-                  cursor: 'pointer',
+                  cursor: loadingAction === 'creating' ? 'not-allowed' : 'pointer',
                   fontWeight: 600,
+                  opacity: loadingAction === 'creating' ? 0.6 : 1,
                 }}
               >
-                Crear
+                {loadingAction === 'creating' ? 'Creando...' : 'Crear'}
               </button>
               <button
                 onClick={() => setShowNewModal(false)}
+                disabled={loadingAction === 'creating'}
                 style={{
                   flex: 1,
                   padding: '12px',
@@ -398,8 +587,9 @@ export default function CRMPage() {
                   color: 'var(--t2)',
                   border: '1px solid var(--b)',
                   borderRadius: '8px',
-                  cursor: 'pointer',
+                  cursor: loadingAction === 'creating' ? 'not-allowed' : 'pointer',
                   fontWeight: 600,
+                  opacity: loadingAction === 'creating' ? 0.6 : 1,
                 }}
               >
                 Cancelar
@@ -409,7 +599,7 @@ export default function CRMPage() {
         </div>
       )}
 
-      {/* Edit Modal - similar structure */}
+      {/* Edit Modal */}
       {showEditModal && editingProspect && (
         <div
           style={{
@@ -424,7 +614,7 @@ export default function CRMPage() {
             justifyContent: 'center',
             zIndex: 100,
           }}
-          onClick={() => setShowEditModal(false)}
+          onClick={() => !loadingAction && setShowEditModal(false)}
         >
           <div
             style={{
@@ -437,6 +627,19 @@ export default function CRMPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <h2 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>Editar Prospecto</h2>
+            {error && (
+              <div style={{
+                marginBottom: '16px',
+                padding: '10px 12px',
+                background: '#FEE2E2',
+                border: '1px solid #FCA5A5',
+                borderRadius: '6px',
+                color: '#DC2626',
+                fontSize: '13px',
+              }}>
+                {error}
+              </div>
+            )}
             {['name', 'company', 'email', 'phone', 'value', 'notes'].map((field) => (
               <input
                 key={field}
@@ -444,6 +647,7 @@ export default function CRMPage() {
                 placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
                 value={formData[field as keyof typeof formData]}
                 onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+                disabled={loadingAction === 'editing'}
                 style={{
                   width: '100%',
                   padding: '12px',
@@ -453,27 +657,32 @@ export default function CRMPage() {
                   color: 'var(--fg)',
                   fontSize: '14px',
                   marginBottom: '12px',
+                  opacity: loadingAction === 'editing' ? 0.6 : 1,
+                  cursor: loadingAction === 'editing' ? 'not-allowed' : 'text',
                 }}
               />
             ))}
             <div style={{ display: 'flex', gap: '12px' }}>
               <button
                 onClick={handleSaveEdit}
+                disabled={loadingAction === 'editing'}
                 style={{
                   flex: 1,
                   padding: '12px',
-                  background: 'var(--blue)',
+                  background: loadingAction === 'editing' ? 'var(--t3)' : 'var(--blue)',
                   color: 'white',
                   border: 'none',
                   borderRadius: '8px',
-                  cursor: 'pointer',
+                  cursor: loadingAction === 'editing' ? 'not-allowed' : 'pointer',
                   fontWeight: 600,
+                  opacity: loadingAction === 'editing' ? 0.6 : 1,
                 }}
               >
-                Guardar
+                {loadingAction === 'editing' ? 'Guardando...' : 'Guardar'}
               </button>
               <button
                 onClick={() => setShowEditModal(false)}
+                disabled={loadingAction === 'editing'}
                 style={{
                   flex: 1,
                   padding: '12px',
@@ -481,8 +690,9 @@ export default function CRMPage() {
                   color: 'var(--t2)',
                   border: '1px solid var(--b)',
                   borderRadius: '8px',
-                  cursor: 'pointer',
+                  cursor: loadingAction === 'editing' ? 'not-allowed' : 'pointer',
                   fontWeight: 600,
+                  opacity: loadingAction === 'editing' ? 0.6 : 1,
                 }}
               >
                 Cancelar

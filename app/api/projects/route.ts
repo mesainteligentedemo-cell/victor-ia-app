@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
 export const runtime = 'nodejs';
 
@@ -13,45 +14,100 @@ interface ProjectRequest {
   priority?: 'low' | 'medium' | 'high';
 }
 
-// In-memory storage (replace with Supabase)
-const projects: Record<string, any> = {};
+// Supabase client
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+);
 
 export async function POST(req: Request) {
   try {
     const body = (await req.json()) as ProjectRequest;
     const { userId, name, description, status, progress, deadline, teamCount, priority } = body;
 
+    // Validación: userId y name requeridos
     if (!userId || !name) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Missing required fields: userId and name are mandatory', code: 400 },
         { status: 400 }
       );
     }
 
-    const project = {
-      id: crypto.randomUUID(),
-      userId,
-      name,
-      description,
-      status: status || 'planning',
-      progress: progress || 0,
-      deadline,
-      teamCount: teamCount || 1,
-      priority: priority || 'medium',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    // Sanitizar inputs
+    const sanitizedUserId = String(userId).trim();
+    const sanitizedName = String(name).trim();
+    const sanitizedDescription = description ? String(description).trim() : undefined;
 
-    projects[project.id] = project;
+    if (!sanitizedUserId || !sanitizedName) {
+      return NextResponse.json(
+        { error: 'userId and name cannot be empty', code: 400 },
+        { status: 400 }
+      );
+    }
+
+    // Validar status
+    const validStatuses = ['planning', 'in-progress', 'review', 'completed'];
+    if (status && !validStatuses.includes(status)) {
+      return NextResponse.json(
+        { error: `Invalid status. Must be one of: ${validStatuses.join(', ')}`, code: 400 },
+        { status: 400 }
+      );
+    }
+
+    // Validar priority
+    const validPriorities = ['low', 'medium', 'high'];
+    if (priority && !validPriorities.includes(priority)) {
+      return NextResponse.json(
+        { error: `Invalid priority. Must be one of: ${validPriorities.join(', ')}`, code: 400 },
+        { status: 400 }
+      );
+    }
+
+    // Validar progress (0-100)
+    if (progress !== undefined && (progress < 0 || progress > 100)) {
+      return NextResponse.json(
+        { error: 'progress must be between 0 and 100', code: 400 },
+        { status: 400 }
+      );
+    }
+
+    console.log(`Creating project for user: ${sanitizedUserId}`);
+
+    // Insertar en Supabase
+    const { data, error } = await supabase
+      .from('projects')
+      .insert([
+        {
+          user_id: sanitizedUserId,
+          name: sanitizedName,
+          description: sanitizedDescription,
+          status: status || 'planning',
+          progress: progress || 0,
+          deadline,
+          team_count: teamCount || 1,
+          priority: priority || 'medium',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+      ])
+      .select();
+
+    if (error) {
+      console.error('Supabase insert error:', error);
+      return NextResponse.json(
+        { error: `Failed to create project: ${error.message}`, code: 500 },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({
       success: true,
-      project,
+      project: data?.[0],
     });
   } catch (error) {
     console.error('Project creation error:', error);
     return NextResponse.json(
-      { error: 'Failed to create project' },
+      { error: 'Failed to create project', code: 500 },
       { status: 500 }
     );
   }
@@ -63,30 +119,65 @@ export async function GET(req: Request) {
     const userId = url.searchParams.get('userId');
     const status = url.searchParams.get('status');
 
+    // Validación: userId requerido
     if (!userId) {
       return NextResponse.json(
-        { error: 'Missing userId' },
+        { error: 'Missing userId parameter', code: 400 },
         { status: 400 }
       );
     }
 
-    let userProjects = Object.values(projects).filter(
-      (p) => p.userId === userId
-    );
+    const sanitizedUserId = String(userId).trim();
+    if (!sanitizedUserId) {
+      return NextResponse.json(
+        { error: 'userId cannot be empty', code: 400 },
+        { status: 400 }
+      );
+    }
+
+    // Validar status si se proporciona
+    if (status) {
+      const validStatuses = ['planning', 'in-progress', 'review', 'completed'];
+      if (!validStatuses.includes(status)) {
+        return NextResponse.json(
+          { error: `Invalid status filter. Must be one of: ${validStatuses.join(', ')}`, code: 400 },
+          { status: 400 }
+        );
+      }
+    }
+
+    console.log(`Fetching projects for user: ${sanitizedUserId}${status ? ` with status: ${status}` : ''}`);
+
+    // Consultar Supabase
+    let query = supabase
+      .from('projects')
+      .select('*')
+      .eq('user_id', sanitizedUserId)
+      .order('created_at', { ascending: false });
 
     if (status) {
-      userProjects = userProjects.filter((p) => p.status === status);
+      query = query.eq('status', status);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      console.error('Supabase fetch error:', error);
+      return NextResponse.json(
+        { error: `Failed to fetch projects: ${error.message}`, code: 500 },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({
       success: true,
-      projects: userProjects,
-      count: userProjects.length,
+      projects: data || [],
+      count: data?.length || 0,
     });
   } catch (error) {
     console.error('Projects fetch error:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch projects' },
+      { error: 'Failed to fetch projects', code: 500 },
       { status: 500 }
     );
   }

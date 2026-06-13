@@ -135,3 +135,84 @@ export function getSafeErrorResponse(error: Error): Record<string, unknown> {
     ...(process.env.NODE_ENV === 'development' && { debug: error.message }),
   };
 }
+
+/**
+ * sanitizeInput - Remove special chars, trim whitespace
+ * Removes HTML tags, control characters, and dangerous special chars
+ * Keeps alphanumeric, spaces, and basic punctuation (-, _, @, +, .)
+ *
+ * Usage:
+ * const name = sanitizeInput(data.name);
+ * if (!name) throw new Error("Name required");
+ */
+export function sanitizeInput(str: string | null | undefined): string {
+  if (!str) return '';
+
+  return str
+    .trim()
+    .replace(/<[^>]*>/g, '') // Remove HTML/XML tags
+    .replace(/[\x00-\x1F\x7F]/g, '') // Remove control characters
+    .replace(/[^\w\s\-._@+]/g, '') // Keep alphanumeric, spaces, -, _, ., @, +
+    .trim();
+}
+
+/**
+ * validateEmail - Regex-based email validation
+ * Basic format check: something@something.something
+ *
+ * @returns boolean - true if email format is valid
+ */
+export function validateEmail(email: string | null | undefined): boolean {
+  if (!email) return false;
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email.trim());
+}
+
+/**
+ * validateUrl - Validate URL starts with http:// or https://
+ * Uses URL constructor for robust parsing
+ *
+ * @returns boolean - true if valid http/https URL
+ */
+export function validateUrl(url: string | null | undefined): boolean {
+  if (!url) return false;
+
+  try {
+    const parsed = new URL(url.trim());
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * validateJson - Attempt to parse JSON string
+ * Returns parsed object if valid, null if invalid
+ *
+ * @returns Record<string, any> | null - parsed object or null
+ */
+export function validateJson(str: string | null | undefined): Record<string, any> | null {
+  if (!str || typeof str !== 'string') return null;
+
+  try {
+    const parsed = JSON.parse(str.trim());
+    // Ensure it's an object, not a primitive
+    return typeof parsed === 'object' && parsed !== null ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * isValidId - Alphanumeric ID with hyphens and underscores
+ * Must not be empty
+ *
+ * @returns boolean - true if valid ID format
+ */
+export function isValidId(id: string | null | undefined): boolean {
+  if (!id || typeof id !== 'string') return false;
+
+  const idRegex = /^[a-zA-Z0-9_-]+$/;
+  return idRegex.test(id.trim()) && id.trim().length > 0;
+}
