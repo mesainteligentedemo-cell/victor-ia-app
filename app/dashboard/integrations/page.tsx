@@ -1,113 +1,283 @@
-"use client";
+'use client';
 
-import { useIntegrationsStore } from "@/lib/stores";
-import { Button } from "@/components/shared/Button";
-import { useModal } from "@/lib/hooks";
-import { Modal } from "@/components/shared/Modal";
-import { useEffect } from "react";
+import { useState } from 'react';
+import { Plus, Check, X } from 'lucide-react';
 
-const AVAILABLE_INTEGRATIONS = [
-  { id: "slack", name: "Slack", description: "Send notifications to Slack", icon: "💬", connected: false },
-  { id: "github", name: "GitHub", description: "Sync repositories and deployments", icon: "🐙", connected: false },
-  { id: "zapier", name: "Zapier", description: "Connect to 5000+ apps", icon: "⚡", connected: false },
-  { id: "stripe", name: "Stripe", description: "Payment processing", icon: "💳", connected: false },
-  { id: "twilio", name: "Twilio", description: "SMS and voice", icon: "📱", connected: false },
-  { id: "hubspot", name: "HubSpot", description: "CRM integration", icon: "🔗", connected: false },
+interface Integration {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  status: 'connected' | 'available';
+  connectedAt?: string;
+}
+
+const ALL_INTEGRATIONS: Integration[] = [
+  { id: 'slack', name: 'Slack', description: 'Envía notificaciones a tus canales', icon: '💬', status: 'connected', connectedAt: 'Jun 1, 2026' },
+  { id: 'github', name: 'GitHub', description: 'Sincroniza repositorios y deployments', icon: '🐙', status: 'available' },
+  { id: 'zapier', name: 'Zapier', description: 'Conecta con 5000+ apps', icon: '⚡', status: 'available' },
+  { id: 'stripe', name: 'Stripe', description: 'Procesa pagos automáticamente', icon: '💳', status: 'connected', connectedAt: 'May 15, 2026' },
+  { id: 'twilio', name: 'Twilio', description: 'SMS y llamadas de voz', icon: '📱', status: 'available' },
+  { id: 'hubspot', name: 'HubSpot', description: 'Integración completa con CRM', icon: '🔗', status: 'available' },
+  { id: 'google-sheets', name: 'Google Sheets', description: 'Sincroniza datos en spreadsheets', icon: '📊', status: 'available' },
+  { id: 'openai', name: 'OpenAI', description: 'Acceso a GPT y Embeddings', icon: '🤖', status: 'connected', connectedAt: 'Apr 10, 2026' },
+  { id: 'vercel', name: 'Vercel', description: 'Deploy automático de proyectos', icon: '▲', status: 'available' },
+  { id: 'mailchimp', name: 'Mailchimp', description: 'Email marketing y newsletters', icon: '📧', status: 'available' },
 ];
 
 export default function IntegrationsPage() {
-  const { integrations, addIntegration } = useIntegrationsStore();
-  const { isOpen, open, close } = useModal();
+  const [integrations, setIntegrations] = useState<Integration[]>(ALL_INTEGRATIONS);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedIntegration, setSelectedIntegration] = useState<Integration | null>(null);
 
-  useEffect(() => {
-    const fetchIntegrations = async () => {
-      const res = await fetch("/api/integrations?userId=user-id");
-      if (res.ok) {
-        const data = await res.json();
-      }
-    };
-    fetchIntegrations();
-  }, []);
+  const connected = integrations.filter((i) => i.status === 'connected');
+  const available = integrations.filter((i) => i.status === 'available');
+
+  const handleConnect = (integration: Integration) => {
+    setSelectedIntegration(integration);
+    setShowModal(true);
+  };
+
+  const handleConfirmConnect = () => {
+    if (selectedIntegration) {
+      setIntegrations(
+        integrations.map((i) =>
+          i.id === selectedIntegration.id
+            ? { ...i, status: 'connected' as const, connectedAt: new Date().toLocaleDateString() }
+            : i
+        )
+      );
+      setShowModal(false);
+      setSelectedIntegration(null);
+    }
+  };
+
+  const handleDisconnect = (id: string) => {
+    if (confirm('¿Desconectar esta integración?')) {
+      setIntegrations(
+        integrations.map((i) =>
+          i.id === id
+            ? { ...i, status: 'available' as const, connectedAt: undefined }
+            : i
+        )
+      );
+    }
+  };
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-start">
+    <div style={{ padding: '24px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
         <div>
-          <h1 className="text-4xl font-bold text-black dark:text-white mb-2">Integrations</h1>
-          <p className="text-gray-600 dark:text-gray-400">Connect external services and tools</p>
+          <h1 style={{ fontSize: '32px', fontWeight: 700, marginBottom: '8px' }}>🔌 Integraciones</h1>
+          <p style={{ fontSize: '14px', color: 'var(--t3)' }}>Conecta tus herramientas favoritas</p>
         </div>
-        <Button onClick={open} variant="primary">
-          + Add Integration
-        </Button>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-4 border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-gray-900">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Connected</p>
-          <p className="text-3xl font-bold text-black dark:text-white">{integrations.length}</p>
-        </div>
-        <div className="p-4 border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-gray-900">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Available</p>
-          <p className="text-3xl font-bold text-black dark:text-white">{AVAILABLE_INTEGRATIONS.length}</p>
-        </div>
-        <div className="p-4 border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-gray-900">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Last Sync</p>
-          <p className="text-xl font-bold text-black dark:text-white">2h ago</p>
-        </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '32px' }}>
+        {[
+          { label: 'Conectadas', value: connected.length, color: 'var(--green)' },
+          { label: 'Disponibles', value: available.length, color: 'var(--blue)' },
+          { label: 'Total', value: integrations.length, color: 'var(--t2)' },
+        ].map((stat) => (
+          <div key={stat.label} style={{ padding: '16px', background: 'var(--bg2)', borderRadius: '8px', border: '1px solid var(--b)' }}>
+            <p style={{ fontSize: '12px', color: 'var(--t3)', marginBottom: '8px', textTransform: 'uppercase', fontWeight: 600 }}>
+              {stat.label}
+            </p>
+            <p style={{ fontSize: '24px', fontWeight: 700, color: stat.color }}>{stat.value}</p>
+          </div>
+        ))}
       </div>
 
-      {/* Integration Grid */}
-      <div>
-        <h2 className="text-2xl font-bold text-black dark:text-white mb-4">Available Services</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {AVAILABLE_INTEGRATIONS.map((service) => (
-            <div
-              key={service.id}
-              className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900 hover:shadow-md transition"
-            >
-              <div className="text-4xl mb-3">{service.icon}</div>
-              <h3 className="text-lg font-semibold text-black dark:text-white mb-2">{service.name}</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{service.description}</p>
-              <Button
-                onClick={() => addIntegration({ id: service.id, name: service.name, active: true, connectedAt: new Date() } as any)}
-                variant={service.connected ? "ghost" : "primary"}
-                className="w-full"
-              >
-                {service.connected ? "Disconnect" : "Connect"}
-              </Button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Connected Services */}
-      {integrations.length > 0 && (
-        <div>
-          <h2 className="text-2xl font-bold text-black dark:text-white mb-4">Active Integrations</h2>
-          <div className="space-y-2">
-            {integrations.map((integration) => (
+      {/* Connected Integrations */}
+      {connected.length > 0 && (
+        <>
+          <h2 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '16px' }}>Integración Activas</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px', marginBottom: '32px' }}>
+            {connected.map((integration) => (
               <div
                 key={integration.id}
-                className="p-4 border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-gray-900 flex justify-between items-center"
+                style={{
+                  padding: '20px',
+                  background: 'var(--bg2)',
+                  border: '2px solid var(--green)',
+                  borderRadius: '12px',
+                  position: 'relative',
+                }}
               >
-                <div>
-                  <p className="font-semibold text-black dark:text-white">{integration.name}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Connected and active</p>
+                <div style={{ display: 'flex', alignItems: 'start', justifyContent: 'space-between', marginBottom: '16px' }}>
+                  <div style={{ fontSize: '32px' }}>{integration.icon}</div>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '4px 8px',
+                    background: 'rgba(16, 185, 129, 0.1)',
+                    borderRadius: '4px',
+                    color: 'var(--green)',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                  }}>
+                    <Check size={14} />
+                    Conectado
+                  </div>
                 </div>
-                <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-900 dark:text-green-100 rounded">
-                  Active
-                </span>
+
+                <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '4px' }}>{integration.name}</h3>
+                <p style={{ fontSize: '13px', color: 'var(--t3)', marginBottom: '12px' }}>{integration.description}</p>
+                <p style={{ fontSize: '11px', color: 'var(--t3)', marginBottom: '12px' }}>
+                  Conectado el {integration.connectedAt}
+                </p>
+
+                <button
+                  onClick={() => handleDisconnect(integration.id)}
+                  style={{
+                    width: '100%',
+                    padding: '8px',
+                    background: 'rgba(239, 68, 68, 0.1)',
+                    color: '#EF4444',
+                    border: '1px solid #EF4444',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                    fontSize: '13px',
+                  }}
+                >
+                  Desconectar
+                </button>
               </div>
             ))}
           </div>
-        </div>
+        </>
       )}
 
-      {/* Modal */}
-      <Modal isOpen={isOpen} onClose={close} title="Add Integration">
-        <p className="text-gray-600 dark:text-gray-400 mb-4">Select an integration from the list above to connect it to your account.</p>
-      </Modal>
+      {/* Available Integrations */}
+      <h2 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '16px' }}>Integraciones Disponibles</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+        {available.map((integration) => (
+          <div
+            key={integration.id}
+            style={{
+              padding: '20px',
+              background: 'var(--bg2)',
+              border: '1px solid var(--b)',
+              borderRadius: '12px',
+            }}
+          >
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ fontSize: '32px', marginBottom: '12px' }}>{integration.icon}</div>
+              <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '4px' }}>{integration.name}</h3>
+              <p style={{ fontSize: '13px', color: 'var(--t3)' }}>{integration.description}</p>
+            </div>
+
+            <button
+              onClick={() => handleConnect(integration)}
+              style={{
+                width: '100%',
+                padding: '8px',
+                background: 'var(--blue)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontWeight: 600,
+                fontSize: '13px',
+              }}
+            >
+              Conectar
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {/* Connection Modal */}
+      {showModal && selectedIntegration && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 100,
+          }}
+          onClick={() => setShowModal(false)}
+        >
+          <div
+            style={{
+              background: 'var(--bg)',
+              borderRadius: '12px',
+              padding: '32px',
+              width: '90%',
+              maxWidth: '500px',
+              textAlign: 'center',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ fontSize: '64px', marginBottom: '16px' }}>{selectedIntegration.icon}</div>
+            <h2 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '12px' }}>
+              Conectar {selectedIntegration.name}
+            </h2>
+            <p style={{ fontSize: '14px', color: 'var(--t2)', marginBottom: '24px' }}>
+              {selectedIntegration.description}
+            </p>
+
+            <div style={{
+              padding: '16px',
+              background: 'var(--bg2)',
+              borderRadius: '8px',
+              marginBottom: '24px',
+              textAlign: 'left',
+              fontSize: '13px',
+              color: 'var(--t2)',
+            }}>
+              <p style={{ marginBottom: '8px', fontWeight: 600 }}>Esta integración te permitirá:</p>
+              <ul style={{ marginLeft: '16px' }}>
+                <li>✓ Sincronizar datos automáticamente</li>
+                <li>✓ Recibir notificaciones en tiempo real</li>
+                <li>✓ Automatizar flujos de trabajo</li>
+              </ul>
+            </div>
+
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button
+                onClick={() => setShowModal(false)}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  background: 'var(--bg2)',
+                  color: 'var(--t2)',
+                  border: '1px solid var(--b)',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                }}
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleConfirmConnect}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  background: 'var(--blue)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                }}
+              >
+                Conectar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

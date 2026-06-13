@@ -1,188 +1,496 @@
-"use client";
+'use client';
 
-import { useCRMStore } from "@/lib/stores";
-import { useForm, useModal } from "@/lib/hooks";
-import { Button } from "@/components/shared/Button";
-import { Input } from "@/components/shared/Input";
-import { Modal } from "@/components/shared/Modal";
-import { useState, useEffect } from "react";
+import { useState } from 'react';
+import { Plus, X, Edit2, Trash2 } from 'lucide-react';
 
-import type { PipelineStage } from "@/lib/types";
+interface Prospect {
+  id: string;
+  name: string;
+  company: string;
+  email: string;
+  phone: string;
+  stage: 'lead' | 'contacted' | 'qualified' | 'proposal' | 'negotiation' | 'won' | 'lost';
+  value: number;
+  createdAt: string;
+  notes: string;
+}
 
-const PIPELINE_STAGES: PipelineStage[] = ["lead", "contacted", "qualified", "proposal", "negotiation", "won", "lost"];
+const MOCK_PROSPECTS: Prospect[] = [
+  { id: '1', name: 'Juan García', company: 'TechCorp MX', email: 'juan@techcorp.mx', phone: '+52 55 1234 5678', stage: 'proposal', value: 50000, createdAt: 'Hoy', notes: 'Propuesta enviada, espera feedback' },
+  { id: '2', name: 'María López', company: 'Innovatech', email: 'maria@innovatech.com', phone: '+52 33 9876 5432', stage: 'qualified', value: 75000, createdAt: 'Ayer', notes: 'Reunión positiva, datos técnicos' },
+  { id: '3', name: 'Carlos Rodríguez', company: 'Digital Solutions', email: 'carlos@digital.com', phone: '+1 408 123 4567', stage: 'won', value: 100000, createdAt: 'Hace 2 días', notes: 'Contrato firmado' },
+  { id: '4', name: 'Ana Martínez', company: 'CreativeAgency', email: 'ana@creative.mx', phone: '+52 55 5555 5555', stage: 'lead', value: 30000, createdAt: 'Hace 3 días', notes: 'Primer contacto, mostrar demo' },
+  { id: '5', name: 'Roberto Sánchez', company: 'StartupHub', email: 'roberto@startuphub.com', phone: '+52 81 1111 2222', stage: 'contacted', value: 45000, createdAt: 'Hace 4 días', notes: 'Llamada programada para mañana' },
+  { id: '6', name: 'Sofia Gómez', company: 'BrandCo', email: 'sofia@brandco.com', phone: '+52 33 3333 3333', stage: 'lost', value: 20000, createdAt: 'Hace 5 días', notes: 'Budget insuficiente' },
+];
+
+const PIPELINE_STAGES = ['lead', 'contacted', 'qualified', 'proposal', 'negotiation', 'won', 'lost'];
 
 export default function CRMPage() {
-  const { prospects, metrics, setMetrics, addProspect } = useCRMStore();
-  const { isOpen, open, close } = useModal();
+  const [prospects, setProspects] = useState<Prospect[]>(MOCK_PROSPECTS);
   const [stageFilter, setStageFilter] = useState<string | null>(null);
-
-  const form = useForm(
-    { name: "", company: "", email: "", phone: "", value: "" },
-    async (values) => {
-      const prospect = {
-        id: Math.random().toString(36).substring(7),
-        userId: "user-id",
-        name: values.name,
-        company: values.company,
-        email: values.email,
-        phone: values.phone,
-        stage: "lead" as const,
-        value: parseInt(values.value) || 0,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      };
-
-      addProspect(prospect);
-      close();
-      form.setValues({ name: "", company: "", email: "", phone: "", value: "" });
-    }
-  );
-
-  useEffect(() => {
-    const fetchMetrics = async () => {
-      const res = await fetch("/api/crm?userId=user-id");
-      if (res.ok) {
-        const data = await res.json();
-        setMetrics(data);
-      }
-    };
-    fetchMetrics();
-  }, []);
+  const [showNewModal, setShowNewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingProspect, setEditingProspect] = useState<Prospect | null>(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    company: '',
+    email: '',
+    phone: '',
+    value: '',
+    notes: '',
+  });
 
   const filteredProspects = stageFilter
     ? prospects.filter((p) => p.stage === stageFilter)
     : prospects;
 
+  const metrics = {
+    total: prospects.length,
+    avgValue: Math.round(prospects.reduce((sum, p) => sum + p.value, 0) / prospects.length),
+    won: prospects.filter((p) => p.stage === 'won').length,
+    wonValue: prospects.filter((p) => p.stage === 'won').reduce((sum, p) => sum + p.value, 0),
+  };
+
+  const handleNewProspect = () => {
+    setFormData({ name: '', company: '', email: '', phone: '', value: '', notes: '' });
+    setShowNewModal(true);
+  };
+
+  const handleSaveNew = () => {
+    if (formData.name && formData.company) {
+      const newProspect: Prospect = {
+        id: Math.random().toString(36),
+        ...formData,
+        stage: 'lead',
+        value: parseInt(formData.value) || 0,
+        createdAt: 'Hoy',
+      };
+      setProspects([newProspect, ...prospects]);
+      setShowNewModal(false);
+    }
+  };
+
+  const handleEditProspect = (prospect: Prospect) => {
+    setEditingProspect(prospect);
+    setFormData({
+      name: prospect.name,
+      company: prospect.company,
+      email: prospect.email,
+      phone: prospect.phone,
+      value: prospect.value.toString(),
+      notes: prospect.notes,
+    });
+    setShowEditModal(true);
+  };
+
+  const handleSaveEdit = () => {
+    if (editingProspect) {
+      setProspects(
+        prospects.map((p) =>
+          p.id === editingProspect.id
+            ? { ...p, ...formData, value: parseInt(formData.value) || 0 }
+            : p
+        )
+      );
+      setShowEditModal(false);
+    }
+  };
+
+  const handleDeleteProspect = (id: string) => {
+    setProspects(prospects.filter((p) => p.id !== id));
+  };
+
+  const handleChangeStage = (prospectId: string, newStage: string) => {
+    setProspects(
+      prospects.map((p) =>
+        p.id === prospectId ? { ...p, stage: newStage as any } : p
+      )
+    );
+  };
+
+  const getStageColor = (stage: string) => {
+    const colors: Record<string, string> = {
+      lead: 'var(--t3)',
+      contacted: 'var(--blue)',
+      qualified: 'var(--orange)',
+      proposal: 'var(--purple)',
+      negotiation: 'var(--pink)',
+      won: 'var(--green)',
+      lost: '#EF4444',
+    };
+    return colors[stage] || 'var(--t3)';
+  };
+
+  const getStageLabel = (stage: string) => {
+    const labels: Record<string, string> = {
+      lead: 'Lead',
+      contacted: 'Contactado',
+      qualified: 'Calificado',
+      proposal: 'Propuesta',
+      negotiation: 'Negociación',
+      won: 'Ganado',
+      lost: 'Perdido',
+    };
+    return labels[stage] || stage;
+  };
+
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-start">
+    <div style={{ padding: '24px' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
         <div>
-          <h1 className="text-4xl font-bold text-black dark:text-white mb-2">CRM</h1>
-          <p className="text-gray-600 dark:text-gray-400">Gestiona tu pipeline de ventas</p>
+          <h1 style={{ fontSize: '32px', fontWeight: 700, marginBottom: '8px' }}>💼 CRM</h1>
+          <p style={{ fontSize: '14px', color: 'var(--t3)' }}>Gestiona tu pipeline de {prospects.length} prospectos</p>
         </div>
-        <Button onClick={open} variant="primary">
-          + Nuevo Prospecto
-        </Button>
+        <button
+          onClick={handleNewProspect}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 20px',
+            background: 'var(--blue)',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontWeight: 600,
+          }}
+        >
+          <Plus size={16} />
+          Nuevo Prospecto
+        </button>
       </div>
 
       {/* Metrics */}
-      {metrics && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="p-4 border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-gray-900">
-            <p className="text-sm text-gray-600 dark:text-gray-400">Total Prospectos</p>
-            <p className="text-3xl font-bold text-black dark:text-white">{metrics.totalProspects}</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '32px' }}>
+        {[
+          { label: 'Total', value: metrics.total },
+          { label: 'Valor Promedio', value: `$${metrics.avgValue.toLocaleString()}` },
+          { label: 'Ganados', value: metrics.won },
+          { label: 'Valor Ganado', value: `$${metrics.wonValue.toLocaleString()}` },
+        ].map((metric) => (
+          <div key={metric.label} style={{ padding: '16px', background: 'var(--bg2)', borderRadius: '8px', border: '1px solid var(--b)' }}>
+            <p style={{ fontSize: '12px', color: 'var(--t3)', marginBottom: '8px', textTransform: 'uppercase', fontWeight: 600 }}>
+              {metric.label}
+            </p>
+            <p style={{ fontSize: '24px', fontWeight: 700 }}>{metric.value}</p>
           </div>
-          <div className="p-4 border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-gray-900">
-            <p className="text-sm text-gray-600 dark:text-gray-400">Valor Promedio</p>
-            <p className="text-3xl font-bold text-black dark:text-white">${metrics.avgValuePerProspect.toFixed(0)}</p>
-          </div>
-          <div className="p-4 border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-gray-900">
-            <p className="text-sm text-gray-600 dark:text-gray-400">Tasa Conversión</p>
-            <p className="text-3xl font-bold text-black dark:text-white">{metrics.conversionRate.toFixed(1)}%</p>
-          </div>
-          <div className="p-4 border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-gray-900">
-            <p className="text-sm text-gray-600 dark:text-gray-400">Cerrados</p>
-            <p className="text-3xl font-bold text-black dark:text-white">{metrics.prospectsPerStage.won}</p>
-          </div>
-        </div>
-      )}
+        ))}
+      </div>
 
       {/* Pipeline Stages */}
-      <div>
-        <h2 className="text-2xl font-bold text-black dark:text-white mb-4">Pipeline</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2">
-          {PIPELINE_STAGES.map((stage) => (
-            <button
-              key={stage}
-              onClick={() => setStageFilter(stageFilter === stage ? null : stage)}
-              className={`p-3 rounded border transition ${
-                stageFilter === stage
-                  ? "border-black dark:border-white bg-black dark:bg-white text-white dark:text-black"
-                  : "border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-black dark:text-white hover:shadow-md"
-              }`}
-            >
-              <p className="text-xs font-semibold capitalize">{stage}</p>
-              <p className="text-lg font-bold">{metrics?.prospectsPerStage[stage] || 0}</p>
-            </button>
-          ))}
+      <div style={{ marginBottom: '32px' }}>
+        <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '12px' }}>Pipeline por Etapa</h3>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => setStageFilter(null)}
+            style={{
+              padding: '8px 14px',
+              background: !stageFilter ? 'var(--blue)' : 'var(--bg2)',
+              color: !stageFilter ? 'white' : 'var(--t2)',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '13px',
+              fontWeight: 500,
+            }}
+          >
+            Todos ({prospects.length})
+          </button>
+          {PIPELINE_STAGES.map((stage) => {
+            const count = prospects.filter((p) => p.stage === stage).length;
+            return (
+              <button
+                key={stage}
+                onClick={() => setStageFilter(stageFilter === stage ? null : stage)}
+                style={{
+                  padding: '8px 14px',
+                  background: stageFilter === stage ? 'var(--blue)' : 'var(--bg2)',
+                  color: stageFilter === stage ? 'white' : 'var(--t2)',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                }}
+              >
+                {getStageLabel(stage)} ({count})
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* Prospects List */}
-      <div>
-        <h2 className="text-2xl font-bold text-black dark:text-white mb-4">
-          {stageFilter ? `Prospectos - ${stageFilter}` : "Todos los Prospectos"}
-        </h2>
-        {filteredProspects.length === 0 ? (
-          <p className="text-gray-600 dark:text-gray-400">Sin prospectos en esta etapa</p>
-        ) : (
-          <div className="space-y-2">
+      {/* Prospects Table */}
+      <div style={{ background: 'var(--bg2)', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--b)' }}>
+        {filteredProspects.length > 0 ? (
+          <>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '2fr 1.5fr 1.5fr 1fr 120px',
+              gap: '16px',
+              padding: '16px',
+              background: 'var(--bg)',
+              borderBottom: '1px solid var(--b)',
+              fontWeight: 600,
+              fontSize: '12px',
+              textTransform: 'uppercase',
+            }}>
+              <div>Prospecto</div>
+              <div>Contacto</div>
+              <div>Valor</div>
+              <div>Etapa</div>
+              <div>Acciones</div>
+            </div>
+
             {filteredProspects.map((prospect) => (
-              <div key={prospect.id} className="p-4 border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-gray-900 hover:shadow-md transition">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="font-semibold text-black dark:text-white">{prospect.name}</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{prospect.company} • {prospect.email}</p>
-                    <p className="text-sm font-medium text-black dark:text-white mt-1">${prospect.value}</p>
-                  </div>
-                  <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-800 text-black dark:text-white rounded capitalize">
-                    {prospect.stage}
-                  </span>
+              <div
+                key={prospect.id}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '2fr 1.5fr 1.5fr 1fr 120px',
+                  gap: '16px',
+                  padding: '16px',
+                  borderBottom: '1px solid var(--b)',
+                  alignItems: 'center',
+                  fontSize: '14px',
+                }}
+              >
+                <div>
+                  <p style={{ fontWeight: 600 }}>{prospect.name}</p>
+                  <p style={{ fontSize: '12px', color: 'var(--t3)', marginTop: '4px' }}>{prospect.company}</p>
+                  {prospect.notes && <p style={{ fontSize: '12px', color: 'var(--t3)', marginTop: '4px' }}>📝 {prospect.notes}</p>}
+                </div>
+                <div>
+                  <p style={{ fontSize: '12px' }}>{prospect.email}</p>
+                  <p style={{ fontSize: '12px', color: 'var(--t3)' }}>{prospect.phone}</p>
+                </div>
+                <div style={{ fontWeight: 600 }}>${prospect.value.toLocaleString()}</div>
+                <select
+                  value={prospect.stage}
+                  onChange={(e) => handleChangeStage(prospect.id, e.target.value)}
+                  style={{
+                    padding: '6px 8px',
+                    background: 'var(--bg2)',
+                    color: getStageColor(prospect.stage),
+                    border: `1px solid ${getStageColor(prospect.stage)}`,
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {PIPELINE_STAGES.map((stage) => (
+                    <option key={stage} value={stage}>
+                      {getStageLabel(stage)}
+                    </option>
+                  ))}
+                </select>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  <button
+                    onClick={() => handleEditProspect(prospect)}
+                    style={{
+                      padding: '6px',
+                      background: 'var(--bg)',
+                      border: '1px solid var(--b)',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      color: 'var(--t2)',
+                    }}
+                  >
+                    <Edit2 size={14} />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteProspect(prospect.id)}
+                    style={{
+                      padding: '6px',
+                      background: 'rgba(239, 68, 68, 0.1)',
+                      border: '1px solid #EF4444',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      color: '#EF4444',
+                    }}
+                  >
+                    <Trash2 size={14} />
+                  </button>
                 </div>
               </div>
             ))}
+          </>
+        ) : (
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--t3)' }}>
+            <p>No hay prospectos en esta etapa</p>
           </div>
         )}
       </div>
 
-      {/* Modal */}
-      <Modal isOpen={isOpen} onClose={close} title="Nuevo Prospecto">
-        <form onSubmit={form.handleSubmit} className="space-y-4">
-          <Input
-            name="name"
-            placeholder="Nombre"
-            value={form.values.name}
-            onChange={form.handleChange}
-            required
-          />
-          <Input
-            name="company"
-            placeholder="Empresa"
-            value={form.values.company}
-            onChange={form.handleChange}
-            required
-          />
-          <Input
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={form.values.email}
-            onChange={form.handleChange}
-            required
-          />
-          <Input
-            name="phone"
-            placeholder="Teléfono"
-            value={form.values.phone}
-            onChange={form.handleChange}
-          />
-          <Input
-            name="value"
-            type="number"
-            placeholder="Valor del Deal ($)"
-            value={form.values.value}
-            onChange={form.handleChange}
-          />
-          <div className="flex gap-2">
-            <Button type="submit" variant="primary" className="flex-1">
-              Crear Prospecto
-            </Button>
-            <Button type="button" variant="ghost" onClick={close} className="flex-1">
-              Cancelar
-            </Button>
+      {/* New Prospect Modal */}
+      {showNewModal && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 100,
+          }}
+          onClick={() => setShowNewModal(false)}
+        >
+          <div
+            style={{
+              background: 'var(--bg)',
+              borderRadius: '12px',
+              padding: '24px',
+              width: '90%',
+              maxWidth: '500px',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>Nuevo Prospecto</h2>
+            {['name', 'company', 'email', 'phone', 'value', 'notes'].map((field) => (
+              <input
+                key={field}
+                type="text"
+                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                value={formData[field as keyof typeof formData]}
+                onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  background: 'var(--bg2)',
+                  border: '1px solid var(--b)',
+                  borderRadius: '8px',
+                  color: 'var(--fg)',
+                  fontSize: '14px',
+                  marginBottom: '12px',
+                }}
+              />
+            ))}
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button
+                onClick={handleSaveNew}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  background: 'var(--blue)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                }}
+              >
+                Crear
+              </button>
+              <button
+                onClick={() => setShowNewModal(false)}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  background: 'var(--bg2)',
+                  color: 'var(--t2)',
+                  border: '1px solid var(--b)',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                }}
+              >
+                Cancelar
+              </button>
+            </div>
           </div>
-        </form>
-      </Modal>
+        </div>
+      )}
+
+      {/* Edit Modal - similar structure */}
+      {showEditModal && editingProspect && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 100,
+          }}
+          onClick={() => setShowEditModal(false)}
+        >
+          <div
+            style={{
+              background: 'var(--bg)',
+              borderRadius: '12px',
+              padding: '24px',
+              width: '90%',
+              maxWidth: '500px',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>Editar Prospecto</h2>
+            {['name', 'company', 'email', 'phone', 'value', 'notes'].map((field) => (
+              <input
+                key={field}
+                type="text"
+                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                value={formData[field as keyof typeof formData]}
+                onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  background: 'var(--bg2)',
+                  border: '1px solid var(--b)',
+                  borderRadius: '8px',
+                  color: 'var(--fg)',
+                  fontSize: '14px',
+                  marginBottom: '12px',
+                }}
+              />
+            ))}
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button
+                onClick={handleSaveEdit}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  background: 'var(--blue)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                }}
+              >
+                Guardar
+              </button>
+              <button
+                onClick={() => setShowEditModal(false)}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  background: 'var(--bg2)',
+                  color: 'var(--t2)',
+                  border: '1px solid var(--b)',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                }}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
