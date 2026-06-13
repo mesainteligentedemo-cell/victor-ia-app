@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { guardEndpoint, secureResponse, secureErrorResponse } from '@/lib/security/endpoint-guard';
 import { isValidEnum } from '@/lib/security/validation';
+import { logger } from '@/lib/logger';
 
 type TimeRange = '7d' | '30d' | '90d' | 'all';
 
@@ -78,6 +79,7 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (error) {
+  logger.error('API error', error as Error);
     return secureErrorResponse(error as Error, 500);
   }
 }

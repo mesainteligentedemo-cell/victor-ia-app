@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AutomationService } from '@/lib/services';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -9,7 +10,8 @@ export async function GET(request: NextRequest) {
     const workflows = await AutomationService.listWorkflows(userId);
     return NextResponse.json(workflows);
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+  logger.error('API error', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request' }, { status: 500 });
   }
 }
 
@@ -27,6 +29,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+  logger.error('API error', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request' }, { status: 500 });
   }
 }

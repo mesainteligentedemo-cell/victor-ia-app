@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 
@@ -44,7 +45,7 @@ export async function POST(req: Request) {
       generation,
     });
   } catch (error) {
-    console.error('Generation save error:', error);
+    logger.error('Generation save error:', error as Error);
     return NextResponse.json(
       { error: 'Failed to save generation' },
       { status: 500 }
@@ -74,7 +75,7 @@ export async function GET(req: Request) {
       count: userGenerations.length,
     });
   } catch (error) {
-    console.error('Generations fetch error:', error);
+    logger.error('Generations fetch error:', error as Error);
     return NextResponse.json(
       { error: 'Failed to fetch generations' },
       { status: 500 }

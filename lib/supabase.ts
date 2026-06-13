@@ -143,10 +143,15 @@ export async function getProjects(userId: string) {
   return data;
 }
 
-export async function createClient(client: Omit<Client, 'id' | 'createdAt' | 'updatedAt'>) {
-  const { data, error } = await supabase.from('clients').insert([client]).select();
-  if (error) throw error;
-  return data[0];
+export async function createClient(client: any) {
+  try {
+    const { data, error } = await supabase.from('clients').insert([client]).select();
+    if (error) throw error;
+    return data?.[0] || null;
+  } catch (error) {
+    console.error('Error creating client:', error);
+    throw error;
+  }
 }
 
 export async function getClients(userId: string) {

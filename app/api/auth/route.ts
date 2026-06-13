@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 export async function GET() {
   try {
     return NextResponse.json({ authenticated: true, message: 'Session active' });
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+  logger.error('API error', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request' }, { status: 500 });
   }
 }
 
@@ -20,6 +22,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+  logger.error('API error', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request' }, { status: 500 });
   }
 }

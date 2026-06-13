@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "validate-env": "ts-node scripts/validate-env.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.0.0",
@@ -25,6 +26,7 @@
     "recharts": "^3.8.1",
     "remark-gfm": "^4.0.0",
     "stripe": "^17.0.0",
+    "svix": "^1.95.2",
     "zod": "^3.24.0",
     "zustand": "^4.5.7"
   },

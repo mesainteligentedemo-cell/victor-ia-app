@@ -1,15 +1,49 @@
 import { NextResponse } from 'next/server';
 import { constructWebhookEvent } from '@/lib/stripe';
 import { supabase, updateUser } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
+
+const WEBHOOK_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
+
+// In-memory idempotency tracking of processed webhook IDs.
+// NOTE: This is per-instance and resets on cold start / redeploy.
+const processedWebhookIds = new Set<string>();
+
+function isWebhookProcessed(eventId: string): boolean {
+  return processedWebhookIds.has(eventId);
+}
+
+function markWebhookProcessed(eventId: string): void {
+  processedWebhookIds.add(eventId);
+}
 
 export async function POST(req: Request) {
   try {
     const body = await req.text();
     const signature = req.headers.get('stripe-signature') || '';
 
+    // Signature verification (existing logic)
     const event = constructWebhookEvent(body, signature);
+
+    // Idempotency check: if webhook already processed -> return 200
+    if (isWebhookProcessed(event.id)) {
+      console.log(`Webhook ${event.id} already processed, skipping`);
+      return NextResponse.json({ received: true, duplicate: true });
+    }
+
+    // Timestamp validation: reject events older than 5 minutes
+    const eventAgeMs = Date.now() - event.created * 1000;
+    if (eventAgeMs > WEBHOOK_TIMEOUT_MS) {
+      console.warn(
+        `Webhook ${event.id} is ${Math.round(eventAgeMs / 1000)}s old, rejecting`
+      );
+      return NextResponse.json(
+        { error: 'Event timestamp too old' },
+        { status: 400 }
+      );
+    }
 
     switch (event.type) {
       case 'customer.subscription.updated': {
@@ -68,9 +102,14 @@ export async function POST(req: Request) {
         console.log(`Unhandled event type: ${event.type}`);
     }
 
+    // Mark webhook as processed ONLY after successful handling.
+    // If an error is thrown above, we never reach this line, so Stripe will retry.
+    markWebhookProcessed(event.id);
+
     return NextResponse.json({ received: true });
   } catch (error) {
-    console.error('Webhook error:', error);
+    // On error -> do NOT mark as processed (Stripe will retry)
+    logger.error('Webhook error:', error as Error);
     return NextResponse.json(
       { error: 'Webhook handler failed' },
       { status: 400 }

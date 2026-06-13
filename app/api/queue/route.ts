@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { QueueService } from '@/lib/services';
+import { logger } from '@/lib/logger';
 
 export async function GET() {
   try {
     const stats = await QueueService.getQueueStats();
     return NextResponse.json(stats);
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+  logger.error('API error', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request' }, { status: 500 });
   }
 }
 
@@ -16,6 +18,7 @@ export async function POST(request: NextRequest) {
     const item = await QueueService.enqueue(userId, type, payload, priority);
     return NextResponse.json(item);
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+  logger.error('API error', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request' }, { status: 500 });
   }
 }

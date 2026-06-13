@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
+import { logger } from '@/lib/logger';
 
 interface MergeRequest {
   assetId: string;
@@ -50,6 +52,15 @@ interface MergeRequest {
  */
 export async function POST(request: NextRequest) {
   try {
+    const { userId } = await auth();
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     const body: MergeRequest = await request.json();
 
     // Validate required fields
@@ -106,10 +117,10 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("[MERGE API] Error:", error);
+    logger.error('[MERGE API] Error:', error as Error);
     return NextResponse.json(
       {
-        error: error instanceof Error ? error.message : "Merge failed",
+        error: 'An error occurred processing your request',
       },
       { status: 500 }
     );
@@ -216,12 +227,23 @@ async function mergeVideos(
  * OPTIONS handler for CORS
  */
 export async function OPTIONS(request: NextRequest) {
+  const origin = request.headers.get("origin") || "";
+  const allowedOrigins = [
+    "https://victor-ia.com",
+    "https://app.victor-ia.com",
+    "https://www.victor-ia.com",
+    "http://localhost:3000",
+  ];
+
+  const isAllowedOrigin = allowedOrigins.includes(origin);
+
   return new NextResponse(null, {
     status: 200,
     headers: {
-      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin": isAllowedOrigin ? origin : "",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Access-Control-Allow-Credentials": "true",
     },
   });
 }

@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { guardEndpoint, secureResponse, secureErrorResponse } from '@/lib/security/endpoint-guard';
 import { isValidUUID, isNumberInRange } from '@/lib/security/validation';
+import { logger } from '@/lib/logger';
 
 export async function GET(req: NextRequest) {
   const guard = await guardEndpoint(req, {
@@ -37,6 +38,7 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (error) {
+  logger.error('API error', error as Error);
     return secureErrorResponse(error, 500);
   }
 }
@@ -78,6 +80,7 @@ export async function POST(req: NextRequest) {
     if (error) throw error;
     return secureResponse({ success: true, data }, 201);
   } catch (error) {
+  logger.error('API error', error as Error);
     return secureErrorResponse(error, 500);
   }
 }
@@ -108,6 +111,7 @@ export async function DELETE(req: NextRequest) {
     if (error) throw error;
     return secureResponse({ success: true }, 204);
   } catch (error) {
+  logger.error('API error', error as Error);
     return secureErrorResponse(error, 500);
   }
 }

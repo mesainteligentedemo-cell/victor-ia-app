@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Webhook } from 'svix';
 import { createUser } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 
@@ -53,7 +54,7 @@ export async function POST(req: Request) {
 
           console.log(`User created in Supabase: ${email}`);
         } catch (error) {
-          console.error('Error creating user in Supabase:', error);
+          logger.error('Error creating user in Supabase:', error as Error);
         }
         break;
       }
@@ -71,7 +72,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ received: true });
   } catch (error) {
-    console.error('Webhook error:', error);
+    logger.error('Webhook error:', error as Error);
     return NextResponse.json(
       { error: 'Webhook handler failed' },
       { status: 400 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { TrendingService } from '@/lib/services';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -9,7 +10,8 @@ export async function GET(request: NextRequest) {
     const trending = await TrendingService.getTrendingItems(category, 10);
     return NextResponse.json(trending);
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+  logger.error('API error', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request' }, { status: 500 });
   }
 }
 
@@ -19,6 +21,7 @@ export async function POST(request: NextRequest) {
     await TrendingService.recordInteraction(category, itemId, type);
     return NextResponse.json({ success: true });
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+  logger.error('API error', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request' }, { status: 500 });
   }
 }

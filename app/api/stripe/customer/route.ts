@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createCustomer } from '@/lib/stripe';
 import { updateUser } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 
@@ -34,7 +35,7 @@ export async function POST(req: Request) {
       customerId: customer.id,
     });
   } catch (error) {
-    console.error('Customer creation error:', error);
+    logger.error('Customer creation error:', error as Error);
     return NextResponse.json(
       { error: 'Failed to create customer' },
       { status: 500 }

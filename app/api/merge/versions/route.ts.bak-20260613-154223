@@ -1,0 +1,248 @@
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
+
+interface MergeRequest {
+  assetId: string;
+  v1Url: string;
+  v2Url: string;
+  assetType: "image" | "video";
+  config: {
+    strategy: "combine" | "blend" | "composite" | "alternate";
+    v1Id: string;
+    v2Id: string;
+    blendRatio?: number;
+    compositeMode?: "overlay" | "multiply" | "screen";
+  };
+}
+
+/**
+ * POST /api/merge/versions
+ *
+ * Merge two asset versions using the specified strategy.
+ * Supports: blend, composite, combine, alternate
+ *
+ * Request body:
+ * {
+ *   assetId: string
+ *   v1Url: string - URL to first version
+ *   v2Url: string - URL to second version
+ *   assetType: "image" | "video"
+ *   config: {
+ *     strategy: MergeStrategy
+ *     v1Id: string
+ *     v2Id: string
+ *     blendRatio?: number (0-100)
+ *     compositeMode?: "overlay" | "multiply" | "screen"
+ *   }
+ * }
+ *
+ * Response:
+ * {
+ *   mergeId: string - unique ID for merged asset
+ *   mergedUrl: string - URL to merged asset
+ *   duration?: number - for videos
+ *   metadata: {
+ *     strategy: MergeStrategy
+ *     source_v1: string
+ *     source_v2: string
+ *     created_at: ISO string
+ *   }
+ * }
+ */
+export async function POST(request: NextRequest) {
+  try {
+    const { userId } = await auth();
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const body: MergeRequest = await request.json();
+
+    // Validate required fields
+    if (
+      !body.assetId ||
+      !body.v1Url ||
+      !body.v2Url ||
+      !body.assetType ||
+      !body.config
+    ) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Validate strategy
+    const validStrategies = ["combine", "blend", "composite", "alternate"];
+    if (!validStrategies.includes(body.config.strategy)) {
+      return NextResponse.json(
+        { error: "Invalid merge strategy" },
+        { status: 400 }
+      );
+    }
+
+    // Generate unique merge ID
+    const mergeId = `merge-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+
+    // Call actual merge service based on asset type
+    let mergedUrl: string;
+    let duration: number | undefined;
+
+    if (body.assetType === "image") {
+      mergedUrl = await mergeImages(body);
+    } else {
+      const result = await mergeVideos(body);
+      mergedUrl = result.url;
+      duration = result.duration;
+    }
+
+    return NextResponse.json(
+      {
+        mergeId,
+        mergedUrl,
+        duration,
+        metadata: {
+          strategy: body.config.strategy,
+          source_v1: body.config.v1Id,
+          source_v2: body.config.v2Id,
+          blend_ratio: body.config.blendRatio || 50,
+          created_at: new Date().toISOString(),
+        },
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("[MERGE API] Error:", error);
+    return NextResponse.json(
+      {
+        error: error instanceof Error ? error.message : "Merge failed",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * Merge two images using specified strategy
+ */
+async function mergeImages(req: MergeRequest): Promise<string> {
+  const { config } = req;
+
+  // In production, this would:
+  // 1. Download both images
+  // 2. Apply transformation using Sharp/Pillow/ImageMagick
+  // 3. Upload result to CDN
+  // 4. Return CDN URL
+
+  // For now, return a mock URL
+  const mergeId = `merge-img-${Date.now()}`;
+
+  // Simulate different merge strategies
+  switch (config.strategy) {
+    case "blend":
+      // Blend with alpha ratio
+      console.log(
+        `Blending images with ratio ${config.blendRatio || 50}% / ${100 - (config.blendRatio || 50)}%`
+      );
+      break;
+
+    case "composite":
+      // Layer one over the other with blend mode
+      console.log(
+        `Compositing with mode: ${config.compositeMode || "overlay"}`
+      );
+      break;
+
+    case "combine":
+      // Side by side or grid
+      console.log(`Combining images side-by-side`);
+      break;
+
+    case "alternate":
+      // Create animation alternating between images
+      console.log(`Creating animated alternation`);
+      break;
+  }
+
+  // Mock: return a placeholder merged image URL
+  return `https://placeholder.com/1920x1080?text=Merged+${mergeId}`;
+}
+
+/**
+ * Merge two videos using specified strategy
+ */
+async function mergeVideos(
+  req: MergeRequest
+): Promise<{ url: string; duration: number }> {
+  const { config, v1Url, v2Url } = req;
+
+  // In production, this would:
+  // 1. Download both videos (or use URLs directly)
+  // 2. Use FFmpeg to apply transformation:
+  //    - blend: use alpha blending
+  //    - composite: overlay one with blend mode
+  //    - combine: side-by-side or picture-in-picture
+  //    - alternate: cut between them
+  // 3. Upload result to CDN
+  // 4. Return CDN URL + duration
+
+  const mergeId = `merge-vid-${Date.now()}`;
+
+  // Simulate FFmpeg commands
+  switch (config.strategy) {
+    case "blend":
+      // ffmpeg -i v1 -i v2 -filter_complex "blend=all_mode=mix,format=yuv420p"
+      console.log(`[FFmpeg] Blending videos with ${config.blendRatio || 50}% ratio`);
+      break;
+
+    case "composite":
+      // ffmpeg -i v1 -i v2 -filter_complex "overlay=(W-w)/2:(H-h)/2:format=rgb,format=yuv420p"
+      console.log(`[FFmpeg] Compositing with ${config.compositeMode || "overlay"} mode`);
+      break;
+
+    case "combine":
+      // ffmpeg -i v1 -i v2 -filter_complex "hstack=inputs=2:format=yuv420p"
+      console.log(`[FFmpeg] Combining videos side-by-side`);
+      break;
+
+    case "alternate":
+      // ffmpeg -i v1 -i v2 -filter_complex "concat=n=2:v=1:a=0"
+      console.log(`[FFmpeg] Creating alternating cut`);
+      break;
+  }
+
+  // Mock: return result with duration
+  return {
+    url: `https://placeholder.com/videos/${mergeId}.mp4`,
+    duration: 30, // Assume 30s result
+  };
+}
+
+/**
+ * OPTIONS handler for CORS
+ */
+export async function OPTIONS(request: NextRequest) {
+  const origin = request.headers.get("origin") || "";
+  const allowedOrigins = [
+    "https://victor-ia.com",
+    "https://app.victor-ia.com",
+    "https://www.victor-ia.com",
+    "http://localhost:3000",
+  ];
+
+  const isAllowedOrigin = allowedOrigins.includes(origin);
+
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": isAllowedOrigin ? origin : "",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Access-Control-Allow-Credentials": "true",
+    },
+  });
+}

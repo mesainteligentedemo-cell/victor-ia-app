@@ -205,6 +205,35 @@ export function validateJson(str: string | null | undefined): Record<string, any
 }
 
 /**
+ * validateText - Validate and sanitize a text string within a length range.
+ * Trims, strips dangerous HTML/script content, and enforces min/max length.
+ *
+ * @returns sanitized string if valid, otherwise null
+ */
+export function validateText(text: unknown, minLength: number, maxLength: number): string | null {
+  if (typeof text !== 'string') return null;
+
+  const sanitized = sanitizeString(text, maxLength);
+
+  if (sanitized.length < minLength || sanitized.length > maxLength) {
+    return null;
+  }
+
+  return sanitized;
+}
+
+/**
+ * validateRange - Validate that a numeric value falls within an inclusive range.
+ *
+ * @returns the number if valid and in range, otherwise null
+ */
+export function validateRange(value: unknown, min: number, max: number): number | null {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return null;
+  if (!isNumberInRange(value, min, max)) return null;
+  return value;
+}
+
+/**
  * isValidId - Alphanumeric ID with hyphens and underscores
  * Must not be empty
  *

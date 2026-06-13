@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 
@@ -47,7 +48,7 @@ export async function POST(req: Request) {
       asset,
     });
   } catch (error) {
-    console.error('Asset creation error:', error);
+    logger.error('Asset creation error:', error as Error);
     return NextResponse.json(
       { error: 'Failed to create asset' },
       { status: 500 }
@@ -87,7 +88,7 @@ export async function GET(req: Request) {
       count: userAssets.length,
     });
   } catch (error) {
-    console.error('Assets fetch error:', error);
+    logger.error('Assets fetch error:', error as Error);
     return NextResponse.json(
       { error: 'Failed to fetch assets' },
       { status: 500 }

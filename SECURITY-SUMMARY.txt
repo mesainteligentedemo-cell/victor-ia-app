@@ -1,0 +1,147 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                   🔐 AUDITORÍA DE SEGURIDAD — RESUMEN EJECUTIVO              ║
+║                         Victor IA App — 13 de junio, 2026                    ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+ESTADO: 🔴 NO LISTO PARA PRODUCCIÓN
+
+═════════════════════════════════════════════════════════════════════════════════
+
+📊 VULNERABILIDADES ENCONTRADAS:
+
+  🔴 CRÍTICAS:    7 vulnerabilidades (requieren remediación inmediata)
+  🟡 MODERADAS:   3 riesgos (importante, pero no bloquea deployment)
+  ✅ BIEN:        6 áreas de seguridad implementadas correctamente
+
+═════════════════════════════════════════════════════════════════════════════════
+
+🔴 CRÍTICAS — ACCIÓN REQUERIDA ANTES DE DEPLOY:
+
+  1. API KEYS EN PLAIN TEXT EN .env.local
+     • OpenRouter, Anthropic, ElevenLabs, Clerk keys expuestas
+     • Riesgo: Uso ilimitado de APIs, leak permanente si commiteado
+     • Tiempo: 15 min | Acción: Rotar todas las keys
+
+  2. CORS ABIERTO A CUALQUIER ORIGEN
+     • /api/merge/versions permite cualquier dominio
+     • Riesgo: CSRF, consumo de recursos no autorizado
+     • Tiempo: 15 min | Acción: Whitelist de orígenes
+
+  3. VALIDACIÓN DE INPUTS INSUFICIENTE
+     • Sin validación de tamaño en /api/chat
+     • Sin limpieza de prompt injection en generación
+     • Riesgo: DoS, manipulación de respuestas de IA
+     • Tiempo: 45 min | Acción: Validar all inputs
+
+  4. ERROR MESSAGES EXPONEN DETALLES INTERNOS
+     • 26 endpoints retornan error messages reveladores
+     • Riesgo: Información de infraestructura leak
+     • Tiempo: 45 min | Acción: Genéricos + logging seguro
+
+  5. MISSING AUTHENTICATION EN /api/chat
+     • Cualquiera puede llamar sin estar autenticado
+     • Riesgo: Consumo económico ilimitado (~$1.50 por 100k tokens)
+     • Tiempo: 30 min | Acción: Agregar auth + rate limit
+
+  6. STRIPE WEBHOOK SIN IDEMPOTENCY
+     • Replay attacks posible → múltiples pagos
+     • Riesgo: Contabilidad desincronizada, créditos duplicados
+     • Tiempo: 20 min | Acción: Verificar timestamp + ID tracking
+
+  7. /api/webhooks GET SIN AUTENTICACIÓN
+     • Info del webhook expuesta
+     • Riesgo: Reconnaissance, enumeración de eventos
+     • Tiempo: 15 min | Acción: Agregar auth
+
+═════════════════════════════════════════════════════════════════════════════════
+
+⏱️ TIEMPO TOTAL DE REMEDIACIÓN: 3-4 horas
+
+═════════════════════════════════════════════════════════════════════════════════
+
+📋 ARCHIVOS DE AYUDA GENERADOS:
+
+  ✅ SECURITY-AUDIT-REPORT.md
+     → Reporte completo con detalles, impacto y soluciones
+     
+  ✅ SECURITY-FIX-TEMPLATES.md
+     → Templates prontos para copiar y pegar en cada endpoint
+     
+  ✅ security-check.sh
+     → Script automatizado para verificar fixes post-implementación
+     
+  ✅ lib/logger.ts (ACTUALIZADO)
+     → Logger con sanitización de datos sensibles
+
+═════════════════════════════════════════════════════════════════════════════════
+
+✅ LO QUE ESTÁ BIEN (NO CAMBIAR):
+
+  • Clerk Authentication Middleware ✅
+  • Webhook Signature Validation (HMAC-SHA256) ✅
+  • Security Headers (CSP, HSTS, X-Frame-Options) ✅
+  • Stripe Webhook Signature ✅
+  • Rate Limiting Infrastructure ✅
+  • Input Validation (parcial) ✅
+
+═════════════════════════════════════════════════════════════════════════════════
+
+🚀 PLAN DE ACCIÓN INMEDIATO:
+
+  PASO 1 (30 min):
+    □ Rotar todas las API keys en OpenRouter, Anthropic, ElevenLabs, Stripe
+    □ Actualizar .env.local con nuevas keys
+    □ Ejecutar: git rm --cached .env.local
+
+  PASO 2 (2 horas):
+    □ Implementar fixes de SECURITY-FIX-TEMPLATES.md
+      - /api/chat (agregar auth)
+      - /api/merge/versions (cerrar CORS)
+      - /api/webhooks (agregar auth a GET)
+      - Stripe webhook (idempotency)
+      - /api/voice/generate (validación)
+    □ Sanitizar 26 endpoints con error messages genéricos
+    □ Ejecutar tests locales
+
+  PASO 3 (30 min):
+    □ Ejecutar: bash security-check.sh
+    □ Fix en git: git rm --cached .env* && git commit
+    □ Deploy a staging
+    □ Verificación final
+
+═════════════════════════════════════════════════════════════════════════════════
+
+🔍 VERIFICACIÓN RÁPIDA POST-FIX:
+
+  # 1. Auth en /api/chat
+  curl -X POST http://localhost:3000/api/chat \
+    -H "Content-Type: application/json" \
+    -d '{"message": "test"}'
+  → Debería retornar 401 Unauthorized ✅
+
+  # 2. CORS cerrado
+  curl -X OPTIONS http://localhost:3000/api/merge/versions \
+    -H "Origin: http://evil.com"
+  → NO debería incluir Access-Control-Allow-Origin ✅
+
+  # 3. Error messages seguros
+  curl http://localhost:3000/api/invalid
+  → "An error occurred processing your request" (genérico) ✅
+
+═════════════════════════════════════════════════════════════════════════════════
+
+📚 REFERENCIAS:
+
+  • OWASP Top 10 2023: https://owasp.org/Top10/
+  • Next.js Security: https://nextjs.org/docs/security
+  • CWE-200: Exposure of Sensitive Information
+  • CWE-347: Improper Verification of Cryptographic Signature
+  • Stripe Webhook Best Practices: https://stripe.com/docs/webhooks/signatures
+
+═════════════════════════════════════════════════════════════════════════════════
+
+AUDITOR: Claude Code Security Team
+FECHA: 13 de junio, 2026
+ESTATUS: ⚠️ REQUIERE ACCIÓN INMEDIATA
+
+═════════════════════════════════════════════════════════════════════════════════

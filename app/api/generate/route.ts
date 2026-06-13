@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GeneratorsService } from '@/lib/services';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,7 +38,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(result);
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+  logger.error('API error', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request' }, { status: 500 });
   }
 }
 
@@ -49,6 +51,7 @@ export async function GET(request: NextRequest) {
     const history = await GeneratorsService.getHistory(userId);
     return NextResponse.json(history);
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+  logger.error('API error', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request' }, { status: 500 });
   }
 }

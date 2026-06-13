@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ExportService } from '@/lib/services';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
   try {
@@ -7,7 +8,8 @@ export async function POST(request: NextRequest) {
     const job = await ExportService.createExport(userId, type, dataType);
     return NextResponse.json(job);
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+  logger.error('API error', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request' }, { status: 500 });
   }
 }
 
@@ -19,6 +21,7 @@ export async function GET(request: NextRequest) {
     const status = await ExportService.getExportStatus(jobId);
     return NextResponse.json(status);
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+  logger.error('API error', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request' }, { status: 500 });
   }
 }

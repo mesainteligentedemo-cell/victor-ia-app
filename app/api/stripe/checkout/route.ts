@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createCheckoutSession } from '@/lib/stripe';
+import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 
@@ -34,7 +35,7 @@ export async function POST(req: Request) {
       sessionId: session.id,
     });
   } catch (error) {
-    console.error('Checkout session error:', error);
+    logger.error('Checkout session error:', error as Error);
     return NextResponse.json(
       { error: 'Failed to create checkout session' },
       { status: 500 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { IntegrationsService } from '@/lib/services';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -9,7 +10,8 @@ export async function GET(request: NextRequest) {
     const integrations = await IntegrationsService.listIntegrations(userId);
     return NextResponse.json(integrations);
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+  logger.error('API error', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request' }, { status: 500 });
   }
 }
 
@@ -64,7 +66,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ error: 'Invalid action', code: 400 }, { status: 400 });
   } catch (error) {
-    console.error('Integration error:', error);
-    return NextResponse.json({ error: String(error), code: 500 }, { status: 500 });
+    logger.error('Integration error:', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request', code: 500 }, { status: 500 });
   }
 }

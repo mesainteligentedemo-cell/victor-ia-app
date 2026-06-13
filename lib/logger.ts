@@ -18,6 +18,55 @@ class Logger {
   private logs: LogEntry[] = [];
   private maxLogs = 1000;
 
+  // ✅ SECURITY: Keys that must be redacted
+  private sensitiveKeys = [
+    'password',
+    'token',
+    'secret',
+    'key',
+    'apiKey',
+    'api_key',
+    'access_token',
+    'refresh_token',
+    'authorization',
+    'stripe_key',
+    'anthropic_key',
+    'elevenlabs_key',
+    'supabase_key',
+    'clerk_secret',
+  ];
+
+  /**
+   * ✅ SECURITY: Recursively sanitize object to remove sensitive keys
+   */
+  private sanitizeValue(value: any): any {
+    if (value === null || value === undefined) {
+      return value;
+    }
+
+    if (typeof value !== 'object') {
+      return value;
+    }
+
+    if (Array.isArray(value)) {
+      return value.map(item => this.sanitizeValue(item));
+    }
+
+    const sanitized: any = {};
+    for (const [key, val] of Object.entries(value)) {
+      const lowerKey = key.toLowerCase();
+      const isSensitive = this.sensitiveKeys.some(sk => lowerKey.includes(sk));
+
+      if (isSensitive) {
+        sanitized[key] = '[REDACTED]';
+      } else {
+        sanitized[key] = this.sanitizeValue(val);
+      }
+    }
+
+    return sanitized;
+  }
+
   private createEntry(
     level: LogLevel,
     message: string,
@@ -28,7 +77,8 @@ class Logger {
       timestamp: new Date().toISOString(),
       level,
       message,
-      context,
+      // ✅ SECURITY: Sanitize before storing
+      context: context ? this.sanitizeValue(context) : undefined,
       error,
     };
   }
@@ -45,29 +95,33 @@ class Logger {
   }
 
   debug(message: string, context?: Record<string, any>) {
-    const entry = this.createEntry(LogLevel.DEBUG, message, context);
+    const sanitized = context ? this.sanitizeValue(context) : undefined;
+    const entry = this.createEntry(LogLevel.DEBUG, message, sanitized);
     this.addLog(entry);
     if (this.isDevelopment) {
-      console.log(this.formatMessage(LogLevel.DEBUG, message), context);
+      console.log(this.formatMessage(LogLevel.DEBUG, message), sanitized);
     }
   }
 
   info(message: string, context?: Record<string, any>) {
-    const entry = this.createEntry(LogLevel.INFO, message, context);
+    const sanitized = context ? this.sanitizeValue(context) : undefined;
+    const entry = this.createEntry(LogLevel.INFO, message, sanitized);
     this.addLog(entry);
-    console.log(this.formatMessage(LogLevel.INFO, message), context);
+    console.log(this.formatMessage(LogLevel.INFO, message), sanitized);
   }
 
   warn(message: string, context?: Record<string, any>) {
-    const entry = this.createEntry(LogLevel.WARN, message, context);
+    const sanitized = context ? this.sanitizeValue(context) : undefined;
+    const entry = this.createEntry(LogLevel.WARN, message, sanitized);
     this.addLog(entry);
-    console.warn(this.formatMessage(LogLevel.WARN, message), context);
+    console.warn(this.formatMessage(LogLevel.WARN, message), sanitized);
   }
 
   error(message: string, error?: Error, context?: Record<string, any>) {
-    const entry = this.createEntry(LogLevel.ERROR, message, context, error);
+    const sanitized = context ? this.sanitizeValue(context) : undefined;
+    const entry = this.createEntry(LogLevel.ERROR, message, sanitized, error);
     this.addLog(entry);
-    console.error(this.formatMessage(LogLevel.ERROR, message), { error, ...context });
+    console.error(this.formatMessage(LogLevel.ERROR, message), { error, ...sanitized });
   }
 
   getLogs(level?: LogLevel): LogEntry[] {

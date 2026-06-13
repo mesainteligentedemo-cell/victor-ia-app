@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AnalyticsAdvancedService } from '@/lib/services';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -9,7 +10,8 @@ export async function GET(request: NextRequest) {
     const snapshot = await AnalyticsAdvancedService.getMetricsSnapshot(userId);
     return NextResponse.json(snapshot);
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+  logger.error('API error', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request' }, { status: 500 });
   }
 }
 
@@ -20,6 +22,7 @@ export async function POST(request: NextRequest) {
     const log = await AnalyticsAdvancedService.trackEvent(userId, eventName, eventData);
     return NextResponse.json(log);
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+  logger.error('API error', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request' }, { status: 500 });
   }
 }

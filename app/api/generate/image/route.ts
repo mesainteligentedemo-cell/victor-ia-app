@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import type { ImageGenerationParams } from "@/lib/prospeccion-types";
+import { logger } from '@/lib/logger';
 
 const QUALITY_TO_CREDITS = {
   standard: 50,
@@ -66,12 +67,12 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("[POST /api/generate/image] Error:", error);
+    logger.error('[POST /api/generate/image] Error:', error as Error);
     return NextResponse.json(
       {
         success: false,
         error: "Failed to generate image",
-        message: error instanceof Error ? error.message : "Unknown error",
+        message: 'An error occurred processing your request',
       },
       { status: 500 }
     );

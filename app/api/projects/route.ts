@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 
@@ -93,9 +94,9 @@ export async function POST(req: Request) {
       .select();
 
     if (error) {
-      console.error('Supabase insert error:', error);
+      logger.error('Supabase insert error:', error as Error);
       return NextResponse.json(
-        { error: `Failed to create project: ${error.message}`, code: 500 },
+        { error: 'An error occurred processing your request', code: 500 },
         { status: 500 }
       );
     }
@@ -105,7 +106,7 @@ export async function POST(req: Request) {
       project: data?.[0],
     });
   } catch (error) {
-    console.error('Project creation error:', error);
+    logger.error('Project creation error:', error as Error);
     return NextResponse.json(
       { error: 'Failed to create project', code: 500 },
       { status: 500 }
@@ -162,9 +163,9 @@ export async function GET(req: Request) {
     const { data, error } = await query;
 
     if (error) {
-      console.error('Supabase fetch error:', error);
+      logger.error('Supabase fetch error:', error as Error);
       return NextResponse.json(
-        { error: `Failed to fetch projects: ${error.message}`, code: 500 },
+        { error: 'An error occurred processing your request', code: 500 },
         { status: 500 }
       );
     }
@@ -175,7 +176,7 @@ export async function GET(req: Request) {
       count: data?.length || 0,
     });
   } catch (error) {
-    console.error('Projects fetch error:', error);
+    logger.error('Projects fetch error:', error as Error);
     return NextResponse.json(
       { error: 'Failed to fetch projects', code: 500 },
       { status: 500 }

@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { CreditsService } from "@/lib/services/credits.service";
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -41,13 +42,13 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error("[GET /api/credits/balance] Error:", error);
+    logger.error('[GET /api/credits/balance] Error:', error as Error);
 
     return NextResponse.json(
       {
         success: false,
         error: "Failed to fetch balance",
-        message: error instanceof Error ? error.message : "Unknown error",
+        message: 'An error occurred processing your request',
       },
       { status: 500 }
     );
@@ -100,13 +101,13 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("[POST /api/credits/balance] Error:", error);
+    logger.error('[POST /api/credits/balance] Error:', error as Error);
 
     return NextResponse.json(
       {
         success: false,
         error: "Failed to add credits",
-        message: error instanceof Error ? error.message : "Unknown error",
+        message: 'An error occurred processing your request',
       },
       { status: 500 }
     );

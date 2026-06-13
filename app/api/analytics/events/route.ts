@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { saveAnalyticsEvent } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 
@@ -31,7 +32,7 @@ export async function POST(req: Request) {
       eventId: event.id,
     });
   } catch (error) {
-    console.error('Analytics error:', error);
+    logger.error('Analytics error:', error as Error);
     return NextResponse.json(
       { error: 'Failed to save event' },
       { status: 500 }
@@ -66,7 +67,7 @@ export async function GET(req: Request) {
       },
     });
   } catch (error) {
-    console.error('Analytics fetch error:', error);
+    logger.error('Analytics fetch error:', error as Error);
     return NextResponse.json(
       { error: 'Failed to fetch analytics' },
       { status: 500 }

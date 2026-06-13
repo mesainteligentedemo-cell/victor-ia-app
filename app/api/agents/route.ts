@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AgentsService } from '@/lib/services';
+import { logger } from '@/lib/logger';
 
 export async function GET() {
   try {
     const agents = await AgentsService.listAgents();
     return NextResponse.json(agents);
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+  logger.error('API error', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request' }, { status: 500 });
   }
 }
 
@@ -37,7 +39,7 @@ export async function POST(request: NextRequest) {
     const execution = await AgentsService.executeAgent(sanitizedAgentId, sanitizedUserId, params);
     return NextResponse.json(execution);
   } catch (error) {
-    console.error('Agent execution error:', error);
-    return NextResponse.json({ error: String(error), code: 500 }, { status: 500 });
+    logger.error('Agent execution error:', error as Error);
+    return NextResponse.json({ error: 'An error occurred processing your request', code: 500 }, { status: 500 });
   }
 }

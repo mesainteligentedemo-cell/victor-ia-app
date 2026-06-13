@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { guardEndpoint, secureResponse, secureErrorResponse } from '@/lib/security/endpoint-guard';
 import { isValidUUID, isNumberInRange } from '@/lib/security/validation';
 import crypto from 'crypto';
+import { logger } from '@/lib/logger';
 
 function hashKey(key: string): string {
   return crypto.createHash('sha256').update(key).digest('hex');
@@ -33,6 +34,7 @@ export async function GET(req: NextRequest) {
     if (error) throw error;
     return secureResponse({ keys });
   } catch (error) {
+  logger.error('API error', error as Error);
     return secureErrorResponse(error, 500);
   }
 }
@@ -74,6 +76,7 @@ export async function POST(req: NextRequest) {
     if (error) throw error;
     return secureResponse({ success: true, data: { ...data, key: apiKey } }, 201);
   } catch (error) {
+  logger.error('API error', error as Error);
     return secureErrorResponse(error, 500);
   }
 }
@@ -104,6 +107,7 @@ export async function DELETE(req: NextRequest) {
     if (error) throw error;
     return secureResponse({ success: true }, 204);
   } catch (error) {
+  logger.error('API error', error as Error);
     return secureErrorResponse(error, 500);
   }
 }

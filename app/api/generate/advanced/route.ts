@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -55,7 +56,7 @@ async function generateWithHiggsfield(
       estimatedTime: data.estimated_seconds || 30,
     };
   } catch (error) {
-    console.error('Higgsfield error:', error);
+    logger.error('Higgsfield error:', error as Error);
     return {
       success: false,
       error: 'Failed to start generation',
@@ -88,7 +89,7 @@ async function generateWithClaude(prompt: string) {
       content: data.content[0].text,
     };
   } catch (error) {
-    console.error('Claude error:', error);
+    logger.error('Claude error:', error as Error);
     return {
       success: false,
       error: 'Generation failed',
@@ -130,7 +131,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(result);
   } catch (error) {
-    console.error('Generation error:', error);
+    logger.error('Generation error:', error as Error);
     return NextResponse.json(
       { error: 'Generation failed' },
       { status: 500 }

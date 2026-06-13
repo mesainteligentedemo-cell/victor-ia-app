@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { VideoGenerationParams } from "@/lib/prospeccion-types";
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,7 +29,7 @@ export async function POST(request: NextRequest) {
       aspectRatio: params.aspectRatio,
     });
   } catch (error) {
-    console.error("Video generation error:", error);
+    logger.error('Video generation error:', error as Error);
     return NextResponse.json(
       { error: "Failed to generate video" },
       { status: 500 }
