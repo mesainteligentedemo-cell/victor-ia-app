@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, MessageCircle, Zap, Library, BarChart3, BookOpen, Users, Megaphone, TrendingUp, Headphones, Settings, Scale, Trophy, Cpu } from 'lucide-react';
+import { Home, MessageCircle, Zap, Library, BarChart3, BookOpen, Users, Megaphone, TrendingUp, Headphones, Settings, Scale, Trophy, Cpu, HelpCircle } from 'lucide-react';
 
 const NAVIGATION = [
   { id: 'inicio', label: 'Inicio', icon: Home, href: '/dashboard' },
@@ -20,6 +20,8 @@ const NAVIGATION = [
   { id: 'separator3', label: '', icon: null, href: '#' },
   { id: 'config', label: 'Configuración', icon: Settings, href: '/dashboard/settings' },
   { id: 'legal', label: 'Legal y Finanzas', icon: Scale, href: '/dashboard/finance' },
+  { id: 'separator4', label: '', icon: null, href: '#' },
+  { id: 'help', label: 'Centro de Ayuda', icon: HelpCircle, href: '/dashboard/help' },
 ];
 
 export default function BottomNav() {

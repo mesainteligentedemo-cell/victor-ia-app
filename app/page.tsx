@@ -1,373 +1,385 @@
 import Link from "next/link";
 import { SignIn } from "@clerk/nextjs";
+import { BarChart3, MessageCircle, Users, BookOpen, TrendingUp, Headphones, Settings, Scale, Zap, Library } from 'lucide-react';
+
+const FEATURES = [
+  {
+    icon: MessageCircle,
+    title: "Chat Inteligente",
+    description: "Conversa con agentes IA en tiempo real. Soporte inmediato 24/7 con comprensión del contexto.",
+  },
+  {
+    icon: Zap,
+    title: "Agentes Especializados",
+    description: "8 agentes expertos: Lead Qualifier, Pitch Generator, Content Strategist, SEO Expert, y más.",
+  },
+  {
+    icon: Library,
+    title: "Biblioteca de Assets",
+    description: "Acceso a 45,000+ recursos: imágenes, videos, audios, documentos y componentes web.",
+  },
+  {
+    icon: BarChart3,
+    title: "Dashboard Analytics",
+    description: "Métricas en tiempo real con gráficas interactivas. Monitorea usuarios, chats, generaciones e ingresos.",
+  },
+  {
+    icon: Users,
+    title: "Recursos Humanos",
+    description: "Gestión de equipo. Monitorea utilización, rendimiento y disponibilidad de especialistas.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Marketing Avanzado",
+    description: "4 campañas activas con tracking de reach, engagement y ROI. Automatización de flujos.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Pipeline de Ventas",
+    description: "Gestión de oportunidades en 4 etapas: Prospect → Proposal → Authorized → Completed.",
+  },
+  {
+    icon: Headphones,
+    title: "Servicio al Cliente",
+    description: "Sistema de tickets con priorización. 6 tickets activos con SLA tracking y resolución automática.",
+  },
+  {
+    icon: BookOpen,
+    title: "Capacitaciones",
+    description: "6 cursos con progreso individual. Certificaciones y evaluaciones de competencias.",
+  },
+  {
+    icon: Scale,
+    title: "Finanzas & Legal",
+    description: "Dashboard financiero completo: $52k ingresos, $31k gastos, 8 transacciones detalladas.",
+  },
+  {
+    icon: Settings,
+    title: "Configuración",
+    description: "5 tabs: Perfil, Preferencias, Billing, Seguridad, Integraciones. Control total de tu cuenta.",
+  },
+  {
+    icon: BarChart3,
+    title: "Inteligencia de Datos",
+    description: "Insights automáticos. Tendencias, anomalías y recomendaciones basadas en datos reales.",
+  },
+];
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white dark:bg-black text-black dark:text-white">
+    <main style={{ background: 'linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%)', color: 'var(--fg)', minHeight: '100vh' }}>
       {/* Navigation */}
-      <nav className="border-b border-gray-200 dark:border-gray-800 sticky top-0 bg-white/95 dark:bg-black/95 backdrop-blur z-10">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold tracking-tight">Victor IA</h1>
-          <div className="flex gap-4 items-center">
-            <Link href="/pricing" className="text-sm hover:underline hidden md:inline">
+      <nav style={{
+        borderBottom: '1px solid var(--b)',
+        position: 'sticky',
+        top: 0,
+        background: 'rgba(var(--bg-rgb), 0.95)',
+        backdropFilter: 'blur(10px)',
+        zIndex: 10,
+      }}>
+        <div style={{
+          maxWidth: '1400px',
+          margin: '0 auto',
+          padding: '16px 20px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ width: '32px', height: '32px', background: 'linear-gradient(135deg, #6366F1, #8B5CF6)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold' }}>
+              V
+            </div>
+            Victor IA
+          </h1>
+          <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+            <Link href="/pricing" style={{ fontSize: '14px', textDecoration: 'none', color: 'var(--t2)', cursor: 'pointer' }}>
               Precios
             </Link>
             <button
-              onClick={() => document.getElementById('clerk-signin')?.scrollIntoView({ behavior: 'smooth' })}
-              className="text-sm hover:underline hidden md:inline"
+              onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
+              style={{ fontSize: '14px', background: 'none', border: 'none', color: 'var(--t2)', cursor: 'pointer' }}
             >
-              Iniciar sesión
+              Características
             </button>
+            <Link href="/dashboard" style={{
+              padding: '10px 20px',
+              background: 'var(--blue)',
+              color: 'white',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              fontWeight: 600,
+              fontSize: '14px',
+            }}>
+              Ingresar
+            </Link>
           </div>
         </div>
       </nav>
 
       {/* ============ HERO SECTION ============ */}
-      <section className="max-w-5xl mx-auto px-4 py-24 md:py-36 text-center">
-        <p className="text-xs md:text-sm uppercase tracking-[0.3em] text-gray-600 dark:text-gray-400 mb-6">
-          155 especialistas, 45,000+ assets, infinitas posibilidades.
+      <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px 40px', textAlign: 'center' }}>
+        <p style={{ fontSize: '12px', letterSpacing: '0.15em', color: 'var(--t3)', marginBottom: '24px', textTransform: 'uppercase', fontWeight: 600 }}>
+          155 especialistas · 45,000+ assets · Infinitas posibilidades
         </p>
-        <h2 className="text-4xl md:text-7xl font-bold mb-8 leading-tight tracking-tight">
-          Agencia IA que trabaja 24/7 sin cansarse
+        <h2 style={{ fontSize: '48px', fontWeight: 700, marginBottom: '24px', lineHeight: 1.1 }}>
+          Agencia IA que trabaja 24/7
         </h2>
-        <p className="text-lg md:text-2xl text-gray-600 dark:text-gray-400 mb-12 max-w-3xl mx-auto">
-          El equipo creativo que nunca duerme. Resultados en horas, no en meses.
+        <p style={{ fontSize: '18px', color: 'var(--t2)', marginBottom: '32px', maxWidth: '700px', margin: '0 auto 32px' }}>
+          Tu equipo creativo completo sin salarios, sin cansancio, sin errores. Resultados en horas, no en meses.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => document.getElementById('clerk-signin')?.scrollIntoView({ behavior: 'smooth' })}
-            className="px-8 py-4 bg-black dark:bg-white text-white dark:text-black rounded font-semibold text-lg hover:shadow-xl transition"
-          >
-            Iniciar Sesión
-          </button>
-          <a
-            href="mailto:info@victor-ia.com.mx?subject=Quiero%20hablar%20con%20un%20especialista"
-            className="px-8 py-4 border border-black dark:border-white rounded font-semibold text-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition"
-          >
+        <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Link href="/sign-in" style={{
+            padding: '14px 32px',
+            background: 'var(--blue)',
+            color: 'white',
+            borderRadius: '8px',
+            textDecoration: 'none',
+            fontWeight: 600,
+            fontSize: '16px',
+          }}>
+            Comenzar gratis
+          </Link>
+          <a href="mailto:info@victor-ia.com.mx" style={{
+            padding: '14px 32px',
+            border: '1px solid var(--b)',
+            color: 'var(--fg)',
+            borderRadius: '8px',
+            textDecoration: 'none',
+            fontWeight: 600,
+            fontSize: '16px',
+            background: 'var(--bg2)',
+          }}>
             Hablar con especialista
           </a>
         </div>
       </section>
 
-      {/* ============ SECTION 1: ¿QUÉ ES VICTOR IA? ============ */}
-      <section className="border-t border-gray-200 dark:border-gray-800">
-        <div className="max-w-6xl mx-auto px-4 py-20 md:py-28">
-          <h3 className="text-3xl md:text-5xl font-bold text-center mb-6">
-            ¿Qué es Victor IA?
-          </h3>
-          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 text-center mb-16 max-w-3xl mx-auto">
-            No es un bot, es una agencia entera: 155 especialistas trabajando para ti.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            {/* Sin */}
-            <div className="p-8 border border-gray-200 dark:border-gray-800 rounded-2xl bg-gray-50 dark:bg-gray-900/50">
-              <h4 className="text-sm uppercase tracking-widest text-gray-600 dark:text-gray-400 mb-6 font-semibold">
-                Sin
-              </h4>
-              <ul className="space-y-4">
-                {["Salarios", "Cansancio", "Errores"].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-lg">
-                    <span className="w-6 h-6 flex items-center justify-center border border-gray-400 dark:border-gray-600 rounded-full text-sm shrink-0">
-                      ✕
-                    </span>
+      {/* ============ OVERVIEW ============ */}
+      <section style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '40px 20px',
+        borderTop: '1px solid var(--b)',
+        borderBottom: '1px solid var(--b)',
+      }}>
+        <h3 style={{ fontSize: '32px', fontWeight: 700, marginBottom: '32px', textAlign: 'center' }}>
+          ¿Qué es Victor IA?
+        </h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}>
+          {[
+            { label: 'Sin', items: ['Salarios mensuales', 'Cansancio', 'Rotación de personal'], style: { background: 'var(--bg2)' } },
+            { label: 'Con', items: ['8 Agentes IA', '24/7 disponible', 'Escalable infinitamente'], style: { background: 'var(--blue)', color: 'white' } },
+          ].map((group, i) => (
+            <div key={i} style={{
+              padding: '24px',
+              borderRadius: '12px',
+              border: '1px solid var(--b)',
+              ...group.style,
+            }}>
+              <p style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '16px', fontWeight: 600, opacity: 0.7 }}>
+                {group.label}
+              </p>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {group.items.map((item, j) => (
+                  <li key={j} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '15px' }}>
+                    <span style={{ fontSize: '18px' }}>{i === 0 ? '✕' : '✓'}</span>
                     {item}
                   </li>
                 ))}
               </ul>
             </div>
-            {/* Con */}
-            <div className="p-8 border border-black dark:border-white rounded-2xl bg-black dark:bg-white text-white dark:text-black">
-              <h4 className="text-sm uppercase tracking-widest mb-6 font-semibold opacity-70">
-                Con
+          ))}
+        </div>
+      </section>
+
+      {/* ============ FEATURES GRID ============ */}
+      <section id="features" style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px' }}>
+        <h3 style={{ fontSize: '32px', fontWeight: 700, marginBottom: '12px', textAlign: 'center' }}>
+          Todas tus herramientas en un solo lugar
+        </h3>
+        <p style={{ fontSize: '16px', color: 'var(--t2)', marginBottom: '40px', textAlign: 'center', maxWidth: '600px', margin: '0 auto 40px' }}>
+          12 módulos integrados + 8 agentes especializados + API completamente abierta para extensiones.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+          {FEATURES.map((feature, index) => {
+            const Icon = feature.icon;
+            return (
+              <div
+                key={index}
+                style={{
+                  padding: '24px',
+                  background: 'var(--bg2)',
+                  borderRadius: '12px',
+                  border: '1px solid var(--b)',
+                  transition: 'all 0.3s',
+                  cursor: 'pointer',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--blue)';
+                  e.currentTarget.style.background = 'rgba(59, 130, 246, 0.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--b)';
+                  e.currentTarget.style.background = 'var(--bg2)';
+                }}
+              >
+                <Icon size={28} style={{ marginBottom: '12px', color: 'var(--blue)' }} />
+                <h4 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px' }}>
+                  {feature.title}
+                </h4>
+                <p style={{ fontSize: '14px', color: 'var(--t3)', lineHeight: 1.5 }}>
+                  {feature.description}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ============ HOW IT WORKS ============ */}
+      <section style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '60px 20px',
+        borderTop: '1px solid var(--b)',
+      }}>
+        <h3 style={{ fontSize: '32px', fontWeight: 700, marginBottom: '40px', textAlign: 'center' }}>
+          Cómo funciona
+        </h3>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+          {[
+            {
+              step: '1',
+              title: 'Inicia sesión',
+              description: 'Accede con tu cuenta. Verás el dashboard con todos los módulos listos.',
+            },
+            {
+              step: '2',
+              title: 'Elige un agente',
+              description: 'Selecciona el especialista que necesitas: Ventas, Marketing, Contenido, etc.',
+            },
+            {
+              step: '3',
+              title: 'Define tu tarea',
+              description: 'Describe qué necesitas. Sé específico: "propuesta para cliente X" o "análisis de trending".',
+            },
+            {
+              step: '4',
+              title: 'Revisa resultados',
+              description: 'En minutos obtienes resultados, analytics detallada y opciones para iterar.',
+            },
+            {
+              step: '5',
+              title: 'Usa el output',
+              description: 'Descarga, integra, modifica o publica directamente desde la plataforma.',
+            },
+            {
+              step: '6',
+              title: 'Escala infinitamente',
+              description: 'Sin nuevos costos. Los agentes siguen trabajando mientras duermes.',
+            },
+          ].map((item, i) => (
+            <div key={i} style={{
+              padding: '24px',
+              background: 'var(--bg2)',
+              borderRadius: '12px',
+              border: '1px solid var(--b)',
+              position: 'relative',
+            }}>
+              <div style={{
+                width: '40px',
+                height: '40px',
+                background: 'var(--blue)',
+                color: 'white',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 700,
+                marginBottom: '12px',
+              }}>
+                {item.step}
+              </div>
+              <h4 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px' }}>
+                {item.title}
               </h4>
-              <ul className="space-y-4">
-                {[
-                  "24/7 disponible",
-                  "Aprendizaje automático",
-                  "40-60% más rápido",
-                  "95% más barato",
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-lg font-medium">
-                    <span className="w-6 h-6 flex items-center justify-center border border-white/40 dark:border-black/40 rounded-full text-sm shrink-0">
-                      ✓
-                    </span>
-                    {item}
+              <p style={{ fontSize: '14px', color: 'var(--t3)' }}>
+                {item.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ============ CTA FINAL ============ */}
+      <section style={{
+        maxWidth: '1000px',
+        margin: '0 auto',
+        padding: '60px 20px',
+        textAlign: 'center',
+        borderTop: '1px solid var(--b)',
+      }}>
+        <h3 style={{ fontSize: '32px', fontWeight: 700, marginBottom: '16px' }}>
+          ¿Listo para tu agencia IA?
+        </h3>
+        <p style={{ fontSize: '16px', color: 'var(--t2)', marginBottom: '32px' }}>
+          Comienza gratis. Sin tarjeta de crédito. Cancela cuando quieras.
+        </p>
+        <Link href="/sign-in" style={{
+          display: 'inline-block',
+          padding: '14px 40px',
+          background: 'var(--blue)',
+          color: 'white',
+          borderRadius: '8px',
+          textDecoration: 'none',
+          fontWeight: 600,
+          fontSize: '16px',
+        }}>
+          Acceder a la app
+        </Link>
+      </section>
+
+      {/* ============ FOOTER ============ */}
+      <footer style={{
+        borderTop: '1px solid var(--b)',
+        padding: '40px 20px',
+        color: 'var(--t3)',
+        fontSize: '14px',
+      }}>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '32px',
+          paddingBottom: '32px',
+          borderBottom: '1px solid var(--b)',
+          marginBottom: '32px',
+        }}>
+          {[
+            { title: 'Producto', links: ['Características', 'Precios', 'Documentación'] },
+            { title: 'Legal', links: ['Términos', 'Privacidad', 'Cookies'] },
+            { title: 'Contacto', links: ['Email', 'Twitter', 'LinkedIn'] },
+          ].map((col, i) => (
+            <div key={i}>
+              <p style={{ fontWeight: 600, marginBottom: '12px', color: 'var(--fg)' }}>{col.title}</p>
+              <ul style={{ listStyle: 'none', padding: 0 }}>
+                {col.links.map((link, j) => (
+                  <li key={j} style={{ marginBottom: '8px' }}>
+                    <a href="#" style={{ color: 'var(--t3)', textDecoration: 'none' }}>
+                      {link}
+                    </a>
                   </li>
                 ))}
               </ul>
             </div>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            {[
-              { num: "155", label: "Especialistas" },
-              { num: "45,000+", label: "Assets" },
-              { num: "24/7", label: "Sin parar" },
-              { num: "95%", label: "Más barato" },
-            ].map((stat) => (
-              <div key={stat.label} className="py-6">
-                <div className="text-3xl md:text-5xl font-bold mb-2">{stat.num}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
+          ))}
         </div>
-      </section>
-
-      {/* ============ SECTION 2: LA DIFERENCIA ============ */}
-      <section className="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/30">
-        <div className="max-w-5xl mx-auto px-4 py-20 md:py-28">
-          <h3 className="text-3xl md:text-5xl font-bold text-center mb-16">La Diferencia</h3>
-
-          <div className="overflow-x-auto rounded-2xl border border-gray-200 dark:border-gray-800">
-            <table className="w-full text-left bg-white dark:bg-black min-w-[600px]">
-              <thead>
-                <tr className="border-b border-gray-200 dark:border-gray-800">
-                  <th className="p-5 text-sm uppercase tracking-wider text-gray-600 dark:text-gray-400 font-semibold"></th>
-                  <th className="p-5 text-sm uppercase tracking-wider text-gray-600 dark:text-gray-400 font-semibold">
-                    Agencia Tradicional
-                  </th>
-                  <th className="p-5 text-sm uppercase tracking-wider font-bold bg-black dark:bg-white text-white dark:text-black">
-                    Victor IA
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  {
-                    label: "Equipo",
-                    trad: "10-20 personas",
-                    via: "155 especialistas IA",
-                  },
-                  {
-                    label: "Tiempo",
-                    trad: "Semanas o meses",
-                    via: "Horas",
-                  },
-                  {
-                    label: "Costo",
-                    trad: "Miles de dólares al mes",
-                    via: "Desde $150",
-                  },
-                  {
-                    label: "Disponibilidad",
-                    trad: "Horario de oficina",
-                    via: "24/7 sin cansarse",
-                  },
-                  {
-                    label: "Aprendizaje",
-                    trad: "Capacitación lenta",
-                    via: "Aprendizaje automático continuo",
-                  },
-                  {
-                    label: "Escalabilidad",
-                    trad: "Contratar más gente",
-                    via: "Infinita, al instante",
-                  },
-                  {
-                    label: "Calidad",
-                    trad: "Variable según el equipo",
-                    via: "Control de calidad en cada entrega",
-                  },
-                ].map((row, i) => (
-                  <tr
-                    key={row.label}
-                    className={
-                      i % 2 === 0
-                        ? "border-b border-gray-200 dark:border-gray-800"
-                        : "border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/40"
-                    }
-                  >
-                    <td className="p-5 font-semibold">{row.label}</td>
-                    <td className="p-5 text-gray-600 dark:text-gray-400">{row.trad}</td>
-                    <td className="p-5 font-medium">{row.via}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      {/* ============ SECTION 3: CÓMO FUNCIONA ============ */}
-      <section className="border-t border-gray-200 dark:border-gray-800">
-        <div className="max-w-5xl mx-auto px-4 py-20 md:py-28">
-          <h3 className="text-3xl md:text-5xl font-bold text-center mb-4">Cómo Funciona</h3>
-          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 text-center mb-16">
-            5 pasos en 60 minutos
-          </p>
-
-          <ol className="space-y-6">
-            {[
-              { n: "1", title: "Tú pides", time: "1 min" },
-              { n: "2", title: "Victor IA planifica", time: "2 min" },
-              { n: "3", title: "Especialistas trabajan en paralelo", time: "40 min" },
-              { n: "4", title: "Control de calidad", time: "10 min" },
-              { n: "5", title: "Sitio LIVE", time: "7 min" },
-            ].map((step) => (
-              <li
-                key={step.n}
-                className="flex items-center gap-6 p-6 border border-gray-200 dark:border-gray-800 rounded-2xl hover:shadow-md transition bg-white dark:bg-gray-900/40"
-              >
-                <span className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center bg-black dark:bg-white text-white dark:text-black rounded-full text-xl md:text-2xl font-bold shrink-0">
-                  {step.n}
-                </span>
-                <span className="text-lg md:text-2xl font-semibold flex-1">{step.title}</span>
-                <span className="text-sm md:text-base text-gray-600 dark:text-gray-400 font-mono shrink-0">
-                  {step.time}
-                </span>
-              </li>
-            ))}
-          </ol>
-
-          <p className="text-center mt-12 text-2xl md:text-3xl font-bold">
-            Total: 60 minutos
-          </p>
-        </div>
-      </section>
-
-      {/* ============ SECTION 4: PRECIOS ============ */}
-      <section className="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/30">
-        <div className="max-w-6xl mx-auto px-4 py-20 md:py-28">
-          <h3 className="text-3xl md:text-5xl font-bold text-center mb-16">Precios</h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Starter */}
-            <div className="p-8 border border-gray-200 dark:border-gray-800 rounded-2xl bg-white dark:bg-black flex flex-col">
-              <h4 className="text-sm uppercase tracking-widest text-gray-600 dark:text-gray-400 mb-4 font-semibold">
-                Starter
-              </h4>
-              <div className="text-5xl font-bold mb-8">
-                $150
-              </div>
-              <Link
-                href="/sign-up"
-                className="mt-auto block text-center px-6 py-3 border border-black dark:border-white rounded font-semibold hover:bg-gray-100 dark:hover:bg-gray-900 transition"
-              >
-                Empezar
-              </Link>
-            </div>
-
-            {/* Pro */}
-            <div className="p-8 border-2 border-black dark:border-white rounded-2xl bg-black dark:bg-white text-white dark:text-black flex flex-col relative">
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-white dark:bg-black text-black dark:text-white border border-black dark:border-white rounded-full text-xs uppercase tracking-widest font-semibold">
-                Recomendado
-              </span>
-              <h4 className="text-sm uppercase tracking-widest opacity-70 mb-4 font-semibold">
-                Pro
-              </h4>
-              <div className="text-5xl font-bold mb-8">
-                $500
-              </div>
-              <Link
-                href="/sign-up"
-                className="mt-auto block text-center px-6 py-3 bg-white dark:bg-black text-black dark:text-white rounded font-semibold hover:shadow-xl transition"
-              >
-                Empezar
-              </Link>
-            </div>
-
-            {/* Enterprise */}
-            <div className="p-8 border border-gray-200 dark:border-gray-800 rounded-2xl bg-white dark:bg-black flex flex-col">
-              <h4 className="text-sm uppercase tracking-widest text-gray-600 dark:text-gray-400 mb-4 font-semibold">
-                Enterprise
-              </h4>
-              <div className="text-5xl font-bold mb-8">
-                Custom
-              </div>
-              <a
-                href="mailto:info@victor-ia.com.mx?subject=Plan%20Enterprise%20Victor%20IA"
-                className="mt-auto block text-center px-6 py-3 border border-black dark:border-white rounded font-semibold hover:bg-gray-100 dark:hover:bg-gray-900 transition"
-              >
-                Hablar con especialista
-              </a>
-            </div>
-          </div>
-
-          <p className="text-center mt-10 text-sm text-gray-600 dark:text-gray-400">
-            <Link href="/pricing" className="underline hover:no-underline">
-              Ver detalle completo de planes →
-            </Link>
-          </p>
-        </div>
-      </section>
-
-      {/* ============ SECTION 5: CTA FINAL ============ */}
-      <section className="border-t border-gray-200 dark:border-gray-800">
-        <div className="max-w-4xl mx-auto px-4 py-24 md:py-32 text-center">
-          <h3 className="text-3xl md:text-6xl font-bold mb-10 leading-tight">
-            Tu próximo proyecto empieza hoy.
-            <br />
-            155 especialistas esperando.
-          </h3>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/dashboard"
-              className="px-8 py-4 bg-black dark:bg-white text-white dark:text-black rounded font-semibold text-lg hover:shadow-xl transition"
-            >
-              Ver Demo en Vivo
-            </Link>
-            <a
-              href="mailto:info@victor-ia.com.mx?subject=Quiero%20hablar%20con%20un%20especialista"
-              className="px-8 py-4 border border-black dark:border-white rounded font-semibold text-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition"
-            >
-              Hablar con especialista
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ============ SIGN IN SECTION ============ */}
-      <section id="clerk-signin" className="border-t border-gray-200 dark:border-gray-800">
-        <div className="max-w-md mx-auto px-4 py-24 md:py-32">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold mb-4">Accede a tu agencia</h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              155 especialistas listos para trabajar
-            </p>
-          </div>
-
-          <div className="flex justify-center">
-            <SignIn
-              redirectUrl="/dashboard"
-              appearance={{
-                elements: {
-                  rootBox: "w-full",
-                  card: "bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 shadow-none",
-                  headerTitle: "hidden",
-                  headerSubtitle: "hidden",
-                  socialButtonsBlockButton: "border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900",
-                  formButtonPrimary: "bg-black dark:bg-white text-white dark:text-black hover:bg-gray-900 dark:hover:bg-gray-100",
-                  footerActionLink: "text-blue-600 hover:text-blue-700",
-                  dividerLine: "bg-gray-200 dark:bg-gray-800",
-                  dividerText: "text-gray-600 dark:text-gray-400",
-                  formFieldLabel: "text-gray-900 dark:text-gray-100",
-                  formFieldInput: "border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-black dark:text-white focus:border-black dark:focus:border-white",
-                },
-              }}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-gray-200 dark:border-gray-800 py-12 text-center text-sm text-gray-600 dark:text-gray-400">
-        <p>© 2026 Victor IA. Todos los derechos reservados.</p>
-        <div className="flex justify-center gap-6 mt-6">
-          <Link href="/pricing" className="hover:underline">
-            Precios
-          </Link>
-          <Link href="/docs" className="hover:underline">
-            Docs
-          </Link>
-          <a href="mailto:info@victor-ia.com.mx" className="hover:underline">
-            Contacto
-          </a>
-        </div>
+        <p style={{ textAlign: 'center' }}>
+          © 2026 Victor IA. Todos los derechos reservados.
+        </p>
       </footer>
     </main>
   );
