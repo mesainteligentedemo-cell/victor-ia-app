@@ -5,6 +5,7 @@ import ChatMessage from '@/components/chat/ChatMessage';
 import InputBar from '@/components/chat/InputBar';
 import LaserOverlay from '@/components/panels/LaserOverlay';
 import { Zap } from 'lucide-react';
+import { useAnalytics, ANALYTICS_EVENTS } from '@/lib/hooks/useAnalytics';
 
 interface Message {
   id: string;
@@ -26,6 +27,7 @@ export default function ChatPage() {
   const [laserOpen, setLaserOpen] = useState(false);
   const [narrative, setNarrative] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { track } = useAnalytics();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -84,6 +86,14 @@ export default function ChatPage() {
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
+
+      // Track analytics
+      await track(ANALYTICS_EVENTS.CHAT_SENT, {
+        messageLength: text.length,
+        responseLength: data.response.length,
+        latencyMs: latencyMs,
+        tokensUsed: data.usage?.output_tokens || 0,
+      });
     } catch (error) {
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),

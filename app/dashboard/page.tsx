@@ -1,83 +1,215 @@
 'use client';
 
-import Link from 'next/link';
 import { useState } from 'react';
-import { TrendingUp, Users, Zap, Target } from 'lucide-react';
+import { AlertCircle, Zap } from 'lucide-react';
+
+const PROJECTS = [
+  { id: 1, name: 'Victor IA Website', desc: 'Sitio web principal de la agencia', icon: '🌐' },
+  { id: 2, name: 'Costa Negra', desc: 'Landing HubSpot luxury lotes Quintana Roo', icon: '🏖️' },
+  { id: 3, name: 'Brandbook Victor IA', desc: 'Manual de identidad visual - 21 secciones', icon: '📚' },
+  { id: 4, name: 'Dashboard BI', desc: 'Dashboard Next.js con KPIs de la agencia', icon: '📊' },
+  { id: 5, name: 'Influence IA Awards', desc: 'Premio anual a la innovación con IA', icon: '🏆' },
+];
+
+const URGENTS = [
+  { id: 1, person: 'Jimena Rodriguez', task: 'URGENTE: elaborar y enviar propuesta hoy', type: 'propuesta' },
+  { id: 2, person: 'Rosa Laura Ubeda', task: 'Vigencia propuesta: 31 mayo 2026', type: 'propuesta' },
+];
 
 export default function DashboardPage() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('inicio');
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      {/* Welcome */}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', padding: '20px' }}>
+      {/* Header */}
       <div>
-        <h1 style={{ fontSize: '28px', fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: '4px' }}>
-          ¡Bienvenido a tu agencia!
+        <p style={{ fontSize: '11px', color: 'var(--t3)', textTransform: 'uppercase', marginBottom: '8px' }}>
+          Sábado 13 de Junio · 2026
+        </p>
+        <h1 style={{ fontSize: '42px', fontWeight: 700, fontFamily: 'var(--font-display)' }}>
+          Buenos días, Victor
         </h1>
-        <p style={{ fontSize: '14px', color: 'var(--t2)' }}>155 especialistas trabajando 24/7</p>
       </div>
 
-      {/* KPI Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '12px' }}>
-        {[
-          { icon: TrendingUp, label: 'Velocidad', value: '40%', subtitle: 'Más rápido que agencia', color: 'var(--green)' },
-          { icon: Users, label: 'Equipo', value: '155', subtitle: 'Especialistas activos', color: 'var(--blue)' },
-          { icon: Zap, label: 'Eficiencia', value: '95%', subtitle: 'Automatización', color: 'var(--orange)' },
-          { icon: Target, label: 'Costo', value: '-85%', subtitle: 'vs agencia tradicional', color: 'var(--green)' },
-        ].map((kpi, i) => {
-          const Icon = kpi.icon;
-          return (
-            <div
-              key={i}
-              style={{
-                padding: '20px',
-                background: 'var(--bg2)',
-                border: '1px solid var(--b)',
-                borderRadius: 'var(--r)',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                <p style={{ fontSize: '12px', color: 'var(--t3)', fontWeight: 600, textTransform: 'uppercase' }}>
-                  {kpi.label}
-                </p>
-                <Icon size={18} style={{ color: kpi.color, opacity: 0.6 }} />
-              </div>
-              <p style={{ fontSize: '32px', fontWeight: 800, fontFamily: 'var(--font-display)', marginBottom: '4px' }}>
-                {kpi.value}
-              </p>
-              <p style={{ fontSize: '12px', color: 'var(--t3)' }}>{kpi.subtitle}</p>
-            </div>
-          );
-        })}
+      {/* Tabs */}
+      <div style={{ display: 'flex', gap: '16px', borderBottom: '1px solid var(--b)' }}>
+        {['Inicio', 'Actividad', 'CRM'].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab.toLowerCase())}
+            style={{
+              padding: '12px 0',
+              background: 'none',
+              border: 'none',
+              fontSize: '14px',
+              fontWeight: activeTab === tab.toLowerCase() ? 600 : 400,
+              color: activeTab === tab.toLowerCase() ? 'var(--fg)' : 'var(--t3)',
+              borderBottom: activeTab === tab.toLowerCase() ? '2px solid var(--blue)' : 'none',
+              cursor: 'pointer',
+            }}
+          >
+            {tab}
+          </button>
+        ))}
       </div>
 
-      {/* Activity Timeline */}
-      <div style={{ padding: '20px', background: 'var(--bg2)', border: '1px solid var(--b)', borderRadius: 'var(--r)' }}>
-        <h2 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '16px', fontFamily: 'var(--font-display)' }}>
-          Actividad esta Semana
-        </h2>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-end', height: '120px' }}>
-          {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sab', 'Dom'].map((day, i) => (
-            <div
-              key={day}
-              style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '6px',
-              }}
-            >
-              <div
+      {activeTab === 'inicio' && (
+        <>
+          {/* Quick Actions */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '12px' }}>
+            {[
+              { icon: '✏️', label: 'Studio' },
+              { icon: '🖼️', label: 'Image Lab' },
+              { icon: '🎬', label: 'Video' },
+              { icon: '🌐', label: 'Web / CMS' },
+              { icon: '⚡', label: 'Estudio IA' },
+              { icon: '👥', label: 'CRM' },
+            ].map((action) => (
+              <button
+                key={action.label}
                 style={{
-                  width: '100%',
-                  height: `${30 + Math.random() * 70}px`,
-                  background: 'linear-gradient(180deg, var(--blue), var(--accent2))',
-                  borderRadius: '4px 4px 0 0',
-                  opacity: 0.8,
+                  padding: '16px',
+                  background: 'var(--bg2)',
+                  border: '1px solid var(--b)',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '8px',
+                  cursor: 'pointer',
+                  fontSize: '28px',
                 }}
-              />
-              <p style={{ fontSize: '10px', color: 'var(--t3)' }}>{day}</p>
+              >
+                {action.icon}
+                <span style={{ fontSize: '12px', color: 'var(--t3)' }}>{action.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Stats Row */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+            <div style={{ padding: '16px', background: 'var(--bg2)', borderRadius: '8px' }}>
+              <p style={{ fontSize: '11px', color: 'var(--t3)', marginBottom: '4px' }}>EN PRODUCCIÓN</p>
+              <p style={{ fontSize: '36px', fontWeight: 700 }}>6</p>
+              <p style={{ fontSize: '11px', color: 'var(--t3)' }}>2 pendientes</p>
+            </div>
+            <div style={{ padding: '16px', background: 'var(--bg2)', borderRadius: '8px' }}>
+              <p style={{ fontSize: '11px', color: 'var(--t3)', marginBottom: '4px' }}>EN PIPELINE</p>
+              <p style={{ fontSize: '36px', fontWeight: 700 }}>4</p>
+              <p style={{ fontSize: '11px', color: 'var(--t3)' }}>2 urgentes</p>
+            </div>
+            <div style={{ padding: '16px', background: 'var(--bg2)', borderRadius: '8px' }}>
+              <p style={{ fontSize: '11px', color: 'var(--t3)', marginBottom: '4px' }}>POR COBRAR</p>
+              <p style={{ fontSize: '28px', fontWeight: 700 }}>$41k</p>
+              <p style={{ fontSize: '11px', color: 'var(--t3)' }}>MXN + USD</p>
+            </div>
+          </div>
+
+          {/* Projects Section */}
+          <div>
+            <p style={{ fontSize: '11px', color: 'var(--t3)', textTransform: 'uppercase', marginBottom: '12px' }}>
+              Proyectos Activos
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {PROJECTS.map((p) => (
+                <div
+                  key={p.id}
+                  style={{
+                    padding: '12px',
+                    background: 'var(--bg2)',
+                    border: '1px solid var(--b)',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <span style={{ fontSize: '24px' }}>{p.icon}</span>
+                  <div>
+                    <p style={{ fontSize: '14px', fontWeight: 600 }}>{p.name}</p>
+                    <p style={{ fontSize: '12px', color: 'var(--t3)' }}>{p.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Urgentes Section */}
+          <div>
+            <p style={{ fontSize: '11px', color: 'var(--t3)', textTransform: 'uppercase', marginBottom: '12px' }}>
+              🚨 Urgentes
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {URGENTS.map((u) => (
+                <div
+                  key={u.id}
+                  style={{
+                    padding: '12px',
+                    background: 'var(--bg2)',
+                    border: '2px solid #FF6B6B',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '12px',
+                  }}
+                >
+                  <AlertCircle size={20} style={{ color: '#FF6B6B', marginTop: '2px' }} />
+                  <div>
+                    <p style={{ fontSize: '14px', fontWeight: 600 }}>{u.person}</p>
+                    <p style={{ fontSize: '12px', color: 'var(--t3)' }}>{u.task}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* "¿Qué Hacemos?" Quick Generators */}
+          <div>
+            <p style={{ fontSize: '16px', fontWeight: 600, marginBottom: '12px' }}>
+              ¿Qué hacemos hoy?
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '12px' }}>
+              {[
+                { icon: '🤖', label: 'Chat IA' },
+                { icon: '🤔', label: '¿Qué hice?' },
+                { icon: '🎓', label: 'Estudio' },
+                { icon: '🎤', label: 'Voz' },
+              ].map((gen) => (
+                <button
+                  key={gen.label}
+                  style={{
+                    padding: '16px',
+                    background: 'var(--bg2)',
+                    border: '1px solid var(--b)',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '8px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <span style={{ fontSize: '28px' }}>{gen.icon}</span>
+                  <span style={{ fontSize: '12px', color: 'var(--t3)' }}>{gen.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+
+      {activeTab === 'actividad' && (
+        <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--t3)' }}>
+          <p>📊 Actividad - Próximamente</p>
+        </div>
+      )}
+
+      {activeTab === 'crm' && (
+        <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--t3)' }}>
+          <p>📋 CRM - Próximamente</p>
+        </div>
+      )}
             </div>
           ))}
         </div>

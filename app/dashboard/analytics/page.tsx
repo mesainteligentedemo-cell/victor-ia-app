@@ -1,135 +1,102 @@
-"use client";
+'use client';
 
-import { useAnalyticsStore } from "@/lib/stores";
-import { BarChart, LineChart, PieChart } from "@/components/charts";
-import { DataTable } from "@/components/dashboard/DataTable";
-import { Button } from "@/components/shared/Button";
-import { useEffect } from "react";
+import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
+const CHART_DATA_DAILY = [
+  { date: 'Lun', chats: 12, generaciones: 8 },
+  { date: 'Mar', chats: 19, generaciones: 15 },
+  { date: 'Mié', chats: 15, generaciones: 12 },
+  { date: 'Jue', chats: 25, generaciones: 22 },
+  { date: 'Vie', chats: 32, generaciones: 28 },
+  { date: 'Sáb', chats: 28, generaciones: 25 },
+  { date: 'Dom', chats: 21, generaciones: 18 },
+];
+
+const CHART_DATA_GENERATION = [
+  { name: 'Imágenes', value: 1200 },
+  { name: 'Videos', value: 800 },
+  { name: 'Texto', value: 800 },
+];
+
+const CHART_DATA_AGENTS = [
+  { agent: 'Código', usage: 45 },
+  { agent: 'UI/UX', usage: 32 },
+  { agent: 'Copy', usage: 28 },
+  { agent: 'Video', usage: 35 },
+  { agent: 'Data', usage: 40 },
+];
+
+const COLORS = ['var(--blue)', 'var(--orange)', 'var(--green)', 'var(--purple)', 'var(--pink)'];
 
 export default function AnalyticsPage() {
-  const { dashboard, activities, setDashboard, setActivities } = useAnalyticsStore();
-
-  useEffect(() => {
-    const fetchMetrics = async () => {
-      try {
-        const res = await fetch("/api/analytics?userId=user-id");
-        if (res.ok) {
-          const data = await res.json();
-          setDashboard(data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch metrics", error);
-      }
-    };
-    fetchMetrics();
-  }, [setDashboard]);
-
-  const sampleData = [
-    { label: "Monday", value: 45 },
-    { label: "Tuesday", value: 62 },
-    { label: "Wednesday", value: 58 },
-    { label: "Thursday", value: 71 },
-    { label: "Friday", value: 89 },
-  ];
-
-  const chartData = [
-    { label: "Generators", value: 234 },
-    { label: "Agents", value: 189 },
-    { label: "CRM", value: 156 },
-    { label: "Analytics", value: 98 },
-  ];
-
-  const tableData = [
-    { id: 1, name: "Content Generated", count: 234, status: "Success" },
-    { id: 2, name: "Agents Executed", count: 189, status: "Success" },
-    { id: 3, name: "Prospects Created", count: 45, status: "Success" },
-    { id: 4, name: "Workflows Triggered", count: 12, status: "Success" },
-  ];
-
-  const tableColumns = [
-    { key: "name", header: "Activity" },
-    { key: "count", header: "Count" },
-    { key: "status", header: "Status", render: (val: string) => (
-      <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-900 dark:text-green-100 rounded">
-        {val}
-      </span>
-    )},
-  ];
-
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-start">
-        <div>
-          <h1 className="text-4xl font-bold text-black dark:text-white mb-2">Analytics Dashboard</h1>
-          <p className="text-gray-600 dark:text-gray-400">Real-time metrics and insights</p>
-        </div>
-        <Button variant="primary">Export Report</Button>
-      </div>
+    <div style={{ padding: '24px' }}>
+      <h1 style={{ fontSize: '32px', fontWeight: 700, marginBottom: '32px' }}>📊 Analytics Avanzado</h1>
 
-      {/* KPI Cards */}
-      {dashboard && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900 hover:shadow-md transition">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Total Generations</p>
-            <p className="text-4xl font-bold text-black dark:text-white">{dashboard.totalGenerations}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">+12% from yesterday</p>
-          </div>
-
-          <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900 hover:shadow-md transition">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Agent Executions</p>
-            <p className="text-4xl font-bold text-black dark:text-white">{dashboard.totalAgentExecutions}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">+15 from yesterday</p>
-          </div>
-
-          <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900 hover:shadow-md transition">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Avg Session</p>
-            <p className="text-4xl font-bold text-black dark:text-white">18m</p>
-            <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">-2m from yesterday</p>
-          </div>
-
-          <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900 hover:shadow-md transition">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Conversion</p>
-            <p className="text-4xl font-bold text-black dark:text-white">24.5%</p>
-            <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">+1.3% from yesterday</p>
-          </div>
-        </div>
-      )}
-
-      {/* Charts Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900">
-          <LineChart data={sampleData} title="Events Over Time" />
-        </div>
-        <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900">
-          <BarChart data={chartData} title="Events by Module" />
-        </div>
-        <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900">
-          <PieChart data={chartData} title="Distribution" />
-        </div>
-        <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900">
-          <div>
-            <h3 className="font-semibold text-black dark:text-white mb-4">Top Events</h3>
-            <div className="space-y-2">
-              {[
-                { name: "Page View", count: 1250 },
-                { name: "Button Click", count: 890 },
-                { name: "Form Submit", count: 456 },
-                { name: "File Download", count: 234 },
-              ].map((event, i) => (
-                <div key={i} className="flex justify-between items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800">
-                  <span className="text-sm text-gray-700 dark:text-gray-300">{event.name}</span>
-                  <span className="text-sm font-semibold text-black dark:text-white">{event.count}</span>
-                </div>
-              ))}
+      {/* Stats Cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '32px' }}>
+        {[
+          { label: 'Usuarios', value: '245', trend: '+12%' },
+          { label: 'Chats', value: '3.4k', trend: '+8%' },
+          { label: 'Generaciones', value: '2.8k', trend: '+15%' },
+          { label: 'Ingresos', value: '$47k', trend: '+22%' },
+        ].map((stat) => (
+          <div key={stat.label} style={{ padding: '20px', background: 'var(--bg2)', borderRadius: '8px' }}>
+            <p style={{ fontSize: '12px', color: 'var(--t3)', marginBottom: '8px' }}>{stat.label}</p>
+            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+              <p style={{ fontSize: '24px', fontWeight: 700 }}>{stat.value}</p>
+              <p style={{ fontSize: '12px', color: 'var(--green)' }}>{stat.trend}</p>
             </div>
           </div>
+        ))}
+      </div>
+
+      {/* Charts Row 1 */}
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px', marginBottom: '20px' }}>
+        {/* Line Chart */}
+        <div style={{ padding: '20px', background: 'var(--bg2)', borderRadius: '8px' }}>
+          <h3 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '16px' }}>Actividad Semanal</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={CHART_DATA_DAILY}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--b)" />
+              <XAxis dataKey="date" stroke="var(--t3)" />
+              <YAxis stroke="var(--t3)" />
+              <Tooltip contentStyle={{ background: 'var(--bg)', border: '1px solid var(--b)' }} />
+              <Legend />
+              <Line type="monotone" dataKey="chats" stroke="var(--blue)" name="Chats" strokeWidth={2} />
+              <Line type="monotone" dataKey="generaciones" stroke="var(--orange)" name="Generaciones" strokeWidth={2} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Pie Chart */}
+        <div style={{ padding: '20px', background: 'var(--bg2)', borderRadius: '8px' }}>
+          <h3 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '16px' }}>Distribución por Tipo</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie data={CHART_DATA_GENERATION} cx="50%" cy="50%" labelLine={false} label={({ name, value }) => `${name}: ${value}`} outerRadius={100} fill="#8884d8" dataKey="value">
+                {CHART_DATA_GENERATION.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
-      {/* Data Table */}
-      <div className="p-6 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900">
-        <h2 className="text-2xl font-bold text-black dark:text-white mb-4">Activity Summary</h2>
-        <DataTable data={tableData} columns={tableColumns} searchable paginated pageSize={5} />
+      {/* Bar Chart */}
+      <div style={{ padding: '20px', background: 'var(--bg2)', borderRadius: '8px', marginBottom: '20px' }}>
+        <h3 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '16px' }}>Uso por Agente</h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={CHART_DATA_AGENTS}>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--b)" />
+            <XAxis dataKey="agent" stroke="var(--t3)" />
+            <YAxis stroke="var(--t3)" />
+            <Tooltip contentStyle={{ background: 'var(--bg)', border: '1px solid var(--b)' }} />
+            <Bar dataKey="usage" fill="var(--blue)" name="Uso %" />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );

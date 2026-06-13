@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Wand2, Loader } from 'lucide-react';
+import { useAnalytics, ANALYTICS_EVENTS } from '@/lib/hooks/useAnalytics';
 
 const GENERATORS = [
   {
@@ -75,18 +76,65 @@ export default function GeneratorsPage() {
   const [selectedGenerator, setSelectedGenerator] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<Record<string, any>>({});
+  const { track } = useAnalytics();
 
   const currentGenerator = GENERATORS.find(g => g.id === selectedGenerator);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!currentGenerator) return;
+
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+
+    try {
+      // Map generator ID to API type
+      const typeMap: Record<string, string> = {
+        websites: 'website',
+        videos: 'video',
+        images: 'image',
+        documents: 'document',
+        emails: 'email',
+        voice: 'audio',
+      };
+
+      const generationType = typeMap[currentGenerator.id];
+      const prompt = formData.contenido || formData.script || formData.prompt || formData.descripcion || '';
+
+      // Call generation API
+      const response = await fetch('/api/generate/advanced', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: generationType,
+          prompt,
+          options: {
+            aspecto: formData.aspecto,
+            resolucion: formData.resolucion,
+            duracion: formData.duracion,
+          },
+        }),
+      });
+
+      if (!response.ok) throw new Error('Generation failed');
+
+      const result = await response.json();
+
+      // Track analytics
+      await track(ANALYTICS_EVENTS.GENERATOR_USED, {
+        generatorType: currentGenerator.id,
+        jobId: result.jobId,
+        timestamp: new Date().toISOString(),
+      });
+
       alert('✅ Generación iniciada!');
       setSelectedGenerator(null);
       setFormData({});
-    }, 2000);
+    } catch (error) {
+      console.error('Generation error:', error);
+      alert('❌ Error en la generación. Intenta nuevamente.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (selectedGenerator && currentGenerator) {

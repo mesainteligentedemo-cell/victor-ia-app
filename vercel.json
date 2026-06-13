@@ -1,16 +1,37 @@
-{
-  "$schema": "https://openapi.vercel.sh/vercel.json",
+﻿{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
   "framework": "nextjs",
-  "buildCommand": "next build",
-  "regions": ["iad1"],
-  "headers": [
+  "nodeVersion": "18.x",
+  "env": [
     {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
-      ]
+      "key": "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
+      "description": "Clerk public key for authentication"
+    },
+    {
+      "key": "CLERK_SECRET_KEY",
+      "description": "Clerk secret key (server-side only)"
+    },
+    {
+      "key": "NEXT_PUBLIC_SUPABASE_URL",
+      "description": "Supabase project URL"
+    },
+    {
+      "key": "ANTHROPIC_API_KEY",
+      "description": "Claude API key"
+    },
+    {
+      "key": "STRIPE_SECRET_KEY",
+      "description": "Stripe secret key"
+    },
+    {
+      "key": "ELEVENLABS_API_KEY",
+      "description": "ElevenLabs API key"
+    },
+    {
+      "key": "HIGGSFIELD_API_KEY",
+      "description": "Higgsfield API key"
     }
   ]
 }

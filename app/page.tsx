@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SignIn } from "@clerk/nextjs";
 
 export default function Home() {
   return (
@@ -11,15 +12,12 @@ export default function Home() {
             <Link href="/pricing" className="text-sm hover:underline hidden md:inline">
               Precios
             </Link>
-            <Link href="/sign-in" className="text-sm hover:underline hidden md:inline">
-              Iniciar sesión
-            </Link>
-            <Link
-              href="/sign-up"
-              className="px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded hover:shadow-lg transition text-sm font-medium"
+            <button
+              onClick={() => document.getElementById('clerk-signin')?.scrollIntoView({ behavior: 'smooth' })}
+              className="text-sm hover:underline hidden md:inline"
             >
-              Empezar
-            </Link>
+              Iniciar sesión
+            </button>
           </div>
         </div>
       </nav>
@@ -36,12 +34,12 @@ export default function Home() {
           El equipo creativo que nunca duerme. Resultados en horas, no en meses.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            href="/dashboard"
+          <button
+            onClick={() => document.getElementById('clerk-signin')?.scrollIntoView({ behavior: 'smooth' })}
             className="px-8 py-4 bg-black dark:bg-white text-white dark:text-black rounded font-semibold text-lg hover:shadow-xl transition"
           >
-            Ver Demo en Vivo
-          </Link>
+            Iniciar Sesión
+          </button>
           <a
             href="mailto:info@victor-ia.com.mx?subject=Quiero%20hablar%20con%20un%20especialista"
             className="px-8 py-4 border border-black dark:border-white rounded font-semibold text-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition"
@@ -319,6 +317,39 @@ export default function Home() {
             >
               Hablar con especialista
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ SIGN IN SECTION ============ */}
+      <section id="clerk-signin" className="border-t border-gray-200 dark:border-gray-800">
+        <div className="max-w-md mx-auto px-4 py-24 md:py-32">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-bold mb-4">Accede a tu agencia</h3>
+            <p className="text-gray-600 dark:text-gray-400">
+              155 especialistas listos para trabajar
+            </p>
+          </div>
+
+          <div className="flex justify-center">
+            <SignIn
+              redirectUrl="/dashboard"
+              appearance={{
+                elements: {
+                  rootBox: "w-full",
+                  card: "bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 shadow-none",
+                  headerTitle: "hidden",
+                  headerSubtitle: "hidden",
+                  socialButtonsBlockButton: "border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900",
+                  formButtonPrimary: "bg-black dark:bg-white text-white dark:text-black hover:bg-gray-900 dark:hover:bg-gray-100",
+                  footerActionLink: "text-blue-600 hover:text-blue-700",
+                  dividerLine: "bg-gray-200 dark:bg-gray-800",
+                  dividerText: "text-gray-600 dark:text-gray-400",
+                  formFieldLabel: "text-gray-900 dark:text-gray-100",
+                  formFieldInput: "border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-black dark:text-white focus:border-black dark:focus:border-white",
+                },
+              }}
+            />
           </div>
         </div>
       </section>

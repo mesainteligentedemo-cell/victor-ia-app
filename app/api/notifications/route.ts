@@ -1,33 +1,139 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from 'next/server';
+import { supabase } from '@/lib/supabase';
+import { guardEndpoint, secureResponse, secureErrorResponse } from '@/lib/security/endpoint-guard';
+import { isValidUUID } from '@/lib/security/validation';
 
-export async function GET(request: NextRequest) {
+export async function GET(req: NextRequest) {
+  const guard = await guardEndpoint(req, {
+    method: 'GET',
+    requireAuth: true,
+    rateLimit: 'api',
+    audit: true,
+  });
+
+  if (!guard.ok) return guard.response;
+  const { userId } = guard;
+
   try {
-    const userId = request.nextUrl.searchParams.get("userId");
+    const limit = Math.min(parseInt(req.nextUrl.searchParams.get('limit') || '50'), 100);
+    const unreadOnly = req.nextUrl.searchParams.get('unread') === 'true';
 
-    const notifications = [
-      { id: 1, title: "Generation Complete", message: "Your image has been generated", read: false },
-      { id: 2, title: "Agent Executed", message: "Lead Qualifier executed successfully", read: false },
-      { id: 3, title: "Report Ready", message: "Your monthly report is ready", read: true },
-    ];
+    let query = supabase.from('notifications').select('*').eq('user_id', userId);
 
-    return NextResponse.json(notifications);
+    if (unreadOnly) {
+      query = query.eq('read', false);
+    }
+
+    const { data, error } = await query
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (error) throw error;
+
+    return secureResponse({ notifications: data });
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+    return secureErrorResponse(error as Error, 500);
   }
 }
 
-export async function POST(request: NextRequest) {
-  try {
-    const { action, notificationId } = await request.json();
+export async function POST(req: NextRequest) {
+  const guard = await guardEndpoint(req, {
+    method: 'POST',
+    requireAuth: true,
+    rateLimit: 'api',
+    requiredFields: ['type', 'title', 'message'],
+    audit: true,
+  });
 
-    if (action === "mark-read") {
-      return NextResponse.json({ success: true, message: "Marked as read" });
-    } else if (action === "clear-all") {
-      return NextResponse.json({ success: true, message: "All notifications cleared" });
+  if (!guard.ok) return guard.response;
+  const { userId, body } = guard;
+
+  try {
+    const { type, title, message, actionUrl, actionLabel, expiresAt, icon } = body as any;
+
+    const { data, error } = await supabase
+      .from('notifications')
+      .insert({
+        user_id: userId,
+        type,
+        title,
+        message,
+        action_url: actionUrl,
+        action_label: actionLabel,
+        read: false,
+        expires_at: expiresAt,
+        icon,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return secureResponse({ success: true, data }, 201);
+  } catch (error) {
+    return secureErrorResponse(error as Error, 500);
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  const guard = await guardEndpoint(req, {
+    method: 'PUT',
+    requireAuth: true,
+    rateLimit: 'api',
+    audit: true,
+  });
+
+  if (!guard.ok) return guard.response;
+  const { userId, body } = guard;
+
+  try {
+    const notificationId = req.nextUrl.searchParams.get('id');
+    if (!notificationId || !isValidUUID(notificationId)) {
+      return secureErrorResponse('Invalid or missing notification id', 400);
     }
 
-    return NextResponse.json({ error: "Unknown action" }, { status: 400 });
+    const { data, error } = await supabase
+      .from('notifications')
+      .update({ ...body, updated_at: new Date().toISOString() })
+      .eq('id', notificationId)
+      .eq('user_id', userId)
+      .select()
+      .single();
+
+    if (error) throw error;
+    if (!data) return secureErrorResponse('Notification not found or unauthorized', 404);
+
+    return secureResponse({ success: true, data });
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+    return secureErrorResponse(error as Error, 500);
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  const guard = await guardEndpoint(req, {
+    method: 'DELETE',
+    requireAuth: true,
+    rateLimit: 'api',
+    audit: true,
+  });
+
+  if (!guard.ok) return guard.response;
+  const { userId } = guard;
+
+  try {
+    const notificationId = req.nextUrl.searchParams.get('id');
+    if (!notificationId || !isValidUUID(notificationId)) {
+      return secureErrorResponse('Invalid or missing notification id', 400);
+    }
+
+    const { error } = await supabase
+      .from('notifications')
+      .delete()
+      .eq('id', notificationId)
+      .eq('user_id', userId);
+
+    if (error) throw error;
+    return secureResponse({ success: true }, 204);
+  } catch (error) {
+    return secureErrorResponse(error as Error, 500);
   }
 }

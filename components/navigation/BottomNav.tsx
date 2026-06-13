@@ -1,111 +1,102 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, MessageCircle, Bot, Library, Menu } from 'lucide-react';
+import { Home, MessageCircle, Zap, Library, BarChart3, BookOpen, Users, Megaphone, TrendingUp, Headphones, Settings, Scale, Trophy, Cpu } from 'lucide-react';
 
-const TABS = [
+const NAVIGATION = [
   { id: 'inicio', label: 'Inicio', icon: Home, href: '/dashboard' },
   { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
-  { id: 'agentes', label: 'Agentes', icon: Bot, href: '/dashboard/agents' },
+  { id: 'separator1', label: '', icon: null, href: '#' },
+  { id: 'agentes', label: 'Agentes', icon: Zap, href: '/dashboard/agents' },
   { id: 'biblioteca', label: 'Biblioteca', icon: Library, href: '/dashboard/library' },
-  { id: 'mas', label: 'Más', icon: Menu, href: '#' },
+  { id: 'dashboard', label: 'Dashboard', icon: BarChart3, href: '/dashboard/analytics' },
+  { id: 'separator2', label: '', icon: null, href: '#' },
+  { id: 'capacitaciones', label: 'Capacitaciones', icon: BookOpen, href: '/dashboard/training' },
+  { id: 'recursos', label: 'Recursos Humanos', icon: Users, href: '/dashboard/hr' },
+  { id: 'marketing', label: 'Marketing', icon: Megaphone, href: '/dashboard/marketing' },
+  { id: 'ventas', label: 'Ventas', icon: TrendingUp, href: '/dashboard/sales' },
+  { id: 'servicio', label: 'Servicio al Cliente', icon: Headphones, href: '/dashboard/support' },
+  { id: 'separator3', label: '', icon: null, href: '#' },
+  { id: 'config', label: 'Configuración', icon: Settings, href: '/dashboard/settings' },
+  { id: 'legal', label: 'Legal y Finanzas', icon: Scale, href: '/dashboard/finance' },
 ];
 
 export default function BottomNav() {
   const pathname = usePathname();
-  const [showMenu, setShowMenu] = useState(false);
 
   return (
-    <>
-      <nav
-        id="bnav"
-        style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: 'var(--nav-h)',
-          paddingTop: '10px',
-          background: 'rgba(10, 10, 10, 0.97)',
-          backdropFilter: 'blur(20px)',
-          borderTop: '1px solid var(--b)',
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-around',
-          zIndex: 30,
-        }}
-      >
-        {TABS.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = pathname === tab.href || (tab.id === 'inicio' && pathname === '/dashboard');
+    <nav
+      id="sidebar"
+      style={{
+        position: 'fixed',
+        left: 0,
+        top: 0,
+        width: '240px',
+        height: '100vh',
+        background: 'linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%)',
+        borderRight: '1px solid var(--b)',
+        overflowY: 'auto',
+        zIndex: 30,
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '20px 0',
+        gap: '8px',
+      }}
+    >
+      {/* Logo */}
+      <div style={{ padding: '16px 20px', marginBottom: '16px' }}>
+        <h1 style={{ fontSize: '18px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ width: '32px', height: '32px', background: 'linear-gradient(135deg, #6366F1, #8B5CF6)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold' }}>
+            V
+          </div>
+          Victor IA
+        </h1>
+        <p style={{ fontSize: '11px', color: 'var(--t3)', marginTop: '4px' }}>BRAIN TRACKER</p>
+      </div>
+
+      {/* Navigation Items */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        {NAVIGATION.map((item) => {
+          if (!item.icon) {
+            return (
+              <div key={item.id} style={{ height: '1px', background: 'var(--b)', margin: '8px 0', marginLeft: '20px', marginRight: '20px' }} />
+            );
+          }
+
+          const Icon = item.icon;
+          const isActive = pathname === item.href || pathname.startsWith(item.href);
 
           return (
             <Link
-              key={tab.id}
-              href={tab.href}
-              className="ntab"
+              key={item.id}
+              href={item.href}
               style={{
-                flex: 1,
                 display: 'flex',
-                flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'flex-start',
-                gap: '3px',
-                cursor: 'pointer',
+                gap: '12px',
+                padding: '12px 20px',
+                color: isActive ? 'var(--blue)' : 'var(--t2)',
                 textDecoration: 'none',
-                position: 'relative',
-                color: isActive ? 'var(--blue)' : 'var(--t3)',
-                fontSize: '10px',
-                fontWeight: isActive ? 700 : 500,
-                transition: 'color 0.2s',
+                fontSize: '14px',
+                fontWeight: isActive ? 600 : 500,
+                background: isActive ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
+                borderLeft: isActive ? '3px solid var(--blue)' : '3px solid transparent',
+                transition: 'all 0.2s',
+                cursor: 'pointer',
               }}
             >
-              {isActive && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '24px',
-                    height: '2px',
-                    background: 'linear-gradient(90deg, #3B82F6, #D8B4FE)',
-                    borderRadius: '1px',
-                  }}
-                />
-              )}
-              <Icon size={20} style={{ color: 'inherit' }} />
-              <span style={{ color: 'inherit' }}>{tab.label}</span>
+              <Icon size={18} style={{ opacity: isActive ? 1 : 0.6 }} />
+              <span>{item.label}</span>
             </Link>
           );
         })}
-      </nav>
+      </div>
 
-      {/* Dropdown menu for "Más" */}
-      {showMenu && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: 'calc(var(--nav-h) + 10px)',
-            right: 10,
-            background: 'var(--bg2)',
-            border: '1px solid var(--b)',
-            borderRadius: 'var(--r)',
-            padding: '8px',
-            zIndex: 31,
-            minWidth: '160px',
-          }}
-        >
-          <Link href="/dashboard/settings" className="block px-4 py-2 text-sm hover:bg-gray-700 rounded">
-            Configuración
-          </Link>
-          <Link href="/dashboard/finance" className="block px-4 py-2 text-sm hover:bg-gray-700 rounded">
-            Finanzas
-          </Link>
-        </div>
-      )}
-    </>
+      {/* Footer */}
+      <div style={{ marginTop: 'auto', padding: '16px 20px', borderTop: '1px solid var(--b)' }}>
+        <p style={{ fontSize: '11px', color: 'var(--t3)', textAlign: 'center' }}>v1.0.0</p>
+      </div>
+    </nav>
   );
 }
