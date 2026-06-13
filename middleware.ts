@@ -324,6 +324,25 @@ async function securityHandler(request: NextRequest) {
 // ==========================================
 
 export default clerkMiddleware(async (auth, request) => {
+  // Proteger rutas de dashboard
+  const { userId } = await auth();
+  const pathname = request.nextUrl.pathname;
+
+  // Rutas públicas (sin autenticación requerida)
+  const publicRoutes = ['/sign-in', '/sign-up', '/', '/api/webhooks'];
+  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
+
+  // Si es ruta pública, permitir
+  if (isPublicRoute) {
+    return securityHandler(request);
+  }
+
+  // Si no está autenticado y no es ruta pública, redirigir a sign-in
+  if (!userId) {
+    return NextResponse.redirect(new URL('/sign-in', request.url));
+  }
+
+  // Usuario autenticado, continuar
   return securityHandler(request);
 });
 
@@ -333,9 +352,7 @@ export default clerkMiddleware(async (auth, request) => {
 
 export const config = {
   matcher: [
-    // Rutas públicas (sin autenticación)
-    '/((?!_next/static|_next/image|favicon.ico|public|sign-in|sign-up|api/webhooks).*)',
-    // Rutas de API
-    '/api/(.*)',
+    // Aplicar middleware a todas las rutas excepto Next.js internas
+    '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 };
