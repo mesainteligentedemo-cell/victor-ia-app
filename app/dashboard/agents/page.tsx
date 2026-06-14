@@ -725,8 +725,6 @@ const SAMPLE_AGENTS: Agent[] = [
     status: 'active',
     tasks: 29,
     uptime: '99.8%',
-    tasks: 29,
-    uptime: '99.8%',
   },
   {
     id: 'especialista_partnerships',
