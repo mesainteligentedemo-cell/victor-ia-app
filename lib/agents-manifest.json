@@ -1,0 +1,2903 @@
+{
+  "version": "2026-06-14",
+  "total": 155,
+  "categories": [
+    {
+      "slug": "agente-maestro",
+      "label": "🤖 Agente Maestro",
+      "count": 17
+    },
+    {
+      "slug": "automatizacion",
+      "label": "⚙️ Automatización",
+      "count": 5
+    },
+    {
+      "slug": "diseno-e-interfaces",
+      "label": "🎨 Diseño & Interfaces",
+      "count": 6
+    },
+    {
+      "slug": "dev-y-codigo",
+      "label": "👨‍💻 Dev & Código",
+      "count": 8
+    },
+    {
+      "slug": "produccion-creativa",
+      "label": "📺 Producción Creativa",
+      "count": 15
+    },
+    {
+      "slug": "sitios-y-publicacion",
+      "label": "🌐 Sitios & Publicación",
+      "count": 4
+    },
+    {
+      "slug": "copy-y-marketing",
+      "label": "📝 Copy & Marketing",
+      "count": 2
+    },
+    {
+      "slug": "video-y-medios",
+      "label": "🎬 Video & Medios",
+      "count": 6
+    },
+    {
+      "slug": "video-juegos-y-3d",
+      "label": "🎮 Videojuegos & 3D",
+      "count": 4
+    },
+    {
+      "slug": "hubspot-crm",
+      "label": "📊 HubSpot & CRM",
+      "count": 6
+    },
+    {
+      "slug": "inmobiliaria",
+      "label": "🏠 Inmobiliaria",
+      "count": 11
+    },
+    {
+      "slug": "seguridad",
+      "label": "🔒 Seguridad",
+      "count": 38
+    },
+    {
+      "slug": "it-y-tecnologia",
+      "label": "💻 IT & Tecnología",
+      "count": 5
+    },
+    {
+      "slug": "liderazgo",
+      "label": "🎓 Liderazgo",
+      "count": 3
+    },
+    {
+      "slug": "neurociencias",
+      "label": "🧠 Neurociencias",
+      "count": 1
+    },
+    {
+      "slug": "negocio-y-estrategia",
+      "label": "💼 Negocio & Estrategia",
+      "count": 1
+    },
+    {
+      "slug": "ventas-y-marketing-sectorial",
+      "label": "🎯 Ventas & Marketing Sectorial",
+      "count": 13
+    },
+    {
+      "slug": "seo-y-contenido",
+      "label": "🔍 SEO & Contenido",
+      "count": 1
+    },
+    {
+      "slug": "diseno-especializado",
+      "label": "🎨 Diseño especializado",
+      "count": 5
+    },
+    {
+      "slug": "fabrica-de-contenido",
+      "label": "🏭 Fábrica de Contenido",
+      "count": 1
+    },
+    {
+      "slug": "otros",
+      "label": "🧩 Otros",
+      "count": 3
+    }
+  ],
+  "agents": [
+    {
+      "id": "director-general",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "CEO — Director General",
+      "emoji": "👔",
+      "shortDesc": "Estrategia global y decisiones C-level",
+      "whatItDoes": "Define la visión y la estrategia global de Victor IA. Evalúa cada solicitud entrante, decide prioridades de negocio y reparte el trabajo entre los demás directores. Aprueba o rechaza iniciativas grandes y arbitra conflictos entre áreas. Es el primer nodo del harness: recibe el contexto del proyecto y planifica su descomposición.",
+      "howItDoes": "Opera como Líder del harness en Claude Opus. Lee el punto-de-parada, los diarios del cliente y el deep-learning antes de planear. Descompone la tarea en subtareas, delega al Implementador (Sonnet) y a los directores especialistas, y sintetiza los resultados antes de devolver al usuario.",
+      "whyItDoes": "Garantiza que cada acción esté alineada con los objetivos de negocio y no se desperdicien recursos. Centraliza la toma de decisiones para mantener coherencia estratégica en todos los proyectos y clientes.",
+      "invocation": "/director-general",
+      "model": "claude-opus",
+      "tags": [
+        "estrategia",
+        "liderazgo",
+        "decisiones"
+      ]
+    },
+    {
+      "id": "director-tecnologia",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "CTO — Director Tecnología",
+      "emoji": "🛠️",
+      "shortDesc": "Tech stack, arquitectura e infraestructura",
+      "whatItDoes": "Define el stack tecnológico y la arquitectura de cada proyecto. Decide entre Next.js, Supabase, Vercel y demás herramientas, y supervisa la infraestructura, el rendimiento y la deuda técnica. Revisa decisiones de seguridad y escalabilidad a nivel de sistema.",
+      "howItDoes": "Trabaja en Claude Opus evaluando trade-offs de arquitectura. Consulta a los skills de Dev & Código y Seguridad, define patrones de despliegue en Vercel/Docker y dicta convenciones de repositorio (AGENTS.md). Valida que la infraestructura soporte la carga prevista.",
+      "whyItDoes": "Reduce el riesgo técnico y asegura que las soluciones sean mantenibles y escalables. Evita reescrituras costosas eligiendo bien el stack desde el inicio.",
+      "invocation": "/director-tecnologia",
+      "model": "claude-opus",
+      "tags": [
+        "arquitectura",
+        "infraestructura",
+        "tecnologia"
+      ]
+    },
+    {
+      "id": "director-creativo",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "CCO — Director Creativo",
+      "emoji": "🎨",
+      "shortDesc": "Visual, marca y campañas",
+      "whatItDoes": "Dirige la identidad visual, el tono de marca y la creatividad de campañas. Aprueba paletas, tipografías, moodboards y la dirección de arte de videos y sitios. Vela por la coherencia del brandbook de Victor IA y de cada cliente.",
+      "howItDoes": "En Claude Opus coordina a los skills de Producción Creativa (Higgsfield, After Effects, ElevenLabs) y de Diseño. Define briefs creativos, revisa entregables visuales contra el manual de identidad y itera hasta lograr nivel award-winning.",
+      "whyItDoes": "Asegura que todo lo que sale tenga calidad estética premium y refuerce la marca. Diferencia a Victor IA por su acabado visual luxury frente a la competencia.",
+      "invocation": "/director-creativo",
+      "model": "claude-opus",
+      "tags": [
+        "creatividad",
+        "marca",
+        "direccion-arte"
+      ]
+    },
+    {
+      "id": "director-marketing",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "CMO — Director Marketing",
+      "emoji": "📣",
+      "shortDesc": "Estrategia de marketing y growth",
+      "whatItDoes": "Diseña la estrategia de marketing y crecimiento. Define posicionamiento, embudos de adquisición, mensajes clave y canales. Coordina campañas con el área creativa y mide su impacto en pipeline y revenue.",
+      "howItDoes": "Opera en Claude Opus apoyándose en los skills de Copy & Marketing y Ventas Sectorial. Planifica calendarios de contenido, estrategias SEO/GEO y growth loops, y conecta resultados con el Director de Datos para optimizar.",
+      "whyItDoes": "Hace crecer la demanda de forma predecible y rentable. Convierte la creatividad en leads y oportunidades medibles de negocio.",
+      "invocation": "/director-marketing",
+      "model": "claude-opus",
+      "tags": [
+        "marketing",
+        "growth",
+        "posicionamiento"
+      ]
+    },
+    {
+      "id": "director-personas",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "CPO — Director Personas",
+      "emoji": "🧑‍🤝‍🧑",
+      "shortDesc": "RRHH, talento y cultura",
+      "whatItDoes": "Gestiona el talento, la cultura y la coordinación entre agentes y colaboradores humanos. Define roles, responsabilidades y la asignación de capacidades dentro del organigrama de Victor IA.",
+      "howItDoes": "En Claude Opus mapea competencias de cada skill/agente a las tareas, evita cuellos de botella de carga y documenta buenas prácticas de colaboración. Alinea el comportamiento de los agentes con la cultura de la empresa.",
+      "whyItDoes": "Maximiza el desempeño del equipo humano-IA y mantiene una cultura de calidad y aprendizaje continuo.",
+      "invocation": "/director-personas",
+      "model": "claude-opus",
+      "tags": [
+        "talento",
+        "cultura",
+        "organizacion"
+      ]
+    },
+    {
+      "id": "director-datos-crecimiento",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "CDO — Director Datos y Growth",
+      "emoji": "📊",
+      "shortDesc": "Analytics, métricas y forecasting",
+      "whatItDoes": "Responsable de analytics, métricas y proyecciones. Define los KPIs de cada proyecto, construye dashboards y modela forecasts de revenue, costos y eficiencia de tokens.",
+      "howItDoes": "En Claude Opus integra datos del tracker, Google Sheets de finanzas y métricas de Graphify. Modela cohortes, embudos y proyecciones, y traduce los números en recomendaciones accionables para los demás directores.",
+      "whyItDoes": "Convierte datos dispersos en decisiones basadas en evidencia. Permite anticipar problemas y oportunidades antes de que ocurran.",
+      "invocation": "/director-datos-crecimiento",
+      "model": "claude-opus",
+      "tags": [
+        "analytics",
+        "metricas",
+        "forecasting"
+      ]
+    },
+    {
+      "id": "director-ventas",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "CSO — Director Ventas",
+      "emoji": "💼",
+      "shortDesc": "Pipeline, deals y revenue",
+      "whatItDoes": "Dirige el pipeline comercial: prospectos, propuestas, cierres y revenue. Aplica el workflow de 4 etapas (prospecto → propuesta → autorizado → completado) y mantiene el tracking de cada cliente.",
+      "howItDoes": "En Claude Opus opera el motor pipeline.py (7 etapas, dedup, SLA, forecast) y coordina los scripts crear-cliente.py. Prioriza deals por valor y probabilidad, y activa notificaciones en cada conversión vía n8n.",
+      "whyItDoes": "Asegura un flujo constante de ingresos y que ninguna oportunidad se pierda por falta de seguimiento.",
+      "invocation": "/director-ventas",
+      "model": "claude-opus",
+      "tags": [
+        "ventas",
+        "pipeline",
+        "revenue"
+      ]
+    },
+    {
+      "id": "director-clientes",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "CXO — Director Clientes",
+      "emoji": "🤝",
+      "shortDesc": "Satisfacción, onboarding y retención",
+      "whatItDoes": "Cuida la experiencia del cliente desde el onboarding hasta la retención. Monitorea satisfacción, gestiona expectativas y previene churn en los proyectos activos.",
+      "howItDoes": "En Claude Opus revisa los diarios de cada cliente, detecta señales de fricción y coordina entregas a tiempo. Diseña flujos de onboarding y comunicación proactiva apoyándose en Hermes y el área de soporte.",
+      "whyItDoes": "Aumenta la retención y el valor de vida del cliente. Convierte clientes satisfechos en referencias y recompras.",
+      "invocation": "/director-clientes",
+      "model": "claude-opus",
+      "tags": [
+        "clientes",
+        "retencion",
+        "experiencia"
+      ]
+    },
+    {
+      "id": "director-administrativo",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "Director Administrativo",
+      "emoji": "🗂️",
+      "shortDesc": "Finanzas, legal y compliance",
+      "whatItDoes": "Administra finanzas, contratos, legal y cumplimiento. Controla presupuesto, licencias activas, cuentas por cobrar y por pagar, y vela por la regla 'APIs sí, software nuevo no'.",
+      "howItDoes": "En Claude Opus lee el Google Sheet de finanzas vía MCP Drive antes de cualquier actualización. Concilia egresos e ingresos, revisa contratos con plantillas legales MX y mantiene el registro de licencias y vigencias.",
+      "whyItDoes": "Mantiene la salud financiera y legal de la empresa. Evita gastos innecesarios y riesgos de incumplimiento.",
+      "invocation": "/director-administrativo",
+      "model": "claude-opus",
+      "tags": [
+        "finanzas",
+        "legal",
+        "compliance"
+      ]
+    },
+    {
+      "id": "director-innovacion",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "Director Innovación",
+      "emoji": "💡",
+      "shortDesc": "Nuevas tecnologías y experimentación",
+      "whatItDoes": "Explora nuevas tecnologías, modelos y herramientas. Diseña experimentos controlados, evalúa su viabilidad y propone su adopción cuando aportan ventaja competitiva.",
+      "howItDoes": "En Claude Opus rastrea novedades (nuevos modelos, MCPs, frameworks), prototipa pruebas de concepto y mide su impacto antes de recomendar su integración al stack o a los skills.",
+      "whyItDoes": "Mantiene a Victor IA a la vanguardia tecnológica y abre nuevas líneas de servicio antes que la competencia.",
+      "invocation": "/director-innovacion",
+      "model": "claude-opus",
+      "tags": [
+        "innovacion",
+        "i+d",
+        "experimentacion"
+      ]
+    },
+    {
+      "id": "director-ciberseguridad",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "CISO — Director Ciberseguridad",
+      "emoji": "🛡️",
+      "shortDesc": "Seguridad, compliance y auditoría",
+      "whatItDoes": "Lidera la seguridad integral: aplicaciones, infraestructura, datos y cumplimiento. Define políticas, supervisa auditorías y orquesta los 38 skills de seguridad según el riesgo del proyecto.",
+      "howItDoes": "En Claude Opus coordina la categoría de Seguridad completa: hardening, defensa contra prompt injection, MCP security y respuesta a incidentes. Prioriza vulnerabilidades por severidad y verifica su remediación.",
+      "whyItDoes": "Protege a la empresa y a los clientes de brechas y sanciones. La seguridad como diferenciador y como requisito no negociable.",
+      "invocation": "/director-ciberseguridad",
+      "model": "claude-opus",
+      "tags": [
+        "seguridad",
+        "ciberseguridad",
+        "auditoria"
+      ]
+    },
+    {
+      "id": "director-calidad",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "CQO — Director Calidad",
+      "emoji": "✅",
+      "shortDesc": "QA, tests y estándares",
+      "whatItDoes": "Garantiza la calidad de cada entregable. Define estándares, checklists y criterios de aceptación, y actúa como Revisor del harness antes de marcar algo como 'listo'.",
+      "howItDoes": "En Claude Opus ejecuta la plantilla de revisión: tests verdes, lint limpio, build sin warnings, UI correcta, accesibilidad WCAG AA y documentación completa. Aprueba o rechaza con feedback específico para iteración.",
+      "whyItDoes": "Asegura que solo salga trabajo que cumple el estándar premium. Reduce retrabajo y errores en producción.",
+      "invocation": "/director-calidad",
+      "model": "claude-opus",
+      "tags": [
+        "calidad",
+        "qa",
+        "estandares"
+      ]
+    },
+    {
+      "id": "auditor-ia",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "Auditor IA",
+      "emoji": "🔍",
+      "shortDesc": "Auditoría interna, compliance y riesgos",
+      "whatItDoes": "Realiza auditoría interna de procesos, decisiones y entregables. Verifica cumplimiento de protocolos, detecta riesgos y deja trazabilidad de cada acción del sistema.",
+      "howItDoes": "En Claude Opus, tras cada entrega, hace compliance check, lee las bitácoras de los skills usados y reporta hallazgos al Director Deep Learning para síntesis de aprendizajes.",
+      "whyItDoes": "Genera confianza y trazabilidad. Detecta desviaciones a tiempo y alimenta la mejora continua del sistema.",
+      "invocation": "/auditor-ia",
+      "model": "claude-opus",
+      "tags": [
+        "auditoria",
+        "compliance",
+        "riesgos"
+      ]
+    },
+    {
+      "id": "gerente-ia",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "Gerente IA",
+      "emoji": "🎛️",
+      "shortDesc": "Orquestación day-to-day y workflows",
+      "whatItDoes": "Coordina la operación diaria. Recibe la solicitud del usuario, identifica proyecto y cliente, y orquesta qué skills se activan y en qué orden para resolver la tarea.",
+      "howItDoes": "En Claude Opus aplica el protocolo de detección de proyectos por keywords, lanza agentes en paralelo cuando no hay dependencias y mantiene el handoff sin pérdida de contexto entre niveles de la cadena.",
+      "whyItDoes": "Hace que el sistema funcione fluido cada día, maximizando el paralelismo y minimizando la fricción operativa.",
+      "invocation": "/gerente-ia",
+      "model": "claude-opus",
+      "tags": [
+        "orquestacion",
+        "workflows",
+        "operacion"
+      ]
+    },
+    {
+      "id": "director-deep-learning",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "Director Deep Learning",
+      "emoji": "🧠",
+      "shortDesc": "Aprendizaje continuo e innovación",
+      "whatItDoes": "Es el CLO del sistema. Investiga actualizaciones diarias (Claude, MCPs, herramientas IA, frameworks), sintetiza las 155 bitácoras de skills e implementa mejoras de forma autónoma.",
+      "howItDoes": "En Claude Opus lee buenos-ejemplos.md y malos-ejemplos.md, identifica patrones ganadores y anti-patterns, y actualiza los protocolos y skills. Propone innovaciones y las documenta para todo el equipo.",
+      "whyItDoes": "Hace que Victor IA mejore con cada trabajo realizado. Convierte la experiencia acumulada en ventaja sistemática.",
+      "invocation": "/director-deep-learning",
+      "model": "claude-opus",
+      "tags": [
+        "aprendizaje",
+        "mejora-continua",
+        "innovacion"
+      ]
+    },
+    {
+      "id": "agente-memoria",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "Agente Memoria",
+      "emoji": "💾",
+      "shortDesc": "Memoria persistente y contexto",
+      "whatItDoes": "Mantiene la memoria persistente entre sesiones. Gestiona los diarios por tema, el punto-de-parada y el maestro-contexto, y responde cuando el usuario pregunta '¿recuerdas X?'.",
+      "howItDoes": "En Claude Sonnet indexa con Graphify la carpeta memory/, consulta grafos en lugar de releer archivos (ahorro ~90% de tokens) y actualiza diarios al final de cada sesión significativa.",
+      "whyItDoes": "Evita que se pierda contexto entre conversaciones. Permite continuidad real en proyectos de larga duración.",
+      "invocation": "/agente-memoria",
+      "model": "claude-sonnet",
+      "tags": [
+        "memoria",
+        "contexto",
+        "diarios"
+      ]
+    },
+    {
+      "id": "interprete-prompts",
+      "category": "agente-maestro",
+      "categoryLabel": "🤖 Agente Maestro",
+      "name": "Intérprete de Prompts",
+      "emoji": "🗣️",
+      "shortDesc": "Desambiguación y clarificación",
+      "whatItDoes": "Traduce solicitudes ambiguas del usuario en instrucciones claras y accionables. Detecta intención, identifica vacíos de información y formula las preguntas mínimas necesarias antes de ejecutar.",
+      "howItDoes": "En Claude Sonnet aplica el protocolo interview-before-build cuando se pide UI/SaaS/app, limita a 15 preguntas máximo y entrega una especificación con riesgos y una v1 antes de delegar a los implementadores.",
+      "whyItDoes": "Evita construir lo incorrecto. Ahorra tiempo y tokens alineando expectativas desde el inicio.",
+      "invocation": "/interprete-prompts",
+      "model": "claude-sonnet",
+      "tags": [
+        "clarificacion",
+        "intencion",
+        "especificacion"
+      ]
+    },
+    {
+      "id": "automatizacion-n8n",
+      "category": "automatizacion",
+      "categoryLabel": "⚙️ Automatización",
+      "name": "Automatización n8n",
+      "emoji": "🔁",
+      "shortDesc": "Workflows básicos e integraciones",
+      "whatItDoes": "Construye workflows de automatización en n8n: conexión de apps, webhooks, envío de correos y sincronización de datos entre sistemas como HubSpot, Telegram y Google Sheets.",
+      "howItDoes": "Diseña nodos y triggers en n8n, configura webhooks (n8n.srv1013903.hstgr.cloud) y prueba cada flujo end-to-end. Aplica el estándar de notificaciones Victor IA (Telegram + email con copias fijas).",
+      "whyItDoes": "Automatiza tareas repetitivas y conecta el ecosistema sin código manual, liberando tiempo del equipo.",
+      "invocation": "/automatizacion-n8n",
+      "model": "claude-sonnet",
+      "tags": [
+        "n8n",
+        "workflows",
+        "integraciones"
+      ]
+    },
+    {
+      "id": "expert-n8n-avanzado",
+      "category": "automatizacion",
+      "categoryLabel": "⚙️ Automatización",
+      "name": "Expert n8n Avanzado",
+      "emoji": "🧩",
+      "shortDesc": "Workflows complejos y lógica custom",
+      "whatItDoes": "Crea automatizaciones avanzadas en n8n con ramificaciones, condiciones, bucles y código JavaScript embebido. Maneja casos con múltiples APIs, manejo de errores y reintentos.",
+      "howItDoes": "Programa nodos Function en JavaScript, implementa lógica condicional y subworkflows, y orquesta llamadas a APIs externas con control de errores y colas. Documenta cada flujo en su bitácora.",
+      "whyItDoes": "Resuelve automatizaciones que los nodos básicos no cubren, habilitando procesos de negocio sofisticados.",
+      "invocation": "/expert-n8n-avanzado",
+      "model": "claude-sonnet",
+      "tags": [
+        "n8n",
+        "javascript",
+        "logica"
+      ]
+    },
+    {
+      "id": "fingerprint-scrapper",
+      "category": "automatizacion",
+      "categoryLabel": "⚙️ Automatización",
+      "name": "Fingerprint Scrapper",
+      "emoji": "🕵️",
+      "shortDesc": "Scraping anti-bot y evasión",
+      "whatItDoes": "Extrae datos de sitios protegidos evadiendo detección anti-bot. Rota fingerprints, bloquea WebRTC y empata geolocalización para parecer un usuario real.",
+      "howItDoes": "Usa Playwright/Puppeteer con la suite fingerprint de Apify, rota identidades de navegador, gestiona proxies y oculta navigator.webdriver. Implementa en Python o Node según el caso.",
+      "whyItDoes": "Permite recolectar datos de fuentes difíciles sin bloqueos, base para prospecting e inteligencia de mercado.",
+      "invocation": "/fingerprint-scrapper",
+      "model": "claude-sonnet",
+      "tags": [
+        "scraping",
+        "anti-bot",
+        "playwright"
+      ]
+    },
+    {
+      "id": "n8n-ia-local",
+      "category": "automatizacion",
+      "categoryLabel": "⚙️ Automatización",
+      "name": "n8n IA Local",
+      "emoji": "🦙",
+      "shortDesc": "Integración Ollama/OpenRouter/Groq",
+      "whatItDoes": "Conecta n8n con modelos de IA locales o económicos (Ollama, OpenRouter, Groq) para automatizaciones privadas sin depender de APIs caras.",
+      "howItDoes": "Configura nodos HTTP hacia Ollama local o OpenRouter, define workflows con prompts y routing por costo, y ofrece arquitecturas por tipo de cliente. Incluye pitch de venta por workflow.",
+      "whyItDoes": "Da a los clientes automatización con IA privada y de bajo costo, un servicio vendible y diferenciado.",
+      "invocation": "/n8n-ia-local",
+      "model": "claude-sonnet",
+      "tags": [
+        "n8n",
+        "ia-local",
+        "privacidad"
+      ]
+    },
+    {
+      "id": "youtube-transcript",
+      "category": "automatizacion",
+      "categoryLabel": "⚙️ Automatización",
+      "name": "YouTube Transcript",
+      "emoji": "📝",
+      "shortDesc": "Extrae transcripts de YouTube",
+      "whatItDoes": "Obtiene el transcript completo de cualquier video de YouTube a partir de su URL, con detección automática de idioma.",
+      "howItDoes": "Usa youtube-transcript-api mediante el script extract.py, detecta el idioma disponible y devuelve el texto limpio listo para resumir o reutilizar como contenido.",
+      "whyItDoes": "Convierte video en texto aprovechable para SEO, resúmenes y repurposing de contenido.",
+      "invocation": "/youtube-transcript",
+      "model": "claude-sonnet",
+      "tags": [
+        "youtube",
+        "transcript",
+        "contenido"
+      ]
+    },
+    {
+      "id": "curador-apps-y-saas",
+      "category": "diseno-e-interfaces",
+      "categoryLabel": "🎨 Diseño & Interfaces",
+      "name": "Curador Apps & SaaS",
+      "emoji": "🧭",
+      "shortDesc": "Auditoría 7 dimensiones y benchmarks",
+      "whatItDoes": "Audita apps y SaaS en 7 dimensiones de diseño, extrae la marca desde una URL o PDF y compara contra benchmarks del vertical antes de proponer mejoras.",
+      "howItDoes": "Aplica un proceso de auditoría estructurado, hace brand extraction y consulta la base de design-intelligence (paletas, fonts, patrones). Presenta un plan confirmado antes de ejecutar cambios.",
+      "whyItDoes": "Asegura que cada interfaz parta de estándares premium y decisiones fundamentadas, no de gustos sueltos.",
+      "invocation": "/curador-apps-y-saas",
+      "model": "claude-sonnet",
+      "tags": [
+        "auditoria",
+        "saas",
+        "benchmarks"
+      ]
+    },
+    {
+      "id": "coach-premios-web",
+      "category": "diseno-e-interfaces",
+      "categoryLabel": "🎨 Diseño & Interfaces",
+      "name": "Coach Premios Web",
+      "emoji": "🏆",
+      "shortDesc": "Optimización para awards web",
+      "whatItDoes": "Optimiza sitios para ganar premios (Awwwards, Webby, FWA). Refina UX, microinteracciones, copy y accesibilidad hasta nivel award-winning.",
+      "howItDoes": "Evalúa contra los criterios de los jurados, sugiere animaciones GSAP/Three.js, mejora la narrativa visual y verifica accesibilidad y rendimiento como factores de puntuación.",
+      "whyItDoes": "Eleva la percepción de marca y el prestigio del cliente al competir por reconocimientos de la industria.",
+      "invocation": "/coach-premios-web",
+      "model": "claude-sonnet",
+      "tags": [
+        "awards",
+        "ux",
+        "microinteracciones"
+      ]
+    },
+    {
+      "id": "director-influence-ia",
+      "category": "diseno-e-interfaces",
+      "categoryLabel": "🎨 Diseño & Interfaces",
+      "name": "Director Influence IA",
+      "emoji": "🎯",
+      "shortDesc": "Dirección creativa para campañas",
+      "whatItDoes": "Dirige creativamente las campañas de Influence IA Awards y similares. Define concepto, narrativa visual y copy de alto impacto para activaciones de marca.",
+      "howItDoes": "En conjunto con el área creativa define moodboards, guías de tono y storyboards, y supervisa la producción visual con Higgsfield y After Effects manteniendo coherencia de campaña.",
+      "whyItDoes": "Logra campañas memorables que posicionan a Victor IA y sus clientes como referentes creativos.",
+      "invocation": "/director-influence-ia",
+      "model": "claude-sonnet",
+      "tags": [
+        "campanas",
+        "direccion",
+        "influence"
+      ]
+    },
+    {
+      "id": "diseno-experiencia-usuario",
+      "category": "diseno-e-interfaces",
+      "categoryLabel": "🎨 Diseño & Interfaces",
+      "name": "Diseño Experiencia Usuario",
+      "emoji": "🧬",
+      "shortDesc": "UX research, wireframes y prototipos",
+      "whatItDoes": "Lleva el proceso de UX: investigación de usuarios, arquitectura de información, wireframes y prototipos interactivos antes de pasar a alta fidelidad.",
+      "howItDoes": "Usa Figma y user research para mapear journeys, validar flujos y prototipar. Define jerarquías, estados y patrones de interacción que luego implementan los skills de código.",
+      "whyItDoes": "Reduce el riesgo de construir productos que la gente no usa, asegurando usabilidad desde el diseño.",
+      "invocation": "/diseno-experiencia-usuario",
+      "model": "claude-sonnet",
+      "tags": [
+        "ux",
+        "research",
+        "prototipos"
+      ]
+    },
+    {
+      "id": "expert-canva-pro",
+      "category": "diseno-e-interfaces",
+      "categoryLabel": "🎨 Diseño & Interfaces",
+      "name": "Expert Canva Pro",
+      "emoji": "🖼️",
+      "shortDesc": "Diseño rápido, templates y branding",
+      "whatItDoes": "Produce piezas gráficas rápidas y consistentes en Canva Pro: posts, presentaciones, banners y aplicaciones de marca a partir de templates.",
+      "howItDoes": "Aprovecha la API y los templates de Canva Pro, aplica la paleta y tipografías del brandbook y genera variantes para distintos formatos y canales.",
+      "whyItDoes": "Permite entregar volumen de gráficos consistentes en poco tiempo para campañas y redes.",
+      "invocation": "/expert-canva-pro",
+      "model": "claude-sonnet",
+      "tags": [
+        "canva",
+        "branding",
+        "templates"
+      ]
+    },
+    {
+      "id": "codigo-interfaces-glm",
+      "category": "diseno-e-interfaces",
+      "categoryLabel": "🎨 Diseño & Interfaces",
+      "name": "Código de Interfaces GLM",
+      "emoji": "⌨️",
+      "shortDesc": "Interfaces vía GLM 5.1 (OpenRouter)",
+      "whatItDoes": "Genera código de interfaces usando el modelo GLM 5.1 a través de OpenRouter, como alternativa económica para construir UI funcional.",
+      "howItDoes": "Enruta prompts de UI hacia GLM 5.1 vía la key única de OpenRouter, produce componentes React/HTML y los integra al proyecto manteniendo el sistema de diseño.",
+      "whyItDoes": "Abarata la producción de interfaces sin sacrificar funcionalidad, optimizando el costo por tarea.",
+      "invocation": "/codigo-interfaces-glm",
+      "model": "claude-sonnet",
+      "tags": [
+        "glm",
+        "openrouter",
+        "ui"
+      ]
+    },
+    {
+      "id": "superpowers",
+      "category": "dev-y-codigo",
+      "categoryLabel": "👨‍💻 Dev & Código",
+      "name": "Superpowers",
+      "emoji": "⚡",
+      "shortDesc": "Metodología 8 fases para desarrollo",
+      "whatItDoes": "Aplica la metodología oficial Superpowers de Claude Code: 8 fases desde brainstorm hasta merge, con worktrees, subagentes y TDD.",
+      "howItDoes": "Sigue el flujo brainstorm → worktree → plan → subagentes → TDD → review → merge usando el plugin Superpowers y sus 14 skills. Aísla el trabajo en worktrees y valida con tests antes de fusionar.",
+      "whyItDoes": "Estructura el desarrollo complejo para que sea predecible, testeado y seguro de integrar.",
+      "invocation": "/superpowers",
+      "model": "claude-opus",
+      "tags": [
+        "metodologia",
+        "tdd",
+        "harness"
+      ]
+    },
+    {
+      "id": "codex-openrouter",
+      "category": "dev-y-codigo",
+      "categoryLabel": "👨‍💻 Dev & Código",
+      "name": "Codex OpenRouter",
+      "emoji": "🔀",
+      "shortDesc": "Codex CLI vía OpenRouter (fallback)",
+      "whatItDoes": "Ejecuta el CLI de Codex a través de OpenRouter como alternativa o complemento a Claude en tareas de código.",
+      "howItDoes": "Lanza Codex con la key en el perfil de PowerShell, corre la tarea y registra todo con codex-tracker.py. Claude detecta automáticamente cuándo Codex gana y lo avisa.",
+      "whyItDoes": "Da una segunda opinión de código y aprovecha el mejor agente por tarea, optimizando velocidad y costo.",
+      "invocation": "/codex-openrouter",
+      "model": "claude-sonnet",
+      "tags": [
+        "codex",
+        "openrouter",
+        "cli"
+      ]
+    },
+    {
+      "id": "curador-codex",
+      "category": "dev-y-codigo",
+      "categoryLabel": "👨‍💻 Dev & Código",
+      "name": "Curador Codex",
+      "emoji": "⚖️",
+      "shortDesc": "Análisis Claude vs Codex",
+      "whatItDoes": "Decide cuándo conviene usar Claude y cuándo Codex para una tarea de desarrollo, basado en benchmarks y resultados históricos.",
+      "howItDoes": "Compara desempeño con codex-race.py, lee el log de comparacion-agentes.md y recomienda el agente óptimo. El Director Deep Learning sintetiza los patrones de quién gana en qué.",
+      "whyItDoes": "Asegura usar siempre el agente más eficaz por tipo de problema, mejorando calidad y ahorrando recursos.",
+      "invocation": "/curador-codex",
+      "model": "claude-opus",
+      "tags": [
+        "benchmarks",
+        "codex",
+        "decision"
+      ]
+    },
+    {
+      "id": "expert-framer-motion",
+      "category": "dev-y-codigo",
+      "categoryLabel": "👨‍💻 Dev & Código",
+      "name": "Expert Framer Motion",
+      "emoji": "🎞️",
+      "shortDesc": "Animaciones React avanzadas",
+      "whatItDoes": "Crea animaciones e interacciones sofisticadas en React con Framer Motion: transiciones, gestos, layout animations y orquestación de secuencias.",
+      "howItDoes": "Implementa variants, useAnimate y AnimatePresence, sincroniza animaciones con el estado y optimiza el rendimiento evitando re-renders innecesarios.",
+      "whyItDoes": "Aporta movimiento fluido y premium a las interfaces, elevando la percepción de calidad del producto.",
+      "invocation": "/expert-framer-motion",
+      "model": "claude-sonnet",
+      "tags": [
+        "framer-motion",
+        "react",
+        "animacion"
+      ]
+    },
+    {
+      "id": "expert-gsap",
+      "category": "dev-y-codigo",
+      "categoryLabel": "👨‍💻 Dev & Código",
+      "name": "Expert GSAP",
+      "emoji": "🌀",
+      "shortDesc": "Animaciones GSAP y efectos complejos",
+      "whatItDoes": "Domina GSAP 3+ para animaciones avanzadas: timelines, ScrollTrigger, DrawSVG, MorphSVG y efectos cinemáticos en web.",
+      "howItDoes": "Construye timelines precisos, scroll-driven animations y morphs de SVG, evitando conflictos entre CSS y GSAP. Usa los plugins (todos free) del manifest de efectos web.",
+      "whyItDoes": "Produce experiencias web con motion de alto nivel que diferencian a los sitios de Victor IA.",
+      "invocation": "/expert-gsap",
+      "model": "claude-sonnet",
+      "tags": [
+        "gsap",
+        "scrolltrigger",
+        "animacion"
+      ]
+    },
+    {
+      "id": "frontend-architect",
+      "category": "dev-y-codigo",
+      "categoryLabel": "👨‍💻 Dev & Código",
+      "name": "Frontend Architect",
+      "emoji": "🏛️",
+      "shortDesc": "Diseño de arquitectura frontend",
+      "whatItDoes": "Define la arquitectura frontend de aplicaciones React/Next.js: estructura de carpetas, estado, data fetching y patrones de componentes.",
+      "howItDoes": "Establece convenciones de componentes, manejo de estado (stores) y estrategias de rendering en Next.js, asegurando escalabilidad y mantenibilidad del código de UI.",
+      "whyItDoes": "Evita el caos en bases de código grandes y acelera el desarrollo con patrones claros y reutilizables.",
+      "invocation": "/frontend-architect",
+      "model": "claude-opus",
+      "tags": [
+        "frontend",
+        "arquitectura",
+        "react"
+      ]
+    },
+    {
+      "id": "system-architect-dev",
+      "category": "dev-y-codigo",
+      "categoryLabel": "👨‍💻 Dev & Código",
+      "name": "System Architect",
+      "emoji": "🧱",
+      "shortDesc": "Arquitectura backend e infraestructura",
+      "whatItDoes": "Diseña la arquitectura backend y de infraestructura: servicios, bases de datos, colas, contenedores y despliegue.",
+      "howItDoes": "Modela servicios en Node.js, define esquemas de datos, contenedores Docker y topología cloud, considerando seguridad, escalabilidad y costos de operación.",
+      "whyItDoes": "Construye cimientos técnicos sólidos que soportan el crecimiento del producto sin reescrituras.",
+      "invocation": "/system-architect-dev",
+      "model": "claude-opus",
+      "tags": [
+        "backend",
+        "arquitectura",
+        "infraestructura"
+      ]
+    },
+    {
+      "id": "rendimiento-vscode",
+      "category": "dev-y-codigo",
+      "categoryLabel": "👨‍💻 Dev & Código",
+      "name": "Rendimiento VSCode",
+      "emoji": "🚀",
+      "shortDesc": "Optimización de rendimiento del IDE",
+      "whatItDoes": "Optimiza el rendimiento del entorno de desarrollo en VSCode: extensiones, configuración y consumo de recursos.",
+      "howItDoes": "Audita extensiones instaladas, ajusta settings, desactiva procesos pesados y recomienda configuraciones que reducen latencia y uso de memoria del IDE.",
+      "whyItDoes": "Hace más fluido el trabajo diario de desarrollo, reduciendo fricción y tiempo perdido.",
+      "invocation": "/rendimiento-vscode",
+      "model": "claude-sonnet",
+      "tags": [
+        "vscode",
+        "rendimiento",
+        "ide"
+      ]
+    },
+    {
+      "id": "higgsfield-supercomputer",
+      "category": "produccion-creativa",
+      "categoryLabel": "📺 Producción Creativa",
+      "name": "Higgsfield Supercomputer",
+      "emoji": "🌌",
+      "shortDesc": "40+ modelos IA imagen/video/audio",
+      "whatItDoes": "Acceso al supercomputador creativo Higgsfield con 40+ modelos de imagen, video y audio, 48 presets y árbol de decisión por objetivo.",
+      "howItDoes": "Usa el MCP de Higgsfield (generate_image, generate_video, generate_audio), selecciona modelos y presets por caso, aplica el virality predictor y orquesta flujos de producción DTC Ads.",
+      "whyItDoes": "Centraliza la generación de assets IA de alta calidad para campañas, sitios y videos, con control de viralidad.",
+      "invocation": "/higgsfield-supercomputer",
+      "model": "claude-sonnet",
+      "tags": [
+        "higgsfield",
+        "generacion",
+        "ia"
+      ]
+    },
+    {
+      "id": "expert-higgsfield",
+      "category": "produccion-creativa",
+      "categoryLabel": "📺 Producción Creativa",
+      "name": "Expert Higgsfield",
+      "emoji": "🔮",
+      "shortDesc": "Especialista avanzado + virality predictor",
+      "whatItDoes": "Especialista profundo en Higgsfield: prompting avanzado, control de personajes, motion control y predicción de viralidad.",
+      "howItDoes": "Combina presets con IDs específicos, usa show_characters y motion_control, analiza creatividades con virality_predictor y ajusta el hook y la retención antes de publicar.",
+      "whyItDoes": "Maximiza el rendimiento de cada pieza generada, aumentando engagement y reduciendo desperdicio de créditos.",
+      "invocation": "/expert-higgsfield",
+      "model": "claude-sonnet",
+      "tags": [
+        "higgsfield",
+        "viralidad",
+        "prompting"
+      ]
+    },
+    {
+      "id": "expert-elevenlabs",
+      "category": "produccion-creativa",
+      "categoryLabel": "📺 Producción Creativa",
+      "name": "Expert ElevenLabs",
+      "emoji": "🎙️",
+      "shortDesc": "Voces, música y agentes conversacionales",
+      "whatItDoes": "Genera voces IA, música original y agentes conversacionales con ElevenLabs. Voz de Victor (Enrique M. Nieto, ES+EN) para VO y bots.",
+      "howItDoes": "Usa la API de ElevenLabs con el Voice ID y la key fijos, genera audio with-timestamps para sincronía quirúrgica con visuales y crea música única por video en lugar de loopear.",
+      "whyItDoes": "Da voz y sonido premium a videos y agentes, con sincronización exacta entre VO y animación.",
+      "invocation": "/expert-elevenlabs",
+      "model": "claude-sonnet",
+      "tags": [
+        "elevenlabs",
+        "voz",
+        "audio"
+      ]
+    },
+    {
+      "id": "expert-runway",
+      "category": "produccion-creativa",
+      "categoryLabel": "📺 Producción Creativa",
+      "name": "Expert Runway",
+      "emoji": "🎥",
+      "shortDesc": "Video gen, inpainting y upscaling",
+      "whatItDoes": "Produce y edita video con Runway: generación, inpainting, remoción de objetos y upscaling de clips.",
+      "howItDoes": "Aprovecha la API de Runway para generar tomas, limpiar marcas de agua, extender escenas y subir resolución, integrándose al pipeline de video (ej. remoción en LATIVA).",
+      "whyItDoes": "Resuelve necesidades de video que requieren edición generativa avanzada con calidad profesional.",
+      "invocation": "/expert-runway",
+      "model": "claude-sonnet",
+      "tags": [
+        "runway",
+        "video",
+        "inpainting"
+      ]
+    },
+    {
+      "id": "expert-midjourney",
+      "category": "produccion-creativa",
+      "categoryLabel": "📺 Producción Creativa",
+      "name": "Expert Midjourney",
+      "emoji": "🖌️",
+      "shortDesc": "Imagen premium y prompting avanzado",
+      "whatItDoes": "Crea imágenes premium con Midjourney, dominando prompting, estilos, referencias y consistencia visual.",
+      "howItDoes": "Construye prompts estructurados con parámetros, sref y cref para mantener estilo y personajes, e itera variaciones hasta lograr la dirección de arte buscada.",
+      "whyItDoes": "Genera visuales de altísima calidad para heroes, campañas y moodboards de marca.",
+      "invocation": "/expert-midjourney",
+      "model": "claude-sonnet",
+      "tags": [
+        "midjourney",
+        "imagen",
+        "prompting"
+      ]
+    },
+    {
+      "id": "expert-ltx-studio",
+      "category": "produccion-creativa",
+      "categoryLabel": "📺 Producción Creativa",
+      "name": "Expert LTX Studio",
+      "emoji": "🎬",
+      "shortDesc": "Video synthesis y motion control",
+      "whatItDoes": "Sintetiza video y controla movimiento de cámara con LTX Studio para piezas narrativas y comerciales.",
+      "howItDoes": "Define escenas, planos y motion control en LTX Studio, encadena tomas coherentes y exporta para edición final en After Effects o Premiere.",
+      "whyItDoes": "Permite producir narrativas en video con control cinematográfico sin set físico.",
+      "invocation": "/expert-ltx-studio",
+      "model": "claude-sonnet",
+      "tags": [
+        "ltx",
+        "video",
+        "motion"
+      ]
+    },
+    {
+      "id": "expert-seedance",
+      "category": "produccion-creativa",
+      "categoryLabel": "📺 Producción Creativa",
+      "name": "Expert Seedance",
+      "emoji": "💃",
+      "shortDesc": "Efectos visuales y motion capture",
+      "whatItDoes": "Crea efectos visuales y captura de movimiento con Seedance (incl. Seedance 2.0) para motion design de campañas.",
+      "howItDoes": "Usa Seedance para animar y capturar movimiento, integrándolo en flujos classicMD/highMD de motion design junto con Higgsfield para los assets.",
+      "whyItDoes": "Aporta movimiento orgánico y efectos llamativos a las piezas de video y campañas.",
+      "invocation": "/expert-seedance",
+      "model": "claude-sonnet",
+      "tags": [
+        "seedance",
+        "vfx",
+        "motion-capture"
+      ]
+    },
+    {
+      "id": "adobe-suite-completo",
+      "category": "produccion-creativa",
+      "categoryLabel": "📺 Producción Creativa",
+      "name": "Adobe Suite Completo",
+      "emoji": "🅰️",
+      "shortDesc": "InDesign, Photoshop e Illustrator",
+      "whatItDoes": "Dominio de la suite Adobe para diseño editorial, retoque y vectores: InDesign, Photoshop e Illustrator.",
+      "howItDoes": "Combina la API de Adobe con trabajo en desktop para maquetar documentos, retocar imágenes y crear ilustraciones vectoriales alineadas al brandbook.",
+      "whyItDoes": "Cubre necesidades de diseño profesional de alta fidelidad que requieren herramientas estándar de la industria.",
+      "invocation": "/adobe-suite-completo",
+      "model": "claude-sonnet",
+      "tags": [
+        "adobe",
+        "diseno",
+        "editorial"
+      ]
+    },
+    {
+      "id": "editor-after-effects",
+      "category": "produccion-creativa",
+      "categoryLabel": "📺 Producción Creativa",
+      "name": "Editor After Effects",
+      "emoji": "✨",
+      "shortDesc": "Composición, efectos y 3D en AE",
+      "whatItDoes": "Compone y anima en After Effects: motion graphics, efectos, kinetic typography y 3D para intros y videos.",
+      "howItDoes": "Usa el MCP de After Effects (crear composiciones, aplicar efectos y plantillas, keyframes y expresiones), respetando las reglas de Ken Burns por escena y transiciones suaves.",
+      "whyItDoes": "Produce piezas de video con acabado profesional y animación precisa para marca y campañas.",
+      "invocation": "/editor-after-effects",
+      "model": "claude-sonnet",
+      "tags": [
+        "after-effects",
+        "motion",
+        "3d"
+      ]
+    },
+    {
+      "id": "editor-premiere-pro",
+      "category": "produccion-creativa",
+      "categoryLabel": "📺 Producción Creativa",
+      "name": "Editor Premiere Pro",
+      "emoji": "🎞️",
+      "shortDesc": "Edición de video profesional",
+      "whatItDoes": "Edita video profesional en Premiere Pro: cortes, ritmo, color con Lumetri y mezcla de pistas.",
+      "howItDoes": "Organiza la línea de tiempo, sincroniza VO y música con fades, aplica corrección de color Lumetri y exporta a 4K cumpliendo los estándares de video de Victor IA.",
+      "whyItDoes": "Entrega videos finales pulidos y consistentes con la calidad esperada de la marca.",
+      "invocation": "/editor-premiere-pro",
+      "model": "claude-sonnet",
+      "tags": [
+        "premiere",
+        "edicion",
+        "video"
+      ]
+    },
+    {
+      "id": "editor-capcut",
+      "category": "produccion-creativa",
+      "categoryLabel": "📺 Producción Creativa",
+      "name": "Editor CapCut",
+      "emoji": "✂️",
+      "shortDesc": "Edición rápida y trending effects",
+      "whatItDoes": "Edita video rápido en CapCut aprovechando efectos y transiciones que son tendencia en redes.",
+      "howItDoes": "Aplica efectos trending, subtítulos automáticos y ritmo para formatos verticales, respetando las reglas de VO sincronizado y música con fade.",
+      "whyItDoes": "Permite producir contenido social ágil y alineado a tendencias para máximo alcance.",
+      "invocation": "/editor-capcut",
+      "model": "claude-sonnet",
+      "tags": [
+        "capcut",
+        "social",
+        "edicion"
+      ]
+    },
+    {
+      "id": "compositor-de-musica",
+      "category": "produccion-creativa",
+      "categoryLabel": "📺 Producción Creativa",
+      "name": "Compositor de Música",
+      "emoji": "🎼",
+      "shortDesc": "Composición original y scoring",
+      "whatItDoes": "Compone música original y scoring para videos, marcando emociones y ritmo según la narrativa.",
+      "howItDoes": "Trabaja en DAW (Logic/Ableton/Reaper) o con ElevenLabs Music para crear pistas únicas por video, sincronizadas con los momentos clave del VO y la imagen.",
+      "whyItDoes": "Da identidad sonora propia a cada pieza, evitando música genérica y elevando la producción.",
+      "invocation": "/compositor-de-musica",
+      "model": "claude-sonnet",
+      "tags": [
+        "musica",
+        "scoring",
+        "daw"
+      ]
+    },
+    {
+      "id": "ingeniero-de-audio",
+      "category": "produccion-creativa",
+      "categoryLabel": "📺 Producción Creativa",
+      "name": "Ingeniero de Audio",
+      "emoji": "🎚️",
+      "shortDesc": "Mezcla, mastering y sound design",
+      "whatItDoes": "Realiza mezcla, mastering y diseño de sonido para que VO, música y SFX convivan con claridad y nivel profesional.",
+      "howItDoes": "Equilibra niveles en DAW, aplica EQ, compresión y ducking para que la voz domine, añade SFX y masteriza al estándar de loudness para web y redes.",
+      "whyItDoes": "Asegura que el audio suene limpio y potente en cualquier dispositivo, completando la calidad del video.",
+      "invocation": "/ingeniero-de-audio",
+      "model": "claude-sonnet",
+      "tags": [
+        "audio",
+        "mezcla",
+        "mastering"
+      ]
+    },
+    {
+      "id": "hacer-cine",
+      "category": "produccion-creativa",
+      "categoryLabel": "📺 Producción Creativa",
+      "name": "Hacer Cine",
+      "emoji": "🎥",
+      "shortDesc": "Dirección de fotografía y composición",
+      "whatItDoes": "Aporta lenguaje cinematográfico: dirección de fotografía, composición, encuadre y storyboards para videos.",
+      "howItDoes": "Define planos, iluminación y movimientos de cámara, crea storyboards y guía la generación de tomas para que el video tenga narrativa y estética de cine.",
+      "whyItDoes": "Eleva los videos de simples clips a piezas con intención cinematográfica y emoción.",
+      "invocation": "/hacer-cine",
+      "model": "claude-sonnet",
+      "tags": [
+        "cine",
+        "fotografia",
+        "storyboard"
+      ]
+    },
+    {
+      "id": "sketches-de-peliculas",
+      "category": "produccion-creativa",
+      "categoryLabel": "📺 Producción Creativa",
+      "name": "Sketches de Películas",
+      "emoji": "📜",
+      "shortDesc": "Guiones, treatments y desarrollo",
+      "whatItDoes": "Desarrolla guiones, treatments y conceptos narrativos para piezas audiovisuales y campañas.",
+      "howItDoes": "Estructura sinopsis, arcos y diálogos con herramientas de screenwriting, define el treatment y prepara el guion para producción en video.",
+      "whyItDoes": "Da una base narrativa sólida que hace que los videos cuenten historias, no solo muestren imágenes.",
+      "invocation": "/sketches-de-peliculas",
+      "model": "claude-sonnet",
+      "tags": [
+        "guion",
+        "narrativa",
+        "treatment"
+      ]
+    },
+    {
+      "id": "sitio-claude-design",
+      "category": "sitios-y-publicacion",
+      "categoryLabel": "🌐 Sitios & Publicación",
+      "name": "Sitio Claude Design",
+      "emoji": "🖥️",
+      "shortDesc": "Figma → Next.js automático",
+      "whatItDoes": "Convierte diseños de Figma en sitios Next.js de forma automática, manteniendo fidelidad visual y estructura de componentes.",
+      "howItDoes": "Lee el contexto de diseño desde Figma vía MCP, mapea componentes y tokens y genera código Next.js listo para deploy, respetando el sistema de diseño.",
+      "whyItDoes": "Acelera el paso de diseño a producto vivo sin perder calidad visual.",
+      "invocation": "/sitio-claude-design",
+      "model": "claude-sonnet",
+      "tags": [
+        "figma",
+        "nextjs",
+        "design-to-code"
+      ]
+    },
+    {
+      "id": "sitio-con-codigo",
+      "category": "sitios-y-publicacion",
+      "categoryLabel": "🌐 Sitios & Publicación",
+      "name": "Sitio con Código",
+      "emoji": "⌨️",
+      "shortDesc": "Sitios desde código HTML/React",
+      "whatItDoes": "Construye sitios directamente desde código HTML/React/Next.js cuando ya hay una base o se requiere control total.",
+      "howItDoes": "Estructura el proyecto en Next.js/React, integra componentes y assets con rutas correctas y prepara el build para Vercel sin errores de configuración.",
+      "whyItDoes": "Da control total sobre el sitio cuando el diseño nace del código y no de Figma.",
+      "invocation": "/sitio-con-codigo",
+      "model": "claude-sonnet",
+      "tags": [
+        "html",
+        "react",
+        "nextjs"
+      ]
+    },
+    {
+      "id": "publicar-vercel-github",
+      "category": "sitios-y-publicacion",
+      "categoryLabel": "🌐 Sitios & Publicación",
+      "name": "Publicar Vercel + GitHub",
+      "emoji": "🚀",
+      "shortDesc": "Deploy automático, CI/CD y versioning",
+      "whatItDoes": "Despliega sitios en Vercel con integración a GitHub: CI/CD, versionado y redeploys automáticos.",
+      "howItDoes": "Configura el repositorio, conecta Vercel, gestiona ramas y commits, y resuelve problemas de build (BOM, rutas, config) para lograr 100% de éxito en deploy.",
+      "whyItDoes": "Lleva el trabajo a producción de forma confiable y repetible, sin fricción de despliegue.",
+      "invocation": "/publicar-vercel-github",
+      "model": "claude-sonnet",
+      "tags": [
+        "vercel",
+        "github",
+        "deploy"
+      ]
+    },
+    {
+      "id": "scraper-web-completo",
+      "category": "sitios-y-publicacion",
+      "categoryLabel": "🌐 Sitios & Publicación",
+      "name": "Scraper Web Completo",
+      "emoji": "🌐",
+      "shortDesc": "Scraping integral con output limpio",
+      "whatItDoes": "Extrae contenido íntegro de sitios web a una carpeta autocontenida con manifest, texto limpio y assets.",
+      "howItDoes": "Usa Python + Playwright + trafilatura, ejecuta setup.py para instalar dependencias y Chromium, y produce output con manifest.json listo para reutilizar.",
+      "whyItDoes": "Provee datos y contenido estructurado de la web para análisis, réplicas y SEO.",
+      "invocation": "/scraper-web-completo",
+      "model": "claude-sonnet",
+      "tags": [
+        "scraping",
+        "playwright",
+        "contenido"
+      ]
+    },
+    {
+      "id": "copy-quiet-luxury",
+      "category": "copy-y-marketing",
+      "categoryLabel": "📝 Copy & Marketing",
+      "name": "Copy Quiet Luxury",
+      "emoji": "🤍",
+      "shortDesc": "Copy luxury y high-ticket",
+      "whatItDoes": "Escribe copy para marcas de lujo y ofertas high-ticket con un tono exclusivo, sobrio y de sutileza.",
+      "howItDoes": "Aplica el principio de quiet luxury: menos es más, lenguaje aspiracional sin estridencia, ritmo elegante y CTAs discretos pero firmes alineados al brandbook.",
+      "whyItDoes": "Posiciona marcas premium con un lenguaje que transmite valor y exclusividad, justificando precios altos.",
+      "invocation": "/copy-quiet-luxury",
+      "model": "claude-sonnet",
+      "tags": [
+        "copy",
+        "luxury",
+        "high-ticket"
+      ]
+    },
+    {
+      "id": "copy-web-pnl",
+      "category": "copy-y-marketing",
+      "categoryLabel": "📝 Copy & Marketing",
+      "name": "Copy Web PNL",
+      "emoji": "🧲",
+      "shortDesc": "Copy persuasivo con PNL",
+      "whatItDoes": "Redacta copy web persuasivo usando PNL y disparadores psicológicos para aumentar conversión.",
+      "howItDoes": "Estructura mensajes con anclajes, prueba social, urgencia y beneficios, optimiza headlines y CTAs y los integra al flujo de conversión del sitio.",
+      "whyItDoes": "Convierte visitantes en leads y clientes mediante un lenguaje diseñado para mover a la acción.",
+      "invocation": "/copy-web-pnl",
+      "model": "claude-sonnet",
+      "tags": [
+        "copy",
+        "pnl",
+        "conversion"
+      ]
+    },
+    {
+      "id": "hyperframes",
+      "category": "video-y-medios",
+      "categoryLabel": "🎬 Video & Medios",
+      "name": "HyperFrames",
+      "emoji": "🎞️",
+      "shortDesc": "HTML → MP4 con GSAP/CSS/Lottie",
+      "whatItDoes": "Convierte HTML con data-attributes en video MP4, usando GSAP, CSS, Lottie y Three.js para animación.",
+      "howItDoes": "Basado en HeyGen open-source + FFmpeg, renderiza el HTML a frames y los une, aplicando audio with-timestamps, Ken Burns por escena y precarga de imágenes.",
+      "whyItDoes": "Permite producir videos programáticamente con control total y reproducibilidad, ideal para escalar contenido.",
+      "invocation": "/hyperframes",
+      "model": "claude-sonnet",
+      "tags": [
+        "hyperframes",
+        "html-to-video",
+        "gsap"
+      ]
+    },
+    {
+      "id": "remotion",
+      "category": "video-y-medios",
+      "categoryLabel": "🎬 Video & Medios",
+      "name": "Remotion",
+      "emoji": "⚛️",
+      "shortDesc": "React → Video con sync quirúrgico",
+      "whatItDoes": "Genera video desde React con Remotion, sincronizando visuales al VO palabra por palabra.",
+      "howItDoes": "Usa useCurrentFrame, interpolate y spring junto con timestamps de ElevenLabs (patrón vtc_generate.py) para empatar cada animación a la palabra exacta del audio.",
+      "whyItDoes": "Logra videos con sincronía perfecta entre voz y movimiento, calidad imposible de hacer a mano.",
+      "invocation": "/remotion",
+      "model": "claude-sonnet",
+      "tags": [
+        "remotion",
+        "react",
+        "video"
+      ]
+    },
+    {
+      "id": "scroll-cinematic",
+      "category": "video-y-medios",
+      "categoryLabel": "🎬 Video & Medios",
+      "name": "Scroll Cinematic",
+      "emoji": "🎞️",
+      "shortDesc": "3D scroll + frame-sequence",
+      "whatItDoes": "Crea sitios cinematográficos donde el scroll controla una secuencia de frames o una escena 3D.",
+      "howItDoes": "Genera video en Higgsfield, lo corta con ffmpeg en ~180 JPGs y los reproduce con scroll usando Lenis + canvas y overlays, sin build complejo.",
+      "whyItDoes": "Produce experiencias web inmersivas tipo Apple que capturan la atención al hacer scroll.",
+      "invocation": "/scroll-cinematic",
+      "model": "claude-sonnet",
+      "tags": [
+        "scroll",
+        "3d",
+        "cinematic"
+      ]
+    },
+    {
+      "id": "video-sitio-scroll",
+      "category": "video-y-medios",
+      "categoryLabel": "🎬 Video & Medios",
+      "name": "Video en Sitio Scroll",
+      "emoji": "📜",
+      "shortDesc": "Videos integrados en scroll sites",
+      "whatItDoes": "Integra videos que reaccionan al scroll dentro de sitios web para reforzar la narrativa.",
+      "howItDoes": "Usa GSAP ScrollTrigger para reproducir, pausar y sincronizar video con la posición del scroll, con transiciones suaves entre secciones.",
+      "whyItDoes": "Aporta dinamismo y storytelling a las landing pages, aumentando el tiempo en página.",
+      "invocation": "/video-sitio-scroll",
+      "model": "claude-sonnet",
+      "tags": [
+        "scroll",
+        "video",
+        "gsap"
+      ]
+    },
+    {
+      "id": "prompts-video-loop",
+      "category": "video-y-medios",
+      "categoryLabel": "🎬 Video & Medios",
+      "name": "Prompts de Video Loop",
+      "emoji": "🔁",
+      "shortDesc": "Prompts para video loops (heroes)",
+      "whatItDoes": "Crea prompts optimizados para generar video loops perfectos como fondos de hero.",
+      "howItDoes": "Diseña prompts para Midjourney/Runway que producen loops sin costura, define duración y movimiento sutil y verifica que el bucle sea imperceptible.",
+      "whyItDoes": "Provee fondos de hero elegantes y ligeros que elevan la primera impresión del sitio.",
+      "invocation": "/prompts-video-loop",
+      "model": "claude-sonnet",
+      "tags": [
+        "prompts",
+        "loop",
+        "hero"
+      ]
+    },
+    {
+      "id": "frames-inicio-fin",
+      "category": "video-y-medios",
+      "categoryLabel": "🎬 Video & Medios",
+      "name": "Frames de Inicio/Fin",
+      "emoji": "🏁",
+      "shortDesc": "Frames para aberturas y cierres",
+      "whatItDoes": "Genera y procesa los frames de apertura y cierre de videos (intros, outros, logo final).",
+      "howItDoes": "Crea los frames clave, los procesa para transición suave y asegura el logo al final con fade, cumpliendo los estándares de video obligatorios.",
+      "whyItDoes": "Da a cada video un inicio y cierre profesional y consistente con la marca.",
+      "invocation": "/frames-inicio-fin",
+      "model": "claude-sonnet",
+      "tags": [
+        "frames",
+        "intro",
+        "outro"
+      ]
+    },
+    {
+      "id": "expert-r3f-three-js",
+      "category": "video-juegos-y-3d",
+      "categoryLabel": "🎮 Videojuegos & 3D",
+      "name": "Expert R3F Three.js",
+      "emoji": "🧊",
+      "shortDesc": "3D en navegador y realtime graphics",
+      "whatItDoes": "Construye gráficos 3D en el navegador con React Three Fiber y Three.js: escenas, materiales, luces e interacción en tiempo real.",
+      "howItDoes": "Usa R3F y drei para montar escenas declarativas, optimiza geometрías y shaders y maneja performance con instancing y LOD para 60fps.",
+      "whyItDoes": "Lleva experiencias 3D inmersivas a la web sin plugins, diferenciando los productos de Victor IA.",
+      "invocation": "/expert-r3f-three-js",
+      "model": "claude-sonnet",
+      "tags": [
+        "three-js",
+        "r3f",
+        "3d"
+      ]
+    },
+    {
+      "id": "modelos-3d",
+      "category": "video-juegos-y-3d",
+      "categoryLabel": "🎮 Videojuegos & 3D",
+      "name": "Modelos 3D",
+      "emoji": "🗿",
+      "shortDesc": "Generación/edición 3D y rigging",
+      "whatItDoes": "Genera, edita y prepara modelos 3D, incluyendo rigging básico para animación.",
+      "howItDoes": "Trabaja con Blender, Spline y TripoSR para crear o ajustar modelos, optimiza topología y exporta en formatos listos para web o motores de juego.",
+      "whyItDoes": "Provee los assets 3D necesarios para AR, web 3D y videojuegos, internamente y para clientes.",
+      "invocation": "/modelos-3d",
+      "model": "claude-sonnet",
+      "tags": [
+        "3d",
+        "blender",
+        "rigging"
+      ]
+    },
+    {
+      "id": "realidad-aumentada",
+      "category": "video-juegos-y-3d",
+      "categoryLabel": "🎮 Videojuegos & 3D",
+      "name": "Realidad Aumentada",
+      "emoji": "📲",
+      "shortDesc": "AR en web y mobile (WebAR)",
+      "whatItDoes": "Desarrolla experiencias de realidad aumentada en web y mobile para producto, marketing y eventos.",
+      "howItDoes": "Implementa WebAR y aprovecha ARCore/ARKit, coloca modelos 3D en el mundo real y gestiona tracking y oclusión para interacciones creíbles.",
+      "whyItDoes": "Abre un canal de marketing inmersivo y memorable, especialmente útil para inmobiliaria y retail.",
+      "invocation": "/realidad-aumentada",
+      "model": "claude-sonnet",
+      "tags": [
+        "ar",
+        "webar",
+        "3d"
+      ]
+    },
+    {
+      "id": "videojuegos-desarrollo",
+      "category": "video-juegos-y-3d",
+      "categoryLabel": "🎮 Videojuegos & 3D",
+      "name": "Desarrollo de Videojuegos",
+      "emoji": "🕹️",
+      "shortDesc": "Game dev con Godot/Unity",
+      "whatItDoes": "Crea videojuegos y mecánicas interactivas, desde prototipos en navegador hasta proyectos en Godot/Unity.",
+      "howItDoes": "Diseña game loops, físicas y estados, implementa en Godot o Unity (básico) y puede desplegar juegos de navegador con el bundle de creación de juegos.",
+      "whyItDoes": "Habilita productos interactivos y gamificación como servicio diferenciado para clientes.",
+      "invocation": "/videojuegos-desarrollo",
+      "model": "claude-sonnet",
+      "tags": [
+        "videojuegos",
+        "godot",
+        "unity"
+      ]
+    },
+    {
+      "id": "workflows-leads-emails",
+      "category": "hubspot-crm",
+      "categoryLabel": "📊 HubSpot & CRM",
+      "name": "Workflows Leads & Emails",
+      "emoji": "📧",
+      "shortDesc": "Automatización leads → nurture",
+      "whatItDoes": "Automatiza el ciclo de leads en HubSpot: captura, scoring, nurture por email y handoff a ventas.",
+      "howItDoes": "Configura workflows de HubSpot con triggers y ramas, secuencias de email y propiedades de scoring, conectados al pipeline y notificaciones de Victor IA.",
+      "whyItDoes": "Convierte leads en oportunidades de forma automática, sin que se enfríen por falta de seguimiento.",
+      "invocation": "/workflows-leads-emails",
+      "model": "claude-sonnet",
+      "tags": [
+        "hubspot",
+        "leads",
+        "nurture"
+      ]
+    },
+    {
+      "id": "landings-hubspot",
+      "category": "hubspot-crm",
+      "categoryLabel": "📊 HubSpot & CRM",
+      "name": "Landings HubSpot",
+      "emoji": "📄",
+      "shortDesc": "Landing pages luxury en HubSpot",
+      "whatItDoes": "Construye landing pages de nivel luxury dentro de HubSpot, optimizadas para conversión.",
+      "howItDoes": "Usa el landing builder de HubSpot con copy persuasivo, diseño premium y formularios conectados a workflows, siguiendo el estándar visual de Victor IA.",
+      "whyItDoes": "Genera páginas de captura de alto rendimiento integradas al CRM del cliente.",
+      "invocation": "/landings-hubspot",
+      "model": "claude-sonnet",
+      "tags": [
+        "hubspot",
+        "landing",
+        "conversion"
+      ]
+    },
+    {
+      "id": "expert-ghl",
+      "category": "hubspot-crm",
+      "categoryLabel": "📊 HubSpot & CRM",
+      "name": "Expert GHL",
+      "emoji": "🔗",
+      "shortDesc": "GoHighLevel CRM y funnels",
+      "whatItDoes": "Implementa CRM, funnels y automatizaciones en GoHighLevel para clientes que usan esa plataforma.",
+      "howItDoes": "Configura pipelines, funnels, campañas SMS/email y workflows en GHL vía su API, integrando captura, nurture y reporting.",
+      "whyItDoes": "Ofrece una alternativa CRM all-in-one para clientes que la prefieren sobre HubSpot.",
+      "invocation": "/expert-ghl",
+      "model": "claude-sonnet",
+      "tags": [
+        "ghl",
+        "crm",
+        "funnels"
+      ]
+    },
+    {
+      "id": "expert-airtable",
+      "category": "hubspot-crm",
+      "categoryLabel": "📊 HubSpot & CRM",
+      "name": "Expert Airtable",
+      "emoji": "🗃️",
+      "shortDesc": "Base de datos flexible + automation",
+      "whatItDoes": "Diseña bases de datos flexibles y automatizaciones ligeras en Airtable para gestión de proyectos y datos.",
+      "howItDoes": "Modela tablas, vistas y relaciones, crea automations nativas y conecta con Zapier/n8n para sincronizar con el resto del stack.",
+      "whyItDoes": "Da estructura y automatización a datos de negocio sin necesidad de una base de datos compleja.",
+      "invocation": "/expert-airtable",
+      "model": "claude-sonnet",
+      "tags": [
+        "airtable",
+        "base-datos",
+        "automatizacion"
+      ]
+    },
+    {
+      "id": "expert-blotato",
+      "category": "hubspot-crm",
+      "categoryLabel": "📊 HubSpot & CRM",
+      "name": "Expert Blotato",
+      "emoji": "📈",
+      "shortDesc": "CRM alternativo y analítica",
+      "whatItDoes": "Opera Blotato como herramienta CRM y de analítica alternativa para casos específicos de cliente.",
+      "howItDoes": "Conecta la API de Blotato, configura seguimiento de contactos y reportes, y compara su analítica con HubSpot/GHL para recomendar la mejor opción.",
+      "whyItDoes": "Amplía el abanico de herramientas CRM disponibles según las necesidades del cliente.",
+      "invocation": "/expert-blotato",
+      "model": "claude-sonnet",
+      "tags": [
+        "blotato",
+        "crm",
+        "analitica"
+      ]
+    },
+    {
+      "id": "whatsapp-a-hubspot",
+      "category": "hubspot-crm",
+      "categoryLabel": "📊 HubSpot & CRM",
+      "name": "WhatsApp a HubSpot",
+      "emoji": "💬",
+      "shortDesc": "Integración WhatsApp → HubSpot",
+      "whatItDoes": "Integra WhatsApp Business con HubSpot para capturar conversaciones como leads y actividades.",
+      "howItDoes": "Conecta la WhatsApp Business API con HubSpot vía webhooks/n8n, registra mensajes como contactos y actividades y dispara workflows de seguimiento.",
+      "whyItDoes": "Unifica el canal más usado por los clientes con el CRM, sin perder ninguna conversación comercial.",
+      "invocation": "/whatsapp-a-hubspot",
+      "model": "claude-sonnet",
+      "tags": [
+        "whatsapp",
+        "hubspot",
+        "integracion"
+      ]
+    },
+    {
+      "id": "agente-califica-leads",
+      "category": "inmobiliaria",
+      "categoryLabel": "🏠 Inmobiliaria",
+      "name": "Agente Califica Leads",
+      "emoji": "🎯",
+      "shortDesc": "Scoring y priorización de leads",
+      "whatItDoes": "Califica y prioriza leads inmobiliarios según presupuesto, intención y fit con el inventario.",
+      "howItDoes": "Aplica scoring con IA sobre los datos del lead, los clasifica por probabilidad de cierre y los enruta a los brokers adecuados con contexto.",
+      "whyItDoes": "Hace que el equipo de ventas dedique tiempo a los leads con mayor probabilidad de comprar.",
+      "invocation": "/agente-califica-leads",
+      "model": "claude-sonnet",
+      "tags": [
+        "leads",
+        "scoring",
+        "inmobiliaria"
+      ]
+    },
+    {
+      "id": "analisis-mercado-roi",
+      "category": "inmobiliaria",
+      "categoryLabel": "🏠 Inmobiliaria",
+      "name": "Análisis Mercado & ROI",
+      "emoji": "📈",
+      "shortDesc": "Análisis de mercado, valuación y ROI",
+      "whatItDoes": "Analiza el mercado inmobiliario, valúa propiedades y calcula ROI para inversionistas.",
+      "howItDoes": "Realiza market research, compara comparables, modela escenarios de plusvalía y presenta proyecciones de retorno claras para la toma de decisión.",
+      "whyItDoes": "Respalda decisiones de inversión con datos, generando confianza y cerrando ventas de mayor ticket.",
+      "invocation": "/analisis-mercado-roi",
+      "model": "claude-opus",
+      "tags": [
+        "mercado",
+        "roi",
+        "valuacion"
+      ]
+    },
+    {
+      "id": "app-brokers-campo",
+      "category": "inmobiliaria",
+      "categoryLabel": "🏠 Inmobiliaria",
+      "name": "App Brokers de Campo",
+      "emoji": "📱",
+      "shortDesc": "App mobile para brokers en terreno",
+      "whatItDoes": "Provee una app móvil para que los brokers gestionen propiedades, leads y visitas desde el terreno.",
+      "howItDoes": "Construida en React Native con geolocalización, permite consultar inventario, registrar visitas y actualizar el CRM en tiempo real con conectividad limitada.",
+      "whyItDoes": "Aumenta la productividad de los brokers en campo y mantiene los datos siempre actualizados.",
+      "invocation": "/app-brokers-campo",
+      "model": "claude-sonnet",
+      "tags": [
+        "mobile",
+        "brokers",
+        "react-native"
+      ]
+    },
+    {
+      "id": "dashboard-kpis-ventas",
+      "category": "inmobiliaria",
+      "categoryLabel": "🏠 Inmobiliaria",
+      "name": "Dashboard KPIs Ventas",
+      "emoji": "📊",
+      "shortDesc": "Dashboard tiempo real de KPIs",
+      "whatItDoes": "Muestra en tiempo real los KPIs de ventas inmobiliarias: pipeline, conversión, inventario y revenue.",
+      "howItDoes": "Integra datos en un dashboard Next.js/Grafana con métricas vivas, alertas y filtros por proyecto y broker para decisiones rápidas.",
+      "whyItDoes": "Da visibilidad total del negocio para detectar problemas y oportunidades al instante.",
+      "invocation": "/dashboard-kpis-ventas",
+      "model": "claude-sonnet",
+      "tags": [
+        "dashboard",
+        "kpis",
+        "ventas"
+      ]
+    },
+    {
+      "id": "fotos-propiedades-pro",
+      "category": "inmobiliaria",
+      "categoryLabel": "🏠 Inmobiliaria",
+      "name": "Fotos de Propiedades Pro",
+      "emoji": "📷",
+      "shortDesc": "Fotografía inmobiliaria, drone y 360",
+      "whatItDoes": "Produce y edita fotografía inmobiliaria profesional, incluyendo drone y recorridos 360.",
+      "howItDoes": "Define tomas, ilumina y edita imágenes para resaltar las propiedades, captura con drone y genera tours 360 listos para web y brochures.",
+      "whyItDoes": "Eleva la presentación de las propiedades, factor clave para atraer compradores de lujo.",
+      "invocation": "/fotos-propiedades-pro",
+      "model": "claude-sonnet",
+      "tags": [
+        "fotografia",
+        "drone",
+        "360"
+      ]
+    },
+    {
+      "id": "genera-pdfs-brochures",
+      "category": "inmobiliaria",
+      "categoryLabel": "🏠 Inmobiliaria",
+      "name": "Genera PDFs & Brochures",
+      "emoji": "📑",
+      "shortDesc": "Brochures y folletos profesionales",
+      "whatItDoes": "Crea brochures y folletos en PDF profesionales para presentar propiedades y desarrollos.",
+      "howItDoes": "Genera PDFs con plantillas de marca, integra fotos, planos, precios y datos de mercado, listos para enviar o imprimir.",
+      "whyItDoes": "Da a los brokers material de venta impecable que comunica valor y profesionalismo.",
+      "invocation": "/genera-pdfs-brochures",
+      "model": "claude-sonnet",
+      "tags": [
+        "pdf",
+        "brochure",
+        "inmobiliaria"
+      ]
+    },
+    {
+      "id": "inventario-base-datos",
+      "category": "inmobiliaria",
+      "categoryLabel": "🏠 Inmobiliaria",
+      "name": "Inventario en Base de Datos",
+      "emoji": "🗄️",
+      "shortDesc": "Gestión de inventario de propiedades",
+      "whatItDoes": "Gestiona el inventario de propiedades en una base de datos estructurada y consultable.",
+      "howItDoes": "Modela el esquema en PostgreSQL, expone una API para consultas y mantiene actualizado el estado, precios y disponibilidad de cada propiedad.",
+      "whyItDoes": "Centraliza la fuente de verdad del inventario para que todo el sistema trabaje con datos consistentes.",
+      "invocation": "/inventario-base-datos",
+      "model": "claude-sonnet",
+      "tags": [
+        "inventario",
+        "postgresql",
+        "datos"
+      ]
+    },
+    {
+      "id": "legal-fideicomiso-mexico",
+      "category": "inmobiliaria",
+      "categoryLabel": "🏠 Inmobiliaria",
+      "name": "Legal Fideicomiso México",
+      "emoji": "⚖️",
+      "shortDesc": "Documentos legales y cumplimiento MX",
+      "whatItDoes": "Genera y revisa documentos legales inmobiliarios mexicanos, en especial fideicomisos para extranjeros.",
+      "howItDoes": "Usa plantillas legales MX, explica el proceso de fideicomiso en zona restringida y verifica requisitos de cumplimiento para compradores extranjeros.",
+      "whyItDoes": "Da certeza jurídica a las operaciones, clave para cerrar ventas a inversionistas internacionales.",
+      "invocation": "/legal-fideicomiso-mexico",
+      "model": "claude-opus",
+      "tags": [
+        "legal",
+        "fideicomiso",
+        "mexico"
+      ]
+    },
+    {
+      "id": "seguridad-aml-datos",
+      "category": "inmobiliaria",
+      "categoryLabel": "🏠 Inmobiliaria",
+      "name": "Seguridad AML & Datos",
+      "emoji": "🔐",
+      "shortDesc": "Anti-lavado y compliance de datos",
+      "whatItDoes": "Aplica controles anti-lavado de dinero (AML) y protección de datos en las operaciones inmobiliarias.",
+      "howItDoes": "Ejecuta verificaciones AML sobre compradores, gestiona consentimientos y cumple GDPR/normativa local en el manejo de datos personales.",
+      "whyItDoes": "Protege al negocio de riesgos legales y reputacionales en transacciones de alto valor.",
+      "invocation": "/seguridad-aml-datos",
+      "model": "claude-opus",
+      "tags": [
+        "aml",
+        "compliance",
+        "datos"
+      ]
+    },
+    {
+      "id": "seo-luxury-qr",
+      "category": "inmobiliaria",
+      "categoryLabel": "🏠 Inmobiliaria",
+      "name": "SEO Luxury + QR",
+      "emoji": "🔗",
+      "shortDesc": "SEO de lujo y códigos QR dinámicos",
+      "whatItDoes": "Optimiza el SEO de propiedades de lujo y genera códigos QR dinámicos para fichas y campañas.",
+      "howItDoes": "Aplica SEO local y de nicho luxury, estructura datos con schema y crea QRs dinámicos que enlazan a fichas y recorridos, con tracking de escaneos.",
+      "whyItDoes": "Aumenta la visibilidad de las propiedades premium y conecta lo físico con lo digital.",
+      "invocation": "/seo-luxury-qr",
+      "model": "claude-sonnet",
+      "tags": [
+        "seo",
+        "qr",
+        "luxury"
+      ]
+    },
+    {
+      "id": "tests-evals-sistema",
+      "category": "inmobiliaria",
+      "categoryLabel": "🏠 Inmobiliaria",
+      "name": "Tests & Evals del Sistema",
+      "emoji": "🧪",
+      "shortDesc": "Testing y evaluación del sistema",
+      "whatItDoes": "Prueba y evalúa el sistema inmobiliario completo: datos, flujos y modelos de scoring.",
+      "howItDoes": "Diseña casos de prueba y evals, valida la calidad del scoring de leads y la integridad de datos, y reporta métricas de calidad del sistema.",
+      "whyItDoes": "Garantiza que el ecosistema inmobiliario funcione de forma confiable y medible.",
+      "invocation": "/tests-evals-sistema",
+      "model": "claude-sonnet",
+      "tags": [
+        "testing",
+        "evals",
+        "qa"
+      ]
+    },
+    {
+      "id": "backend-architect",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Backend Architect",
+      "emoji": "🏛️",
+      "shortDesc": "Arquitectura backend segura",
+      "whatItDoes": "Diseña arquitecturas backend con la seguridad incorporada desde el inicio: separación de capas, validación y manejo seguro de datos.",
+      "howItDoes": "Define límites de confianza, valida entradas, aplica el principio de menor privilegio en servicios y revisa el flujo de datos sensibles entre componentes.",
+      "whyItDoes": "Previene vulnerabilidades estructurales que son costosísimas de corregir más tarde.",
+      "invocation": "/backend-architect",
+      "model": "claude-opus",
+      "tags": [
+        "backend",
+        "arquitectura",
+        "seguridad"
+      ]
+    },
+    {
+      "id": "backend-architecture",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Backend Architecture",
+      "emoji": "🧱",
+      "shortDesc": "Patrones de arquitectura backend",
+      "whatItDoes": "Establece patrones y estándares de arquitectura backend reutilizables y seguros para todos los proyectos.",
+      "howItDoes": "Documenta patrones (capas, servicios, colas), define convenciones de seguridad y guías de implementación que el equipo sigue de forma consistente.",
+      "whyItDoes": "Estandariza la calidad y seguridad del backend, reduciendo decisiones ad-hoc riesgosas.",
+      "invocation": "/backend-architecture",
+      "model": "claude-opus",
+      "tags": [
+        "backend",
+        "patrones",
+        "arquitectura"
+      ]
+    },
+    {
+      "id": "system-architect-sec",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "System Architect",
+      "emoji": "🗺️",
+      "shortDesc": "Arquitectura de sistema segura",
+      "whatItDoes": "Diseña la arquitectura de sistema completa considerando seguridad, resiliencia y escalabilidad.",
+      "howItDoes": "Modela componentes, integraciones y superficies de ataque, define controles transversales y revisa puntos únicos de falla.",
+      "whyItDoes": "Asegura que el sistema entero sea robusto y defendible, no solo sus partes.",
+      "invocation": "/system-architect-sec",
+      "model": "claude-opus",
+      "tags": [
+        "sistema",
+        "arquitectura",
+        "resiliencia"
+      ]
+    },
+    {
+      "id": "auth-hardening",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Auth Hardening",
+      "emoji": "🔑",
+      "shortDesc": "Endurecimiento de autenticación",
+      "whatItDoes": "Fortalece la autenticación: OAuth, JWT, MFA y gestión segura de sesiones.",
+      "howItDoes": "Implementa flujos OAuth correctos, rota y firma tokens JWT, exige MFA y protege contra fijación y robo de sesión.",
+      "whyItDoes": "Cierra la puerta de entrada más atacada de cualquier aplicación.",
+      "invocation": "/auth-hardening",
+      "model": "claude-opus",
+      "tags": [
+        "auth",
+        "oauth",
+        "mfa"
+      ]
+    },
+    {
+      "id": "api-security",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "API Security",
+      "emoji": "🔌",
+      "shortDesc": "Seguridad de APIs REST/GraphQL",
+      "whatItDoes": "Asegura APIs REST y GraphQL contra abuso, fugas y ataques de inyección.",
+      "howItDoes": "Aplica autenticación, autorización por recurso, rate limiting, validación de esquema y control de exposición de datos sensibles.",
+      "whyItDoes": "Protege la superficie más expuesta de los productos modernos.",
+      "invocation": "/api-security",
+      "model": "claude-opus",
+      "tags": [
+        "api",
+        "rest",
+        "graphql"
+      ]
+    },
+    {
+      "id": "postgresql-hardening",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "PostgreSQL Hardening",
+      "emoji": "🐘",
+      "shortDesc": "Endurecimiento de PostgreSQL",
+      "whatItDoes": "Endurece bases de datos PostgreSQL: cifrado, roles, backups y auditoría.",
+      "howItDoes": "Configura roles con menor privilegio, cifrado en reposo y tránsito, RLS, backups verificados y logging de accesos sensibles.",
+      "whyItDoes": "Protege el activo más valioso: los datos de la empresa y los clientes.",
+      "invocation": "/postgresql-hardening",
+      "model": "claude-opus",
+      "tags": [
+        "postgresql",
+        "cifrado",
+        "backups"
+      ]
+    },
+    {
+      "id": "vps-hardening",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "VPS Hardening",
+      "emoji": "🖥️",
+      "shortDesc": "Endurecimiento de servidores VPS",
+      "whatItDoes": "Asegura servidores VPS: firewall, SSH, parches y monitoreo.",
+      "howItDoes": "Configura firewall restrictivo, SSH con llaves y sin root, fail2ban, actualizaciones automáticas y monitoreo de intrusiones.",
+      "whyItDoes": "Reduce drásticamente la superficie de ataque del servidor base.",
+      "invocation": "/vps-hardening",
+      "model": "claude-opus",
+      "tags": [
+        "vps",
+        "servidor",
+        "hardening"
+      ]
+    },
+    {
+      "id": "cloudflare-hardening",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "CloudFlare Hardening",
+      "emoji": "☁️",
+      "shortDesc": "Endurecimiento con CloudFlare",
+      "whatItDoes": "Configura CloudFlare para protección DDoS, WAF y mitigación de bots.",
+      "howItDoes": "Activa WAF, reglas de firewall, rate limiting, protección de bots y reglas de caché y TLS estrictas.",
+      "whyItDoes": "Pone un escudo de borde que absorbe ataques antes de llegar al origen.",
+      "invocation": "/cloudflare-hardening",
+      "model": "claude-opus",
+      "tags": [
+        "cloudflare",
+        "waf",
+        "ddos"
+      ]
+    },
+    {
+      "id": "docker-container-security",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Docker Container Security",
+      "emoji": "🐳",
+      "shortDesc": "Seguridad de contenedores Docker",
+      "whatItDoes": "Asegura imágenes y contenedores Docker contra configuraciones y dependencias inseguras.",
+      "howItDoes": "Usa imágenes mínimas, escanea vulnerabilidades, evita root, limita capacidades y gestiona secretos fuera de la imagen.",
+      "whyItDoes": "Evita que un contenedor comprometido escale a todo el host.",
+      "invocation": "/docker-container-security",
+      "model": "claude-opus",
+      "tags": [
+        "docker",
+        "contenedores",
+        "hardening"
+      ]
+    },
+    {
+      "id": "kubernetes-security",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Kubernetes Security",
+      "emoji": "☸️",
+      "shortDesc": "Seguridad de Kubernetes",
+      "whatItDoes": "Protege clústeres Kubernetes: RBAC, network policies y políticas de pods.",
+      "howItDoes": "Configura RBAC granular, network policies, pod security standards, secretos cifrados y escaneo de cargas de trabajo.",
+      "whyItDoes": "Asegura orquestaciones complejas donde un fallo se propaga rápido.",
+      "invocation": "/kubernetes-security",
+      "model": "claude-opus",
+      "tags": [
+        "kubernetes",
+        "rbac",
+        "orquestacion"
+      ]
+    },
+    {
+      "id": "nextjs-security",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "NextJS Security",
+      "emoji": "▲",
+      "shortDesc": "Seguridad de aplicaciones Next.js",
+      "whatItDoes": "Asegura aplicaciones Next.js: headers, server actions, env y rutas API.",
+      "howItDoes": "Configura headers de seguridad y CSP, valida server actions y rutas API, protege variables de entorno y previene exposición de datos en el cliente.",
+      "whyItDoes": "Protege el framework principal del stack de Victor IA en producción.",
+      "invocation": "/nextjs-security",
+      "model": "claude-opus",
+      "tags": [
+        "nextjs",
+        "csp",
+        "seguridad"
+      ]
+    },
+    {
+      "id": "wordpress-hardening",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "WordPress Hardening",
+      "emoji": "📰",
+      "shortDesc": "Endurecimiento de WordPress",
+      "whatItDoes": "Endurece instalaciones WordPress contra los vectores de ataque más comunes.",
+      "howItDoes": "Actualiza core/plugins, limita logins, oculta versiones, configura permisos de archivos y añade WAF y backups.",
+      "whyItDoes": "Protege sitios WordPress, históricamente los más atacados de la web.",
+      "invocation": "/wordpress-hardening",
+      "model": "claude-opus",
+      "tags": [
+        "wordpress",
+        "hardening",
+        "cms"
+      ]
+    },
+    {
+      "id": "ios-security",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "iOS Security",
+      "emoji": "🍎",
+      "shortDesc": "Seguridad de aplicaciones iOS",
+      "whatItDoes": "Asegura apps iOS: almacenamiento seguro, comunicación y protección de datos.",
+      "howItDoes": "Usa Keychain, certificate pinning, ofuscación y protección contra jailbreak, validando el manejo de datos sensibles.",
+      "whyItDoes": "Protege apps móviles y la confianza de sus usuarios en la App Store.",
+      "invocation": "/ios-security",
+      "model": "claude-opus",
+      "tags": [
+        "ios",
+        "mobile",
+        "seguridad"
+      ]
+    },
+    {
+      "id": "file-upload-security",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "File Upload Security",
+      "emoji": "📎",
+      "shortDesc": "Seguridad de subida de archivos",
+      "whatItDoes": "Asegura la subida de archivos contra malware, path traversal y abuso.",
+      "howItDoes": "Valida tipo y tamaño, escanea contenido, renombra y aísla archivos, y sirve desde un dominio o CDN separado.",
+      "whyItDoes": "Cierra un vector clásico de carga de malware y ejecución remota.",
+      "invocation": "/file-upload-security",
+      "model": "claude-opus",
+      "tags": [
+        "upload",
+        "archivos",
+        "malware"
+      ]
+    },
+    {
+      "id": "backup-y-disaster-recovery",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Backup & Disaster Recovery",
+      "emoji": "💽",
+      "shortDesc": "Backups y recuperación ante desastres",
+      "whatItDoes": "Diseña estrategias de backup y planes de recuperación ante desastres.",
+      "howItDoes": "Define RPO/RTO, automatiza backups cifrados, prueba restauraciones periódicas y documenta el runbook de recuperación.",
+      "whyItDoes": "Garantiza continuidad del negocio cuando algo sale mal.",
+      "invocation": "/backup-y-disaster-recovery",
+      "model": "claude-opus",
+      "tags": [
+        "backup",
+        "disaster-recovery",
+        "continuidad"
+      ]
+    },
+    {
+      "id": "github-actions-security",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "GitHub Actions Security",
+      "emoji": "🔧",
+      "shortDesc": "Seguridad de GitHub Actions",
+      "whatItDoes": "Asegura pipelines de GitHub Actions contra fugas de secretos y supply chain.",
+      "howItDoes": "Fija acciones por SHA, limita permisos del token, protege secretos y evita ejecución de código no confiable en pull requests.",
+      "whyItDoes": "Protege la cadena de CI/CD, un objetivo creciente de ataques.",
+      "invocation": "/github-actions-security",
+      "model": "claude-opus",
+      "tags": [
+        "github-actions",
+        "ci-cd",
+        "supply-chain"
+      ]
+    },
+    {
+      "id": "codebase-audit",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Codebase Audit",
+      "emoji": "🔎",
+      "shortDesc": "Auditoría de código base",
+      "whatItDoes": "Audita una base de código completa en busca de vulnerabilidades y malas prácticas.",
+      "howItDoes": "Revisa patrones inseguros, manejo de secretos, dependencias y lógica de autorización, y prioriza hallazgos por severidad.",
+      "whyItDoes": "Detecta riesgos ocultos antes de que se exploten en producción.",
+      "invocation": "/codebase-audit",
+      "model": "claude-opus",
+      "tags": [
+        "auditoria",
+        "codigo",
+        "vulnerabilidades"
+      ]
+    },
+    {
+      "id": "dependency-y-supply-chain",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Dependency & Supply Chain",
+      "emoji": "📦",
+      "shortDesc": "Seguridad de dependencias",
+      "whatItDoes": "Gestiona la seguridad de dependencias y la cadena de suministro de software.",
+      "howItDoes": "Escanea dependencias, fija versiones, detecta paquetes maliciosos y vigila CVEs con alertas y actualizaciones controladas.",
+      "whyItDoes": "Evita que una librería comprometida infecte todo el producto.",
+      "invocation": "/dependency-y-supply-chain",
+      "model": "claude-opus",
+      "tags": [
+        "dependencias",
+        "supply-chain",
+        "cve"
+      ]
+    },
+    {
+      "id": "llm-coding-failure-modes",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "LLM Coding Failure Modes",
+      "emoji": "🤖",
+      "shortDesc": "Modos de fallo de código por LLM",
+      "whatItDoes": "Identifica y previene los modos de fallo típicos del código generado por LLMs.",
+      "howItDoes": "Detecta alucinaciones de APIs, falta de validación, secretos hardcodeados y lógica insegura, y define guardrails de revisión.",
+      "whyItDoes": "Asegura que el código asistido por IA sea seguro y no introduzca riesgos sutiles.",
+      "invocation": "/llm-coding-failure-modes",
+      "model": "claude-opus",
+      "tags": [
+        "llm",
+        "codigo",
+        "fallos"
+      ]
+    },
+    {
+      "id": "message-bus-security",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Message Bus Security",
+      "emoji": "📨",
+      "shortDesc": "Seguridad de buses de mensajes",
+      "whatItDoes": "Asegura buses de mensajes y colas (Kafka, RabbitMQ) contra acceso y manipulación.",
+      "howItDoes": "Aplica autenticación, cifrado en tránsito, autorización por tópico y validación de mensajes contra inyección.",
+      "whyItDoes": "Protege la columna vertebral de comunicación de sistemas distribuidos.",
+      "invocation": "/message-bus-security",
+      "model": "claude-opus",
+      "tags": [
+        "mensajeria",
+        "colas",
+        "seguridad"
+      ]
+    },
+    {
+      "id": "log-strategy",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Log Strategy",
+      "emoji": "📋",
+      "shortDesc": "Estrategia de logging seguro",
+      "whatItDoes": "Define una estrategia de logging que ayude a detectar incidentes sin filtrar datos sensibles.",
+      "howItDoes": "Establece qué registrar, redacción de datos sensibles, retención, centralización y alertas sobre eventos de seguridad.",
+      "whyItDoes": "Permite detectar y responder a incidentes con evidencia, sin crear nuevos riesgos.",
+      "invocation": "/log-strategy",
+      "model": "claude-opus",
+      "tags": [
+        "logs",
+        "observabilidad",
+        "seguridad"
+      ]
+    },
+    {
+      "id": "llm-app-security",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "LLM App Security",
+      "emoji": "🧠",
+      "shortDesc": "Seguridad de aplicaciones LLM",
+      "whatItDoes": "Asegura aplicaciones basadas en LLM contra abuso, fuga de datos y manipulación.",
+      "howItDoes": "Controla acceso a herramientas, filtra entradas y salidas, limita el contexto expuesto y monitorea uso anómalo del modelo.",
+      "whyItDoes": "Protege productos de IA, una superficie de ataque nueva y poco entendida.",
+      "invocation": "/llm-app-security",
+      "model": "claude-opus",
+      "tags": [
+        "llm",
+        "ia",
+        "seguridad"
+      ]
+    },
+    {
+      "id": "prompt-injection-defense",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Prompt Injection Defense",
+      "emoji": "🛡️",
+      "shortDesc": "Defensa contra prompt injection",
+      "whatItDoes": "Defiende agentes y apps LLM contra ataques de inyección de prompt directos e indirectos.",
+      "howItDoes": "Separa instrucciones de datos, sanitiza contenido externo, limita capacidades de herramientas y valida acciones sensibles antes de ejecutarlas.",
+      "whyItDoes": "Evita que contenido malicioso secuestre el comportamiento de los agentes.",
+      "invocation": "/prompt-injection-defense",
+      "model": "claude-opus",
+      "tags": [
+        "prompt-injection",
+        "llm",
+        "defensa"
+      ]
+    },
+    {
+      "id": "mcp-security",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "MCP Security",
+      "emoji": "🔌",
+      "shortDesc": "Seguridad de servidores MCP",
+      "whatItDoes": "Asegura servidores y conexiones MCP usados por los agentes.",
+      "howItDoes": "Verifica el origen y permisos de cada MCP, limita herramientas expuestas, valida payloads y aísla credenciales de servidores externos.",
+      "whyItDoes": "Protege el puente entre los agentes y las herramientas externas que ejecutan.",
+      "invocation": "/mcp-security",
+      "model": "claude-opus",
+      "tags": [
+        "mcp",
+        "agentes",
+        "seguridad"
+      ]
+    },
+    {
+      "id": "stripe-webhook-security",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Stripe Webhook Security",
+      "emoji": "💳",
+      "shortDesc": "Seguridad de webhooks de Stripe",
+      "whatItDoes": "Asegura los webhooks de Stripe contra falsificación y replay.",
+      "howItDoes": "Verifica firmas, valida idempotencia, restringe orígenes y maneja reintentos de forma segura para no procesar pagos dos veces.",
+      "whyItDoes": "Protege el flujo de pagos, donde un fallo se traduce en pérdida de dinero.",
+      "invocation": "/stripe-webhook-security",
+      "model": "claude-opus",
+      "tags": [
+        "stripe",
+        "webhooks",
+        "pagos"
+      ]
+    },
+    {
+      "id": "email-deliverability-security",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Email Deliverability Security",
+      "emoji": "✉️",
+      "shortDesc": "Seguridad y entregabilidad de email",
+      "whatItDoes": "Asegura la entregabilidad y autenticidad del correo: SPF, DKIM y DMARC.",
+      "howItDoes": "Configura SPF, DKIM y DMARC, monitorea reputación y previene spoofing del dominio en envíos transaccionales y de marketing.",
+      "whyItDoes": "Evita que los correos caigan en spam y que el dominio sea suplantado.",
+      "invocation": "/email-deliverability-security",
+      "model": "claude-opus",
+      "tags": [
+        "email",
+        "dmarc",
+        "entregabilidad"
+      ]
+    },
+    {
+      "id": "payload-cms-security",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Payload CMS Security",
+      "emoji": "🧰",
+      "shortDesc": "Seguridad de Payload CMS",
+      "whatItDoes": "Asegura instalaciones de Payload CMS: acceso, hooks y exposición de datos.",
+      "howItDoes": "Configura control de acceso por colección, valida hooks, protege endpoints y restringe la API admin.",
+      "whyItDoes": "Protege el CMS headless y el contenido que alimenta los sitios.",
+      "invocation": "/payload-cms-security",
+      "model": "claude-opus",
+      "tags": [
+        "payload",
+        "cms",
+        "seguridad"
+      ]
+    },
+    {
+      "id": "gdpr-technical-controls",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "GDPR Technical Controls",
+      "emoji": "🇪🇺",
+      "shortDesc": "Controles técnicos GDPR",
+      "whatItDoes": "Implementa los controles técnicos que exige el GDPR para datos personales.",
+      "howItDoes": "Gestiona consentimiento, minimización, cifrado, derecho al olvido y registros de tratamiento a nivel de sistema.",
+      "whyItDoes": "Evita sanciones y construye confianza al manejar datos personales correctamente.",
+      "invocation": "/gdpr-technical-controls",
+      "model": "claude-opus",
+      "tags": [
+        "gdpr",
+        "privacidad",
+        "compliance"
+      ]
+    },
+    {
+      "id": "dach-compliance",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "DACH Compliance",
+      "emoji": "🇩🇪",
+      "shortDesc": "Cumplimiento región DACH",
+      "whatItDoes": "Cubre los requisitos de cumplimiento específicos de la región DACH (Alemania, Austria, Suiza).",
+      "howItDoes": "Aplica normativas locales de privacidad y consumo, adapta avisos legales y controles de datos al marco DACH.",
+      "whyItDoes": "Habilita operar y vender en mercados europeos exigentes sin riesgo regulatorio.",
+      "invocation": "/dach-compliance",
+      "model": "claude-opus",
+      "tags": [
+        "dach",
+        "compliance",
+        "europa"
+      ]
+    },
+    {
+      "id": "incident-response",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Incident Response",
+      "emoji": "🚨",
+      "shortDesc": "Respuesta a incidentes",
+      "whatItDoes": "Coordina la respuesta ante incidentes de seguridad: detección, contención y recuperación.",
+      "howItDoes": "Define el runbook de incidentes, clasifica severidad, contiene, erradica, recupera y documenta lecciones aprendidas.",
+      "whyItDoes": "Reduce el daño y el tiempo de recuperación cuando ocurre una brecha.",
+      "invocation": "/incident-response",
+      "model": "claude-opus",
+      "tags": [
+        "incidentes",
+        "respuesta",
+        "seguridad"
+      ]
+    },
+    {
+      "id": "honeypot-y-tarpits",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Honeypot & Tarpits",
+      "emoji": "🍯",
+      "shortDesc": "Honeypots y tarpits defensivos",
+      "whatItDoes": "Despliega honeypots y tarpits para detectar y ralentizar a los atacantes.",
+      "howItDoes": "Coloca señuelos y trampas que atraen actividad maliciosa, alertan temprano y consumen el tiempo del atacante sin afectar a usuarios reales.",
+      "whyItDoes": "Da visibilidad temprana de ataques y aumenta el costo para el atacante.",
+      "invocation": "/honeypot-y-tarpits",
+      "model": "claude-opus",
+      "tags": [
+        "honeypot",
+        "tarpit",
+        "defensa"
+      ]
+    },
+    {
+      "id": "qa-engineering",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "QA Engineering",
+      "emoji": "🧪",
+      "shortDesc": "Ingeniería de QA de seguridad",
+      "whatItDoes": "Integra pruebas de seguridad en el proceso de QA del software.",
+      "howItDoes": "Diseña casos de prueba de seguridad, automatiza checks en CI y valida que las correcciones realmente cierren las vulnerabilidades.",
+      "whyItDoes": "Convierte la seguridad en parte del estándar de calidad, no en un añadido.",
+      "invocation": "/qa-engineering",
+      "model": "claude-opus",
+      "tags": [
+        "qa",
+        "testing",
+        "seguridad"
+      ]
+    },
+    {
+      "id": "site-y-server-audit",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Site & Server Audit",
+      "emoji": "🌐",
+      "shortDesc": "Auditoría de sitio y servidor",
+      "whatItDoes": "Audita la seguridad de un sitio web y su servidor de forma integral.",
+      "howItDoes": "Revisa headers, TLS, configuración del servidor, exposición de servicios y vulnerabilidades conocidas, con un reporte priorizado.",
+      "whyItDoes": "Da una foto clara del estado de seguridad de un activo web y cómo mejorarlo.",
+      "invocation": "/site-y-server-audit",
+      "model": "claude-opus",
+      "tags": [
+        "auditoria",
+        "sitio",
+        "servidor"
+      ]
+    },
+    {
+      "id": "distributed-system-audit",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Distributed System Audit",
+      "emoji": "🕸️",
+      "shortDesc": "Auditoría de sistemas distribuidos",
+      "whatItDoes": "Audita la seguridad de sistemas distribuidos y sus interacciones entre servicios.",
+      "howItDoes": "Mapea flujos entre servicios, identifica límites de confianza, valida autenticación servicio-a-servicio y puntos de fuga de datos.",
+      "whyItDoes": "Detecta riesgos que solo aparecen cuando muchos servicios interactúan.",
+      "invocation": "/distributed-system-audit",
+      "model": "claude-opus",
+      "tags": [
+        "distribuido",
+        "auditoria",
+        "servicios"
+      ]
+    },
+    {
+      "id": "agent-y-client-security",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Agent & Client Security",
+      "emoji": "🤝",
+      "shortDesc": "Seguridad de agentes y clientes",
+      "whatItDoes": "Asegura agentes IA y sus clientes contra abuso, exfiltración y acciones no autorizadas.",
+      "howItDoes": "Limita capacidades del agente, valida acciones sensibles, protege credenciales del cliente y monitorea comportamiento anómalo.",
+      "whyItDoes": "Protege los sistemas agénticos que ejecutan acciones reales en nombre del usuario.",
+      "invocation": "/agent-y-client-security",
+      "model": "claude-opus",
+      "tags": [
+        "agentes",
+        "clientes",
+        "seguridad"
+      ]
+    },
+    {
+      "id": "ai-agent-guardrails",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "AI Agent Guardrails",
+      "emoji": "🚧",
+      "shortDesc": "Guardrails para agentes IA",
+      "whatItDoes": "Define guardrails de seguridad y comportamiento para agentes IA.",
+      "howItDoes": "Establece políticas de qué puede y no hacer el agente, validaciones previas a acciones críticas y mecanismos de aprobación humana.",
+      "whyItDoes": "Mantiene a los agentes dentro de límites seguros y predecibles.",
+      "invocation": "/ai-agent-guardrails",
+      "model": "claude-opus",
+      "tags": [
+        "guardrails",
+        "agentes",
+        "seguridad"
+      ]
+    },
+    {
+      "id": "secrets-management",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Secrets Management",
+      "emoji": "🗝️",
+      "shortDesc": "Gestión de secretos",
+      "whatItDoes": "Gestiona secretos y credenciales de forma segura en todo el ciclo de vida.",
+      "howItDoes": "Centraliza secretos en un vault, rota credenciales, evita hardcoding y controla el acceso con auditoría y menor privilegio.",
+      "whyItDoes": "Evita la fuga de llaves, una de las causas más comunes de brechas.",
+      "invocation": "/secrets-management",
+      "model": "claude-opus",
+      "tags": [
+        "secretos",
+        "credenciales",
+        "vault"
+      ]
+    },
+    {
+      "id": "zero-trust-network",
+      "category": "seguridad",
+      "categoryLabel": "🔒 Seguridad",
+      "name": "Zero Trust Network",
+      "emoji": "🔒",
+      "shortDesc": "Red de confianza cero",
+      "whatItDoes": "Implementa una arquitectura de red de confianza cero (Zero Trust).",
+      "howItDoes": "Aplica autenticación y autorización en cada acceso, microsegmentación y verificación continua sin confiar en la red interna por defecto.",
+      "whyItDoes": "Reduce el impacto de un acceso comprometido al no asumir confianza implícita.",
+      "invocation": "/zero-trust-network",
+      "model": "claude-opus",
+      "tags": [
+        "zero-trust",
+        "red",
+        "seguridad"
+      ]
+    },
+    {
+      "id": "ollama-cliente-setup",
+      "category": "it-y-tecnologia",
+      "categoryLabel": "💻 IT & Tecnología",
+      "name": "Ollama Cliente Setup",
+      "emoji": "🦙",
+      "shortDesc": "IA local en cliente, instalación",
+      "whatItDoes": "Instala y configura IA local en equipos del cliente con Ollama y modelos según su hardware.",
+      "howItDoes": "Aplica la tabla RAM→modelo, instala Ollama, descarga el modelo adecuado y entrega con checklist; es un servicio vendible de $5k-15k MXN.",
+      "whyItDoes": "Da a los clientes IA privada y sin costos de API recurrentes, un servicio rentable.",
+      "invocation": "/ollama-cliente-setup",
+      "model": "claude-sonnet",
+      "tags": [
+        "ollama",
+        "ia-local",
+        "setup"
+      ]
+    },
+    {
+      "id": "openrouter-cliente",
+      "category": "it-y-tecnologia",
+      "categoryLabel": "💻 IT & Tecnología",
+      "name": "OpenRouter Cliente",
+      "emoji": "🔀",
+      "shortDesc": "API unificada de 100+ modelos",
+      "whatItDoes": "Configura OpenRouter para dar acceso a 100+ modelos de IA con una sola API key, incluidos varios gratis.",
+      "howItDoes": "Define la estrategia de costos en 3 niveles, conecta Claude Code y otras herramientas a la key única y selecciona modelos por tarea y presupuesto.",
+      "whyItDoes": "Optimiza el costo de IA dando flexibilidad de modelos sin múltiples cuentas.",
+      "invocation": "/openrouter-cliente",
+      "model": "claude-sonnet",
+      "tags": [
+        "openrouter",
+        "modelos",
+        "api"
+      ]
+    },
+    {
+      "id": "groq-api-setup",
+      "category": "it-y-tecnologia",
+      "categoryLabel": "💻 IT & Tecnología",
+      "name": "Groq API Setup",
+      "emoji": "⚡",
+      "shortDesc": "Inferencia ultrarrápida gratuita",
+      "whatItDoes": "Configura Groq para inferencia ultrarrápida (~800 tok/s) con un plan gratuito generoso.",
+      "howItDoes": "Conecta la API de Groq, usa Whisper para audio e implementa chatbots de voz y demos donde la velocidad es el diferenciador.",
+      "whyItDoes": "Permite experiencias de IA en tiempo real impactantes sin costo en la fase de demo.",
+      "invocation": "/groq-api-setup",
+      "model": "claude-sonnet",
+      "tags": [
+        "groq",
+        "inferencia",
+        "velocidad"
+      ]
+    },
+    {
+      "id": "it-infraestructura",
+      "category": "it-y-tecnologia",
+      "categoryLabel": "💻 IT & Tecnología",
+      "name": "IT Infraestructura",
+      "emoji": "🖧",
+      "shortDesc": "Servidores, redes y DevOps",
+      "whatItDoes": "Gestiona infraestructura IT: servidores, redes, contenedores y prácticas DevOps.",
+      "howItDoes": "Trabaja con Docker, Kubernetes y Terraform para aprovisionar y mantener infraestructura como código, con monitoreo y automatización.",
+      "whyItDoes": "Mantiene los sistemas corriendo de forma estable, escalable y reproducible.",
+      "invocation": "/it-infraestructura",
+      "model": "claude-sonnet",
+      "tags": [
+        "devops",
+        "infraestructura",
+        "terraform"
+      ]
+    },
+    {
+      "id": "telemetria-iot",
+      "category": "it-y-tecnologia",
+      "categoryLabel": "💻 IT & Tecnología",
+      "name": "Telemetría IoT",
+      "emoji": "📡",
+      "shortDesc": "IoT industrial y ML predictivo",
+      "whatItDoes": "Diseña soluciones de IoT industrial: sensores, pipelines de datos y mantenimiento predictivo.",
+      "howItDoes": "Conecta sensores vía MQTT, almacena en InfluxDB, procesa en edge y aplica ML para predecir fallos, con gemelos digitales por industria.",
+      "whyItDoes": "Convierte datos de máquinas en decisiones que reducen costos y paros no planeados.",
+      "invocation": "/telemetria-iot",
+      "model": "claude-sonnet",
+      "tags": [
+        "iot",
+        "telemetria",
+        "ml"
+      ]
+    },
+    {
+      "id": "director-proyecto",
+      "category": "liderazgo",
+      "categoryLabel": "🎓 Liderazgo",
+      "name": "Director de Proyecto",
+      "emoji": "📅",
+      "shortDesc": "Dirección, timeline y scope",
+      "whatItDoes": "Dirige proyectos de principio a fin: alcance, cronograma, riesgos y entregables.",
+      "howItDoes": "Define el plan, descompone tareas, gestiona dependencias y riesgos, y coordina a los equipos para cumplir tiempos y calidad.",
+      "whyItDoes": "Asegura que los proyectos lleguen a buen puerto, a tiempo y dentro del alcance.",
+      "invocation": "/director-proyecto",
+      "model": "claude-opus",
+      "tags": [
+        "proyectos",
+        "gestion",
+        "timeline"
+      ]
+    },
+    {
+      "id": "gerente-general",
+      "category": "liderazgo",
+      "categoryLabel": "🎓 Liderazgo",
+      "name": "Gerente General",
+      "emoji": "🧑‍💼",
+      "shortDesc": "Management, RRHH y operaciones",
+      "whatItDoes": "Gestiona la operación general: personas, procesos y recursos del día a día.",
+      "howItDoes": "Coordina áreas, asigna recursos, resuelve cuellos de botella operativos y alinea la ejecución con la estrategia de los directores.",
+      "whyItDoes": "Mantiene la maquinaria operativa funcionando de forma eficiente y coordinada.",
+      "invocation": "/gerente-general",
+      "model": "claude-opus",
+      "tags": [
+        "management",
+        "operaciones",
+        "rrhh"
+      ]
+    },
+    {
+      "id": "subgerente",
+      "category": "liderazgo",
+      "categoryLabel": "🎓 Liderazgo",
+      "name": "Subgerente",
+      "emoji": "🤵",
+      "shortDesc": "Soporte a gerentes y ejecución",
+      "whatItDoes": "Apoya a la gerencia en la ejecución y el seguimiento de iniciativas operativas.",
+      "howItDoes": "Da seguimiento a tareas, prepara reportes, coordina equipos pequeños y cubre la operación cuando la gerencia delega.",
+      "whyItDoes": "Multiplica la capacidad de la gerencia asegurando que las cosas se ejecuten.",
+      "invocation": "/subgerente",
+      "model": "claude-sonnet",
+      "tags": [
+        "ejecucion",
+        "soporte",
+        "operaciones"
+      ]
+    },
+    {
+      "id": "programador-neurocientifico",
+      "category": "neurociencias",
+      "categoryLabel": "🧠 Neurociencias",
+      "name": "Programador Neurocientífico",
+      "emoji": "🧠",
+      "shortDesc": "Behavioral design y neuromarketing",
+      "whatItDoes": "Aplica neurociencia al diseño de productos y marketing: behavioral design, neuromarketing y psicología de UX.",
+      "howItDoes": "Usa principios cognitivos (atención, recompensa, sesgos) para diseñar flujos, copy y experiencias que guían el comportamiento del usuario éticamente.",
+      "whyItDoes": "Aumenta conversión y engagement diseñando para cómo realmente decide el cerebro humano.",
+      "invocation": "/programador-neurocientifico",
+      "model": "claude-sonnet",
+      "tags": [
+        "neurociencia",
+        "ux",
+        "comportamiento"
+      ]
+    },
+    {
+      "id": "estrategia-general",
+      "category": "negocio-y-estrategia",
+      "categoryLabel": "💼 Negocio & Estrategia",
+      "name": "Estrategia General",
+      "emoji": "♟️",
+      "shortDesc": "Planificación y modelo de negocio",
+      "whatItDoes": "Diseña la estrategia y el modelo de negocio: propuesta de valor, segmentos, pricing y crecimiento.",
+      "howItDoes": "Construye business model canvas, analiza mercado y competencia, define pricing y diseña growth loops alineados a los objetivos de la empresa.",
+      "whyItDoes": "Da dirección y coherencia al negocio para crecer de forma sostenible y diferenciada.",
+      "invocation": "/estrategia-general",
+      "model": "claude-opus",
+      "tags": [
+        "estrategia",
+        "negocio",
+        "growth"
+      ]
+    },
+    {
+      "id": "entrenador-timeshare",
+      "category": "ventas-y-marketing-sectorial",
+      "categoryLabel": "🎯 Ventas & Marketing Sectorial",
+      "name": "Entrenador Timeshare",
+      "emoji": "🎓",
+      "shortDesc": "Roleplay y entrenamiento timeshare",
+      "whatItDoes": "Entrena equipos de timeshare con roleplay interactivo en todos los roles: OPC, Liner, Cerrador, Gerente y más.",
+      "howItDoes": "Agente interactivo con 15 módulos, PNL avanzado y roleplay en 8 nacionalidades (EN/ES), con exámenes y calificación por desempeño.",
+      "whyItDoes": "Forma vendedores de timeshare de alto nivel, replicando situaciones reales de venta.",
+      "invocation": "/entrenador-timeshare",
+      "model": "claude-sonnet",
+      "tags": [
+        "timeshare",
+        "roleplay",
+        "entrenamiento"
+      ]
+    },
+    {
+      "id": "marketing-timeshare",
+      "category": "ventas-y-marketing-sectorial",
+      "categoryLabel": "🎯 Ventas & Marketing Sectorial",
+      "name": "Marketing Timeshare",
+      "emoji": "🏖️",
+      "shortDesc": "Marketing y ventas de timeshare",
+      "whatItDoes": "Diseña estrategias de marketing y ventas específicas para el negocio de timeshare.",
+      "howItDoes": "Aplica PNL y técnicas de venta de membresías vacacionales, optimiza tours y presentaciones y mide conversión por etapa del funnel.",
+      "whyItDoes": "Aumenta las ventas de membresías con tácticas probadas del sector.",
+      "invocation": "/marketing-timeshare",
+      "model": "claude-sonnet",
+      "tags": [
+        "timeshare",
+        "marketing",
+        "ventas"
+      ]
+    },
+    {
+      "id": "marketing-hoteleria",
+      "category": "ventas-y-marketing-sectorial",
+      "categoryLabel": "🎯 Ventas & Marketing Sectorial",
+      "name": "Marketing Hotelería",
+      "emoji": "🏨",
+      "shortDesc": "Revenue management y guests",
+      "whatItDoes": "Marketing y revenue management para hotelería: ocupación, tarifas y experiencia del huésped.",
+      "howItDoes": "Optimiza pricing dinámico, campañas de ocupación y programas de fidelidad, y mejora la experiencia del guest end-to-end.",
+      "whyItDoes": "Maximiza ingresos por habitación y la lealtad de los huéspedes.",
+      "invocation": "/marketing-hoteleria",
+      "model": "claude-sonnet",
+      "tags": [
+        "hoteleria",
+        "revenue",
+        "huespedes"
+      ]
+    },
+    {
+      "id": "renta-de-autos",
+      "category": "ventas-y-marketing-sectorial",
+      "categoryLabel": "🎯 Ventas & Marketing Sectorial",
+      "name": "Renta de Autos",
+      "emoji": "🚗",
+      "shortDesc": "Marketing y operación de renta de autos",
+      "whatItDoes": "Estrategias de marketing y operación para empresas de renta de autos.",
+      "howItDoes": "Optimiza disponibilidad de flota, pricing por temporada, upsell de coberturas y campañas de captación en aeropuertos y online.",
+      "whyItDoes": "Incrementa la utilización de la flota y el ticket promedio por renta.",
+      "invocation": "/renta-de-autos",
+      "model": "claude-sonnet",
+      "tags": [
+        "renta-autos",
+        "mobility",
+        "ventas"
+      ]
+    },
+    {
+      "id": "aeropuertos",
+      "category": "ventas-y-marketing-sectorial",
+      "categoryLabel": "🎯 Ventas & Marketing Sectorial",
+      "name": "Aeropuertos",
+      "emoji": "✈️",
+      "shortDesc": "Marketing y servicios en aeropuertos",
+      "whatItDoes": "Marketing y experiencia de servicios en el contexto aeroportuario (check-in, lounges, traslados).",
+      "howItDoes": "Diseña flujos de captación y conversión para servicios premium de viaje, optimizando el journey del pasajero desde la llegada.",
+      "whyItDoes": "Captura demanda de viajeros con servicios y experiencias en un momento de alta intención.",
+      "invocation": "/aeropuertos",
+      "model": "claude-sonnet",
+      "tags": [
+        "aeropuertos",
+        "viajes",
+        "servicios"
+      ]
+    },
+    {
+      "id": "tours-y-turismo",
+      "category": "ventas-y-marketing-sectorial",
+      "categoryLabel": "🎯 Ventas & Marketing Sectorial",
+      "name": "Tours & Turismo",
+      "emoji": "🗺️",
+      "shortDesc": "Marketing de tours y experiencias",
+      "whatItDoes": "Marketing y venta de tours y experiencias turísticas premium.",
+      "howItDoes": "Crea paquetes y narrativas de experiencia, optimiza canales de venta (OTAs, directo) y diseña upsells por tipo de viajero.",
+      "whyItDoes": "Vende experiencias memorables con mejor margen que el turismo de volumen.",
+      "invocation": "/tours-y-turismo",
+      "model": "claude-sonnet",
+      "tags": [
+        "tours",
+        "turismo",
+        "experiencias"
+      ]
+    },
+    {
+      "id": "club-yates-beach-clubs",
+      "category": "ventas-y-marketing-sectorial",
+      "categoryLabel": "🎯 Ventas & Marketing Sectorial",
+      "name": "Yates & Beach Clubs",
+      "emoji": "🛥️",
+      "shortDesc": "Marketing de yates y beach clubs",
+      "whatItDoes": "Marketing y ventas para clubes de yates y beach clubs de lujo.",
+      "howItDoes": "Diseña membresías y experiencias premium, gestiona reservas y eventos y posiciona la marca en el segmento de alto poder adquisitivo.",
+      "whyItDoes": "Atrae y retiene clientela de lujo en experiencias náuticas y de playa.",
+      "invocation": "/club-yates-beach-clubs",
+      "model": "claude-sonnet",
+      "tags": [
+        "yates",
+        "beach-club",
+        "lujo"
+      ]
+    },
+    {
+      "id": "restaurantes",
+      "category": "ventas-y-marketing-sectorial",
+      "categoryLabel": "🎯 Ventas & Marketing Sectorial",
+      "name": "Restaurantes",
+      "emoji": "🍽️",
+      "shortDesc": "Marketing y ambiance de restaurantes",
+      "whatItDoes": "Marketing, ambiance y experiencia para restaurantes.",
+      "howItDoes": "Optimiza la propuesta gastronómica, el ambiente, las reservas y las campañas locales y de redes para llenar mesas.",
+      "whyItDoes": "Aumenta la ocupación y el ticket promedio con una experiencia y marketing cuidados.",
+      "invocation": "/restaurantes",
+      "model": "claude-sonnet",
+      "tags": [
+        "restaurantes",
+        "f&b",
+        "marketing"
+      ]
+    },
+    {
+      "id": "bares-y-discotecas",
+      "category": "ventas-y-marketing-sectorial",
+      "categoryLabel": "🎯 Ventas & Marketing Sectorial",
+      "name": "Bares & Discotecas",
+      "emoji": "🍸",
+      "shortDesc": "Marketing de bares y vida nocturna",
+      "whatItDoes": "Marketing y operación para bares y discotecas, enfocado en eventos y vida nocturna.",
+      "howItDoes": "Diseña eventos, line-ups y campañas de redes, gestiona reservas VIP y crea experiencias que generan boca a boca.",
+      "whyItDoes": "Llena el lugar las noches clave y construye una marca de vida nocturna deseable.",
+      "invocation": "/bares-y-discotecas",
+      "model": "claude-sonnet",
+      "tags": [
+        "bares",
+        "nightlife",
+        "eventos"
+      ]
+    },
+    {
+      "id": "parques-diversiones",
+      "category": "ventas-y-marketing-sectorial",
+      "categoryLabel": "🎯 Ventas & Marketing Sectorial",
+      "name": "Parques de Diversiones",
+      "emoji": "🎢",
+      "shortDesc": "Marketing y ticketing de parques",
+      "whatItDoes": "Marketing, atracciones y ticketing para parques de diversiones.",
+      "howItDoes": "Optimiza precios de entrada, paquetes, temporadas altas y campañas familiares, y mejora el flujo de visitantes y el upsell.",
+      "whyItDoes": "Aumenta la afluencia y el gasto por visitante en el parque.",
+      "invocation": "/parques-diversiones",
+      "model": "claude-sonnet",
+      "tags": [
+        "parques",
+        "ticketing",
+        "entretenimiento"
+      ]
+    },
+    {
+      "id": "ventas-generales",
+      "category": "ventas-y-marketing-sectorial",
+      "categoryLabel": "🎯 Ventas & Marketing Sectorial",
+      "name": "Ventas Generales",
+      "emoji": "💼",
+      "shortDesc": "Técnicas de venta cross-vertical",
+      "whatItDoes": "Entrena y aplica técnicas de venta generales aplicables a cualquier industria.",
+      "howItDoes": "Cubre prospección, manejo de objeciones, cierre y seguimiento con metodologías probadas, adaptables al producto y cliente.",
+      "whyItDoes": "Eleva la efectividad comercial transversalmente en todos los proyectos.",
+      "invocation": "/ventas-generales",
+      "model": "claude-sonnet",
+      "tags": [
+        "ventas",
+        "cierre",
+        "objeciones"
+      ]
+    },
+    {
+      "id": "inbound-sales",
+      "category": "ventas-y-marketing-sectorial",
+      "categoryLabel": "🎯 Ventas & Marketing Sectorial",
+      "name": "Inbound Sales",
+      "emoji": "🧲",
+      "shortDesc": "Ventas inbound y nurturing",
+      "whatItDoes": "Gestiona ventas inbound: convierte leads que llegan por interés propio en clientes.",
+      "howItDoes": "Califica leads entrantes, nutre con contenido relevante, aplica venta consultiva y cierra acompañando el journey del comprador.",
+      "whyItDoes": "Aprovecha la demanda existente para cerrar con menor costo de adquisición.",
+      "invocation": "/inbound-sales",
+      "model": "claude-sonnet",
+      "tags": [
+        "inbound",
+        "ventas",
+        "nurturing"
+      ]
+    },
+    {
+      "id": "inbound-marketing",
+      "category": "ventas-y-marketing-sectorial",
+      "categoryLabel": "🎯 Ventas & Marketing Sectorial",
+      "name": "Inbound Marketing",
+      "emoji": "🌱",
+      "shortDesc": "Atracción de demanda por contenido",
+      "whatItDoes": "Diseña estrategias de inbound marketing para atraer demanda con contenido de valor.",
+      "howItDoes": "Crea contenido, SEO y lead magnets que atraen al público objetivo, lo captura y lo nutre hasta convertirlo en lead calificado.",
+      "whyItDoes": "Genera demanda sostenible y de bajo costo construyendo audiencia propia.",
+      "invocation": "/inbound-marketing",
+      "model": "claude-sonnet",
+      "tags": [
+        "inbound",
+        "contenido",
+        "seo"
+      ]
+    },
+    {
+      "id": "seo-audit-tecnico",
+      "category": "seo-y-contenido",
+      "categoryLabel": "🔍 SEO & Contenido",
+      "name": "SEO Audit Técnico",
+      "emoji": "🔍",
+      "shortDesc": "Auditoría SEO en 9 dimensiones",
+      "whatItDoes": "Realiza auditorías SEO técnicas completas en 9 dimensiones, con plan de acción a 90 días.",
+      "howItDoes": "Analiza rastreo, estructura, Core Web Vitals, on-page, schema, mobile, contenido, backlinks y SEO local, y prioriza el plan de mejora.",
+      "whyItDoes": "Mejora el posicionamiento orgánico de forma estructurada y medible.",
+      "invocation": "/seo-audit-tecnico",
+      "model": "claude-sonnet",
+      "tags": [
+        "seo",
+        "auditoria",
+        "cwv"
+      ]
+    },
+    {
+      "id": "web-4o",
+      "category": "diseno-especializado",
+      "categoryLabel": "🎨 Diseño especializado",
+      "name": "Web 4.0",
+      "emoji": "🪐",
+      "shortDesc": "R3F + Three.js + GSAP + shaders",
+      "whatItDoes": "Crea y pule sitios Web 4.0 con R3F, Three.js, GSAP y shaders, con acabado pixel-perfecto.",
+      "howItDoes": "Cubre tanto creación (componentes, shaders, animación) como cirugía visual (audit de 7 niveles, tipografía, grid 8pt, responsive), consultando design-intelligence.",
+      "whyItDoes": "Entrega sitios de vanguardia visual que diferencian a Victor IA en el mercado.",
+      "invocation": "/web-4o",
+      "model": "claude-sonnet",
+      "tags": [
+        "web4",
+        "three-js",
+        "shaders"
+      ]
+    },
+    {
+      "id": "web-assets-deploy",
+      "category": "diseno-especializado",
+      "categoryLabel": "🎨 Diseño especializado",
+      "name": "Web Assets Deploy",
+      "emoji": "🖼️",
+      "shortDesc": "Imágenes/videos sin errores + Cloudinary",
+      "whatItDoes": "Sube y sirve imágenes y videos a sitios sin errores, optimizados vía Cloudinary y CDN.",
+      "howItDoes": "Regenera assets a WebP quality alta, genera variantes dark, sube a Cloudinary con URLs permanentes y valida HTTP 200, integrando en cualquier framework.",
+      "whyItDoes": "Garantiza media sin 404, con colores fieles, dark mode y CDN global.",
+      "invocation": "/web-assets-deploy",
+      "model": "claude-sonnet",
+      "tags": [
+        "assets",
+        "cloudinary",
+        "deploy"
+      ]
+    },
+    {
+      "id": "pixel-perfecto",
+      "category": "diseno-especializado",
+      "categoryLabel": "🎨 Diseño especializado",
+      "name": "Pixel Perfecto",
+      "emoji": "🔬",
+      "shortDesc": "Polish quirúrgico, design surgeon",
+      "whatItDoes": "Aplica polish quirúrgico a interfaces existentes hasta lograr un acabado pixel-perfect.",
+      "howItDoes": "Audita tipografía, espaciado, grid de 8pt, alineaciones, logos y responsive con un checklist de 35 puntos y corrige cada detalle.",
+      "whyItDoes": "Eleva interfaces buenas a excelentes, el nivel que distingue trabajo amateur de premium.",
+      "invocation": "/pixel-perfecto",
+      "model": "claude-sonnet",
+      "tags": [
+        "pixel-perfect",
+        "polish",
+        "ui"
+      ]
+    },
+    {
+      "id": "svg-motion",
+      "category": "diseno-especializado",
+      "categoryLabel": "🎨 Diseño especializado",
+      "name": "SVG Motion",
+      "emoji": "📐",
+      "shortDesc": "Animación SVG, iconografía y charts",
+      "whatItDoes": "Anima SVG y crea iconografía y visualización de datos: iconos, charts, infografías y loaders.",
+      "howItDoes": "Usa SMIL, CSS, GSAP (DrawSVG/MorphSVG/MotionPath), Framer Motion, Lottie, D3 y Chart.js, con iconos en grid de 24px y charts con entrada animada.",
+      "whyItDoes": "Aporta gráficos y animaciones SVG precisas que comunican y deleitan.",
+      "invocation": "/svg-motion",
+      "model": "claude-sonnet",
+      "tags": [
+        "svg",
+        "animacion",
+        "charts"
+      ]
+    },
+    {
+      "id": "skill-inclusivo",
+      "category": "diseno-especializado",
+      "categoryLabel": "🎨 Diseño especializado",
+      "name": "Skill Inclusivo",
+      "emoji": "♿",
+      "shortDesc": "WCAG AA, accesibilidad y eye-tracking",
+      "whatItDoes": "Diseña experiencias web inclusivas y accesibles cumpliendo WCAG 2.2 AA, EAA 2025 y ADA.",
+      "howItDoes": "Implementa navegación por voz (Web Speech, Annyang), eye-tracking (WebGazer/MediaPipe), tours con Driver.js y un checklist de 35 puntos de accesibilidad.",
+      "whyItDoes": "Hace los productos usables por todos y cumple la normativa, ampliando el alcance y evitando demandas.",
+      "invocation": "/skill-inclusivo",
+      "model": "claude-sonnet",
+      "tags": [
+        "accesibilidad",
+        "wcag",
+        "inclusivo"
+      ]
+    },
+    {
+      "id": "higgsfield-content-factory",
+      "category": "fabrica-de-contenido",
+      "categoryLabel": "🏭 Fábrica de Contenido",
+      "name": "Higgsfield Content Factory",
+      "emoji": "🏭",
+      "shortDesc": "Producción masiva IA, pipeline completo",
+      "whatItDoes": "Produce contenido visual en masa con un pipeline completo basado en Higgsfield.",
+      "howItDoes": "Pregunta siempre cuántos videos se requieren, adapta la estrategia por cantidad y orquesta generación, selección y entrega de assets a escala.",
+      "whyItDoes": "Permite escalar la producción de contenido manteniendo consistencia y calidad.",
+      "invocation": "/higgsfield-content-factory",
+      "model": "claude-sonnet",
+      "tags": [
+        "contenido",
+        "higgsfield",
+        "pipeline"
+      ]
+    },
+    {
+      "id": "brain-tracker-ux",
+      "category": "otros",
+      "categoryLabel": "🧩 Otros",
+      "name": "Brain Tracker UX",
+      "emoji": "🧠",
+      "shortDesc": "Diseño PWA luxury y CRM",
+      "whatItDoes": "Diseña y pule la UX/UI del Victor IA Brain Tracker: PWA luxury dark con lenguaje coloquial.",
+      "howItDoes": "Aplica reglas de copy, sistema visual, componentes y animaciones SVG del tracker, con nivel award-winning y un CRM standalone integrado.",
+      "whyItDoes": "Mantiene la herramienta interna a un nivel de producto premium, no de utilidad improvisada.",
+      "invocation": "/brain-tracker-ux",
+      "model": "claude-sonnet",
+      "tags": [
+        "pwa",
+        "ux",
+        "tracker"
+      ]
+    },
+    {
+      "id": "perfect-media-deployment",
+      "category": "otros",
+      "categoryLabel": "🧩 Otros",
+      "name": "Perfect Media Deployment",
+      "emoji": "🚀",
+      "shortDesc": "Deploy de media sin fricción",
+      "whatItDoes": "Despliega media (imágenes/videos) sin fricción ni errores en cualquier sitio y framework.",
+      "howItDoes": "Sigue el protocolo universal: optimización con colores exactos, subida a CDN, integración framework-agnostic y validación de 0 errores.",
+      "whyItDoes": "Garantiza que cualquier despliegue de media salga perfecto a la primera.",
+      "invocation": "/perfect-media-deployment",
+      "model": "claude-sonnet",
+      "tags": [
+        "media",
+        "deploy",
+        "cdn"
+      ]
+    },
+    {
+      "id": "skill-finder",
+      "category": "otros",
+      "categoryLabel": "🧩 Otros",
+      "name": "Skill Finder",
+      "emoji": "🧭",
+      "shortDesc": "Discovery: qué skill usar",
+      "whatItDoes": "Descubre cuál de los 155 skills usar para una tarea dada, evitando ensayo y error.",
+      "howItDoes": "Analiza la solicitud, la mapea contra el inventario y el grafo de skills (skills-router) y recomienda el o los skills óptimos y su orden.",
+      "whyItDoes": "Acelera la ejecución conectando cada tarea con la herramienta correcta de inmediato.",
+      "invocation": "/skill-finder",
+      "model": "claude-sonnet",
+      "tags": [
+        "discovery",
+        "skills",
+        "routing"
+      ]
+    }
+  ]
+}
