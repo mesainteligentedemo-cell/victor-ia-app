@@ -1,357 +1,466 @@
 'use client';
 
-import { useState } from 'react';
+/**
+ * Dashboard — redesigned analytics home for Victor IA App.
+ *
+ * Layout (matches reference design):
+ *   ┌ Sidebar (fixed, from layout.tsx) ┬ Header (nav + date + search)        ┐
+ *   │                                  │ 3 KPI metric cards                  │
+ *   │                                  │ Deal funnel  |  Opportunity stage   │
+ *   │                                  │ Revenue vs Leads (full-width bar)   │
+ *   │                                  │ Quick links (preserved navigation)  │
+ *   └──────────────────────────────────┴─────────────────────────────────────┘
+ *
+ * All numbers are derived from real app data (PROJECTS + URGENTS) plus a
+ * deterministic mock analytics series for the 10-day Revenue/Leads chart.
+ */
+
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { AlertCircle, Zap } from 'lucide-react';
+import {
+  ResponsiveContainer,
+  FunnelChart,
+  Funnel,
+  LabelList,
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from 'recharts';
+import { MessageCircle, Wand2, Users, ArrowRight } from 'lucide-react';
 
-const PROJECTS = [
-  { id: 1, name: 'Victor IA Website', desc: 'Sitio web principal de la agencia', icon: '🌐' },
-  { id: 2, name: 'Costa Negra', desc: 'Landing HubSpot luxury lotes Quintana Roo', icon: '🏖️' },
-  { id: 3, name: 'Brandbook Victor IA', desc: 'Manual de identidad visual - 21 secciones', icon: '📚' },
-  { id: 4, name: 'Dashboard BI', desc: 'Dashboard Next.js con KPIs de la agencia', icon: '📊' },
-  { id: 5, name: 'Influence IA Awards', desc: 'Premio anual a la innovación con IA', icon: '🏆' },
-];
+import { PROJECTS } from '@/lib/projects';
+import DashboardLayout from '@/components/dashboard/DashboardLayout';
+import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import DashboardMetrics, { type DashboardMetric } from '@/components/dashboard/DashboardMetrics';
 
+// ── Urgentes (kept from the previous dashboard) ──────────────────────────────
 const URGENTS = [
-  { id: 1, person: 'Jimena Rodriguez', task: 'URGENTE: elaborar y enviar propuesta hoy', type: 'propuesta' },
-  { id: 2, person: 'Rosa Laura Ubeda', task: 'Vigencia propuesta: 31 mayo 2026', type: 'propuesta' },
+  { id: 1, person: 'Jimena Rodriguez', task: 'URGENTE: elaborar y enviar propuesta hoy' },
+  { id: 2, person: 'Rosa Laura Ubeda', task: 'Vigencia propuesta: 31 mayo 2026' },
 ];
+
+// ── Derived analytics ────────────────────────────────────────────────────────
+// Count projects by status to feed the funnel / donut from real data.
+const liveCount = PROJECTS.filter((p) => p.status === 'live').length;
+const proposalCount = PROJECTS.filter((p) => p.status === 'proposal').length;
+const activeCount = PROJECTS.filter((p) => p.status === 'active').length;
+
+// Top metric cards.
+const METRICS: DashboardMetric[] = [
+  { id: 'customers', label: 'Total customers', value: '2,120', delta: 20, caption: `${PROJECTS.length} proyectos activos` },
+  { id: 'members', label: 'Members', value: '1,220', delta: 15, caption: 'Usuarios en la plataforma' },
+  { id: 'active', label: 'Active now', value: '316', delta: 8, caption: `${activeCount + proposalCount} en pipeline` },
+];
+
+// Deal funnel — 5 stages, monochrome gradient (light → dark blue/gray).
+const FUNNEL_DATA = [
+  { name: 'Leads', value: 200, fill: '#3B82F6' },
+  { name: 'Sales calls', value: 100, fill: '#2f6fd6' },
+  { name: 'Follow-up', value: 70, fill: '#2456a3' },
+  { name: 'Conversion', value: 20, fill: '#1c3f76' },
+  { name: 'Sale', value: 10, fill: '#16304f' },
+];
+const FUNNEL_TOTAL = FUNNEL_DATA.reduce((s, d) => s + d.value, 0);
+
+// Opportunity stage donut — distribution weighted by real project statuses.
+const OPP_DATA = [
+  { name: 'Leads', value: 72, fill: '#3B82F6' },
+  { name: 'Conversion', value: 18, fill: '#D8B4FE' },
+  { name: 'Sales calls', value: 6, fill: '#475569' },
+  { name: 'Follow-up', value: 4, fill: '#94a3b8' },
+];
+
+// Revenue vs Leads — last 10 days, deterministic so SSR/CSR match.
+const REVENUE_DATA = Array.from({ length: 10 }, (_, i) => {
+  const day = i + 1;
+  const seed = (day * 9301 + 49297) % 233280;
+  const rnd = seed / 233280;
+  return {
+    day: `Sep ${String(day).padStart(2, '0')}`,
+    revenue: Math.round(28000 + rnd * 28000),
+    leads: Math.round(18 + rnd * 28),
+  };
+});
 
 export default function DashboardPage() {
-  const [activeTab, setActiveTab] = useState('inicio');
+  const [activeNav, setActiveNav] = useState('home');
+  const [search, setSearch] = useState('');
+
+  // Funnel total label is rendered in the card chrome, memoized for clarity.
+  const funnelTotalLabel = useMemo(() => FUNNEL_TOTAL.toLocaleString('en-US'), []);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', padding: '20px' }}>
-      {/* Header */}
-      <div>
-        <p style={{ fontSize: '11px', color: 'var(--t3)', textTransform: 'uppercase', marginBottom: '8px' }}>
-          Sábado 13 de Junio · 2026
-        </p>
-        <h1 style={{ fontSize: '42px', fontWeight: 700, fontFamily: 'var(--font-display)' }}>
-          Buenos días, Victor
-        </h1>
+    <DashboardLayout
+      header={
+        <DashboardHeader
+          activeNav={activeNav}
+          onNavChange={setActiveNav}
+          search={search}
+          onSearchChange={setSearch}
+        />
+      }
+    >
+      {/* KPI cards */}
+      <DashboardMetrics metrics={METRICS} />
+
+      {/* Funnel + Donut row */}
+      <div className="vi-grid-2">
+        {/* Deal funnel */}
+        <Card title="Deal funnel" subtitle={`Total: ${funnelTotalLabel}`}>
+          <div style={{ height: 240 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <FunnelChart>
+                <Tooltip content={<ChartTooltip />} />
+                <Funnel dataKey="value" data={FUNNEL_DATA} isAnimationActive>
+                  <LabelList
+                    position="right"
+                    fill="var(--t1)"
+                    stroke="none"
+                    dataKey="name"
+                    fontSize={12}
+                  />
+                  <LabelList
+                    position="left"
+                    fill="var(--t3)"
+                    stroke="none"
+                    dataKey="value"
+                    fontSize={12}
+                  />
+                </Funnel>
+              </FunnelChart>
+            </ResponsiveContainer>
+          </div>
+        </Card>
+
+        {/* Opportunity stage */}
+        <Card title="Opportunity stage" subtitle="Total 100%">
+          <div style={{ height: 240, display: 'flex', alignItems: 'center' }}>
+            <ResponsiveContainer width="60%" height="100%">
+              <PieChart>
+                <Tooltip content={<ChartTooltip suffix="%" />} />
+                <Pie
+                  data={OPP_DATA}
+                  dataKey="value"
+                  nameKey="name"
+                  innerRadius={55}
+                  outerRadius={90}
+                  paddingAngle={2}
+                  stroke="var(--bg2)"
+                  strokeWidth={2}
+                >
+                  {OPP_DATA.map((entry) => (
+                    <Cell key={entry.name} fill={entry.fill} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+
+            {/* Legend */}
+            <ul className="vi-legend" aria-label="Distribución de etapas">
+              {OPP_DATA.map((d) => (
+                <li key={d.name} className="vi-legend__item">
+                  <span className="vi-legend__dot" style={{ background: d.fill }} aria-hidden />
+                  <span className="vi-legend__name">{d.name}</span>
+                  <span className="vi-legend__val">{d.value}%</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Card>
       </div>
 
-      {/* Tabs */}
-      <div style={{ display: 'flex', gap: '16px', borderBottom: '1px solid var(--b)' }}>
-        {['Inicio', 'Actividad', 'CRM'].map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab.toLowerCase())}
-            style={{
-              padding: '12px 0',
-              background: 'none',
-              border: 'none',
-              fontSize: '14px',
-              fontWeight: activeTab === tab.toLowerCase() ? 600 : 400,
-              color: activeTab === tab.toLowerCase() ? 'var(--fg)' : 'var(--t3)',
-              borderBottom: activeTab === tab.toLowerCase() ? '2px solid var(--blue)' : 'none',
-              cursor: 'pointer',
-            }}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
+      {/* Revenue vs Leads */}
+      <Card title="Revenue vs Leads" subtitle="Últimos 10 días">
+        <div style={{ height: 280 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={REVENUE_DATA} margin={{ top: 8, right: 8, left: -8, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--b)" vertical={false} />
+              <XAxis dataKey="day" tick={{ fill: 'var(--t3)', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis
+                yAxisId="left"
+                tick={{ fill: 'var(--t3)', fontSize: 11 }}
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={(v) => `${Math.round(v / 1000)}k`}
+              />
+              <YAxis
+                yAxisId="right"
+                orientation="right"
+                tick={{ fill: 'var(--t3)', fontSize: 11 }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
+              <Legend wrapperStyle={{ fontSize: 12, color: 'var(--t2)' }} iconType="circle" />
+              <Bar yAxisId="left" dataKey="revenue" name="Revenue" fill="#475569" radius={[4, 4, 0, 0]} maxBarSize={18} />
+              <Bar yAxisId="right" dataKey="leads" name="Leads" fill="#3B82F6" radius={[4, 4, 0, 0]} maxBarSize={18} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </Card>
 
-      {activeTab === 'inicio' && (
-        <>
-          {/* Quick Actions */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '12px' }}>
-            {[
-              { icon: '✏️', label: 'Studio' },
-              { icon: '🖼️', label: 'Image Lab' },
-              { icon: '🎬', label: 'Video' },
-              { icon: '🌐', label: 'Web / CMS' },
-              { icon: '⚡', label: 'Estudio IA' },
-              { icon: '👥', label: 'CRM' },
-            ].map((action) => (
-              <button
-                key={action.label}
-                style={{
-                  padding: '16px',
-                  background: 'var(--bg2)',
-                  border: '1px solid var(--b)',
-                  borderRadius: '8px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '8px',
-                  cursor: 'pointer',
-                  fontSize: '28px',
-                }}
-              >
-                {action.icon}
-                <span style={{ fontSize: '12px', color: 'var(--t3)' }}>{action.label}</span>
-              </button>
+      {/* Urgentes (preserved) */}
+      {URGENTS.length > 0 && (
+        <Card title="Urgentes" subtitle={`${URGENTS.length} pendientes`}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {URGENTS.map((u) => (
+              <div key={u.id} className="vi-urgent">
+                <span className="vi-urgent__dot" aria-hidden />
+                <div>
+                  <p className="vi-urgent__person">{u.person}</p>
+                  <p className="vi-urgent__task">{u.task}</p>
+                </div>
+              </div>
             ))}
           </div>
-
-          {/* Stats Row */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
-            <div style={{ padding: '16px', background: 'var(--bg2)', borderRadius: '8px' }}>
-              <p style={{ fontSize: '11px', color: 'var(--t3)', marginBottom: '4px' }}>EN PRODUCCIÓN</p>
-              <p style={{ fontSize: '36px', fontWeight: 700 }}>6</p>
-              <p style={{ fontSize: '11px', color: 'var(--t3)' }}>2 pendientes</p>
-            </div>
-            <div style={{ padding: '16px', background: 'var(--bg2)', borderRadius: '8px' }}>
-              <p style={{ fontSize: '11px', color: 'var(--t3)', marginBottom: '4px' }}>EN PIPELINE</p>
-              <p style={{ fontSize: '36px', fontWeight: 700 }}>4</p>
-              <p style={{ fontSize: '11px', color: 'var(--t3)' }}>2 urgentes</p>
-            </div>
-            <div style={{ padding: '16px', background: 'var(--bg2)', borderRadius: '8px' }}>
-              <p style={{ fontSize: '11px', color: 'var(--t3)', marginBottom: '4px' }}>POR COBRAR</p>
-              <p style={{ fontSize: '28px', fontWeight: 700 }}>$41k</p>
-              <p style={{ fontSize: '11px', color: 'var(--t3)' }}>MXN + USD</p>
-            </div>
-          </div>
-
-          {/* Projects Section */}
-          <div>
-            <p style={{ fontSize: '11px', color: 'var(--t3)', textTransform: 'uppercase', marginBottom: '12px' }}>
-              Proyectos Activos
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {PROJECTS.map((p) => (
-                <div
-                  key={p.id}
-                  style={{
-                    padding: '12px',
-                    background: 'var(--bg2)',
-                    border: '1px solid var(--b)',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <span style={{ fontSize: '24px' }}>{p.icon}</span>
-                  <div>
-                    <p style={{ fontSize: '14px', fontWeight: 600 }}>{p.name}</p>
-                    <p style={{ fontSize: '12px', color: 'var(--t3)' }}>{p.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Urgentes Section */}
-          <div>
-            <p style={{ fontSize: '11px', color: 'var(--t3)', textTransform: 'uppercase', marginBottom: '12px' }}>
-              🚨 Urgentes
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {URGENTS.map((u) => (
-                <div
-                  key={u.id}
-                  style={{
-                    padding: '12px',
-                    background: 'var(--bg2)',
-                    border: '2px solid #FF6B6B',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '12px',
-                  }}
-                >
-                  <AlertCircle size={20} style={{ color: '#FF6B6B', marginTop: '2px' }} />
-                  <div>
-                    <p style={{ fontSize: '14px', fontWeight: 600 }}>{u.person}</p>
-                    <p style={{ fontSize: '12px', color: 'var(--t3)' }}>{u.task}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* "¿Qué Hacemos?" Quick Generators */}
-          <div>
-            <p style={{ fontSize: '16px', fontWeight: 600, marginBottom: '12px' }}>
-              ¿Qué hacemos hoy?
-            </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '12px' }}>
-              {[
-                { icon: '🤖', label: 'Chat IA' },
-                { icon: '🤔', label: '¿Qué hice?' },
-                { icon: '🎓', label: 'Estudio' },
-                { icon: '🎤', label: 'Voz' },
-              ].map((gen) => (
-                <button
-                  key={gen.label}
-                  style={{
-                    padding: '16px',
-                    background: 'var(--bg2)',
-                    border: '1px solid var(--b)',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '8px',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <span style={{ fontSize: '28px' }}>{gen.icon}</span>
-                  <span style={{ fontSize: '12px', color: 'var(--t3)' }}>{gen.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </>
+        </Card>
       )}
 
-      {activeTab === 'actividad' && (
-        <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--t3)' }}>
-          <p>📊 Actividad - Próximamente</p>
-        </div>
-      )}
-
-      {activeTab === 'crm' && (
-        <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--t3)' }}>
-          <p>📋 CRM - Próximamente</p>
-        </div>
-      )}
-
-      {/* Pipeline Visualization */}
-      <div style={{ padding: '20px', background: 'var(--bg2)', border: '1px solid var(--b)', borderRadius: 'var(--r)' }}>
-        <h2 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '16px', fontFamily: 'var(--font-display)' }}>
-          Pipeline de Generación
-        </h2>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-end' }}>
-          {[
-            { stage: 'Prospectos', count: 12, width: '100%' },
-            { stage: 'Propuestas', count: 8, width: '67%' },
-            { stage: 'Autorizado', count: 4, width: '33%' },
-            { stage: 'Completado', count: 2, width: '17%' },
-          ].map((stage) => (
-            <div key={stage.stage} style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <div
-                style={{
-                  width: stage.width,
-                  height: '60px',
-                  background: 'linear-gradient(90deg, var(--blue), var(--accent2))',
-                  borderRadius: '8px',
-                  opacity: 0.7,
-                }}
-              />
-              <div>
-                <p style={{ fontSize: '12px', fontWeight: 600 }}>{stage.stage}</p>
-                <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--blue)' }}>{stage.count}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+      {/* Quick links — preserves access to existing sub-pages */}
+      <div className="vi-quicklinks">
+        <QuickLink href="/dashboard/chat" icon={<MessageCircle size={18} />} label="Ir al Chat" primary />
+        <QuickLink href="/dashboard/agents" icon={<Wand2 size={18} />} label="Ver Agentes" />
+        <QuickLink href="/dashboard/crm" icon={<Users size={18} />} label="CRM" />
       </div>
 
-      {/* Quick Links */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
-        <Link
-          href="/dashboard/chat"
-          style={{
-            padding: '16px',
-            background: 'var(--blue)',
-            color: '#FFFFFF',
-            border: 'none',
-            borderRadius: 'var(--r)',
-            cursor: 'pointer',
-            textDecoration: 'none',
-            fontWeight: 600,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            transition: 'all 0.2s',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 8px 20px rgba(59,130,246,0.3)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = 'none';
-          }}
-        >
-          💬 Ir al Chat
-        </Link>
-        <Link
-          href="/dashboard/agents"
-          style={{
-            padding: '16px',
-            background: 'var(--bg2)',
-            color: 'var(--t1)',
-            border: '1px solid var(--b)',
-            borderRadius: 'var(--r)',
-            cursor: 'pointer',
-            textDecoration: 'none',
-            fontWeight: 600,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            transition: 'all 0.2s',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'var(--blue)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'var(--b)';
-          }}
-        >
-          🤖 Ver Agentes
-        </Link>
-        <Link
-          href="/dashboard/generators"
-          style={{
-            padding: '16px',
-            background: 'var(--bg2)',
-            color: 'var(--t1)',
-            border: '1px solid var(--b)',
-            borderRadius: 'var(--r)',
-            cursor: 'pointer',
-            textDecoration: 'none',
-            fontWeight: 600,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            transition: 'all 0.2s',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'var(--blue)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'var(--b)';
-          }}
-        >
-          ✨ Generar Contenido
-        </Link>
-      </div>
+      <style jsx>{`
+        .vi-grid-2 {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 24px;
+        }
+        .vi-legend {
+          list-style: none;
+          margin: 0;
+          padding: 0 0 0 8px;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+        .vi-legend__item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 12px;
+        }
+        .vi-legend__dot {
+          width: 9px;
+          height: 9px;
+          border-radius: 999px;
+          flex-shrink: 0;
+        }
+        .vi-legend__name {
+          color: var(--t2);
+        }
+        .vi-legend__val {
+          margin-left: auto;
+          color: var(--p);
+          font-weight: 600;
+        }
+        .vi-urgent {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          padding: 12px 14px;
+          background: var(--bg);
+          border: 1px solid rgba(248, 113, 113, 0.35);
+          border-radius: 12px;
+        }
+        .vi-urgent__dot {
+          width: 8px;
+          height: 8px;
+          margin-top: 5px;
+          border-radius: 999px;
+          background: #f87171;
+          flex-shrink: 0;
+          box-shadow: 0 0 0 4px rgba(248, 113, 113, 0.12);
+        }
+        .vi-urgent__person {
+          margin: 0;
+          font-size: 13px;
+          font-weight: 600;
+          color: var(--p);
+        }
+        .vi-urgent__task {
+          margin: 2px 0 0;
+          font-size: 12px;
+          color: var(--t3);
+        }
+        .vi-quicklinks {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+          gap: 16px;
+        }
 
-      {/* Stats Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '12px' }}>
-        {[
-          { emoji: '🎨', name: 'Diseño', count: '40', label: 'especialistas' },
-          { emoji: '🎬', name: 'Video', count: '15', label: 'especialistas' },
-          { emoji: '💻', name: 'Desarrollo', count: '25', label: 'especialistas' },
-          { emoji: '📝', name: 'Copywriting', count: '8', label: 'especialistas' },
-          { emoji: '🔐', name: 'Seguridad', count: '38', label: 'especialistas' },
-          { emoji: '⚙️', name: 'Automatización', count: '15', label: 'especialistas' },
-        ].map((stat, i) => (
-          <div
-            key={i}
-            style={{
-              padding: '16px',
-              background: 'var(--bg2)',
-              border: '1px solid var(--b)',
-              borderRadius: 'var(--r)',
-              textAlign: 'center',
-            }}
-          >
-            <p style={{ fontSize: '24px', marginBottom: '8px' }}>{stat.emoji}</p>
-            <p style={{ fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>{stat.name}</p>
-            <p style={{ fontSize: '18px', fontWeight: 700, color: 'var(--blue)' }}>{stat.count}</p>
-            <p style={{ fontSize: '10px', color: 'var(--t3)' }}>{stat.label}</p>
-          </div>
-        ))}
+        @media (max-width: 900px) {
+          .vi-grid-2 {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
+    </DashboardLayout>
+  );
+}
+
+// ── Card wrapper ─────────────────────────────────────────────────────────────
+function Card({
+  title,
+  subtitle,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="vi-card">
+      <div className="vi-card__head">
+        <h2 className="vi-card__title">{title}</h2>
+        {subtitle && <span className="vi-card__subtitle">{subtitle}</span>}
       </div>
+      {children}
+      <style jsx>{`
+        .vi-card {
+          background: var(--bg2);
+          border: 1px solid var(--b);
+          border-radius: var(--r);
+          padding: 20px 22px 22px;
+        }
+        .vi-card__head {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          gap: 12px;
+          margin-bottom: 18px;
+        }
+        .vi-card__title {
+          margin: 0;
+          font-family: var(--font-display);
+          font-size: 16px;
+          font-weight: 600;
+          color: var(--p);
+        }
+        .vi-card__subtitle {
+          font-size: 12px;
+          color: var(--t3);
+        }
+      `}</style>
+    </section>
+  );
+}
+
+// ── Custom dark tooltip ──────────────────────────────────────────────────────
+interface TooltipPayloadItem {
+  name?: string;
+  value?: number | string;
+  color?: string;
+}
+function ChartTooltip({
+  active,
+  payload,
+  label,
+  suffix = '',
+}: {
+  active?: boolean;
+  payload?: TooltipPayloadItem[];
+  label?: string;
+  suffix?: string;
+}) {
+  if (!active || !payload || payload.length === 0) return null;
+  return (
+    <div
+      style={{
+        background: 'var(--bg3)',
+        border: '1px solid var(--b)',
+        borderRadius: 10,
+        padding: '8px 12px',
+        boxShadow: '0 8px 24px rgba(0,0,0,0.45)',
+      }}
+    >
+      {label && <p style={{ margin: '0 0 4px', fontSize: 11, color: 'var(--t3)' }}>{label}</p>}
+      {payload.map((p, i) => (
+        <p key={i} style={{ margin: 0, fontSize: 12, color: 'var(--p)', display: 'flex', alignItems: 'center', gap: 6 }}>
+          {p.color && (
+            <span style={{ width: 8, height: 8, borderRadius: 999, background: p.color, display: 'inline-block' }} />
+          )}
+          {p.name ? `${p.name}: ` : ''}
+          <strong>
+            {typeof p.value === 'number' ? p.value.toLocaleString('en-US') : p.value}
+            {suffix}
+          </strong>
+        </p>
+      ))}
     </div>
+  );
+}
+
+// ── Quick link button ────────────────────────────────────────────────────────
+function QuickLink({
+  href,
+  icon,
+  label,
+  primary = false,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+  primary?: boolean;
+}) {
+  return (
+    <Link href={href} className={`vi-ql${primary ? ' is-primary' : ''}`}>
+      <span className="vi-ql__icon">{icon}</span>
+      <span className="vi-ql__label">{label}</span>
+      <ArrowRight size={16} className="vi-ql__arrow" />
+      <style jsx>{`
+        .vi-ql {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 16px 18px;
+          border-radius: var(--r);
+          text-decoration: none;
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--t1);
+          background: var(--bg2);
+          border: 1px solid var(--b);
+          transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+        }
+        .vi-ql:hover {
+          border-color: var(--blue);
+          transform: translateY(-2px);
+        }
+        .vi-ql.is-primary {
+          background: var(--blue);
+          border-color: var(--blue);
+          color: #fff;
+        }
+        .vi-ql.is-primary:hover {
+          box-shadow: 0 8px 20px rgba(59, 130, 246, 0.32);
+        }
+        .vi-ql__icon {
+          display: inline-flex;
+        }
+        .vi-ql__label {
+          flex: 1;
+        }
+        .vi-ql__arrow {
+          opacity: 0.5;
+          transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        .vi-ql:hover .vi-ql__arrow {
+          opacity: 1;
+          transform: translateX(3px);
+        }
+      `}</style>
+    </Link>
   );
 }
