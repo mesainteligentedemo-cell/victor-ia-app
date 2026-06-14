@@ -1579,9 +1579,9 @@ export default function AgentsPage() {
     <div style={{ padding: '24px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '32px', fontWeight: 700, marginBottom: '8px' }}>🤖 Agentes IA</h1>
+          <h1 style={{ fontSize: '32px', fontWeight: 700, marginBottom: '8px' }}>🤖 Agentes IA · Sistema Completo</h1>
           <p style={{ fontSize: '12px', color: 'var(--t3)' }}>
-            {agents.length} especialistas · {agents.filter((a) => a.status === 'active' || a.status === 'running').length} activos
+            {agents.length} especialistas disponibles · {agents.filter((a) => a.status === 'active' || a.status === 'running').length} activos ahora
           </p>
         </div>
         <button
