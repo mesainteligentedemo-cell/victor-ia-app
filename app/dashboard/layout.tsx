@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import BottomNav from '@/components/navigation/BottomNav';
 import Onboarding from '@/components/Onboarding';
