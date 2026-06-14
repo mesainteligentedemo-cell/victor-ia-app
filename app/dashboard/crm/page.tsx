@@ -1,701 +1,261 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Plus, X, Edit2, Trash2 } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Loader2, X } from 'lucide-react';
 
-interface Prospect {
+type Stage = 'prospect' | 'proposal' | 'authorized' | 'completed';
+
+interface Card {
   id: string;
   name: string;
-  company: string;
-  email: string;
-  phone: string;
-  stage: 'lead' | 'contacted' | 'qualified' | 'proposal' | 'negotiation' | 'won' | 'lost';
+  company: string | null;
+  email: string | null;
+  phone: string | null;
+  stage: Stage;
   value: number;
-  createdAt: string;
-  notes: string;
+  deadline: string | null;
+  notes: string | null;
+  created_at: string;
 }
 
-const PIPELINE_STAGES = ['lead', 'contacted', 'qualified', 'proposal', 'negotiation', 'won', 'lost'];
+const COLUMNS: { stage: Stage; label: string }[] = [
+  { stage: 'prospect', label: 'Prospecto' },
+  { stage: 'proposal', label: 'Propuesta' },
+  { stage: 'authorized', label: 'Autorizado' },
+  { stage: 'completed', label: 'Completado' },
+];
 
-export default function CRMPage() {
-  const [prospects, setProspects] = useState<Prospect[]>([]);
-  const [stageFilter, setStageFilter] = useState<string | null>(null);
-  const [showNewModal, setShowNewModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [editingProspect, setEditingProspect] = useState<Prospect | null>(null);
+const fmt = (n: number) => `$${Math.round(n).toLocaleString('es-MX')}`;
+
+/** Urgency from deadline: red <=3d, yellow <=10d, green otherwise/none. */
+function urgency(deadline: string | null): { dot: string; color: string } {
+  if (!deadline) return { dot: '🟢', color: 'var(--green)' };
+  const days = Math.ceil((new Date(deadline).getTime() - Date.now()) / 86400000);
+  if (days <= 3) return { dot: '🔴', color: 'var(--red)' };
+  if (days <= 10) return { dot: '🟡', color: 'var(--orange)' };
+  return { dot: '🟢', color: 'var(--green)' };
+}
+
+export default function CRMKanbanPage() {
+  const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadingAction, setLoadingAction] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    company: '',
-    email: '',
-    phone: '',
-    value: '',
-    notes: '',
-  });
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [detail, setDetail] = useState<Card | null>(null);
+  const [savingDetail, setSavingDetail] = useState(false);
 
-  // Cargar prospectos al montar
-  useEffect(() => {
-    fetchProspects();
-  }, []);
+  // filters
+  const [search, setSearch] = useState('');
+  const [minValue, setMinValue] = useState('');
+  const [fromDate, setFromDate] = useState('');
 
-  const fetchProspects = async () => {
+  const fetchCards = useCallback(async () => {
     try {
-      setLoading(true);
       setError(null);
-      const response = await fetch('/api/crm');
-      if (!response.ok) {
-        throw new Error('Error al cargar prospectos');
-      }
-      const data = await response.json();
-      setProspects(data);
+      const res = await fetch('/api/crm/kanban');
+      if (!res.ok) throw new Error('No se pudieron cargar los clientes.');
+      const data = await res.json();
+      setCards(data.cards ?? []);
     } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
-      setError(errorMsg);
-      console.error('Error loading prospects:', err);
+      setError(err instanceof Error ? err.message : 'Error al cargar.');
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const filteredProspects = stageFilter
-    ? prospects.filter((p) => p.stage === stageFilter)
-    : prospects;
+  useEffect(() => { fetchCards(); }, [fetchCards]);
 
-  const metrics = {
-    total: prospects.length,
-    avgValue: Math.round(prospects.reduce((sum, p) => sum + p.value, 0) / prospects.length),
-    won: prospects.filter((p) => p.stage === 'won').length,
-    wonValue: prospects.filter((p) => p.stage === 'won').reduce((sum, p) => sum + p.value, 0),
-  };
+  const filtered = useMemo(() => {
+    return cards.filter((c) => {
+      if (search && !`${c.name} ${c.company ?? ''}`.toLowerCase().includes(search.toLowerCase())) return false;
+      if (minValue && c.value < Number(minValue)) return false;
+      if (fromDate && new Date(c.created_at) < new Date(fromDate)) return false;
+      return true;
+    });
+  }, [cards, search, minValue, fromDate]);
 
-  const handleNewProspect = () => {
-    setFormData({ name: '', company: '', email: '', phone: '', value: '', notes: '' });
-    setError(null);
-    setShowNewModal(true);
-  };
+  const byStage = (stage: Stage) => filtered.filter((c) => c.stage === stage);
+  const colTotal = (stage: Stage) => byStage(stage).reduce((sum, c) => sum + c.value, 0);
 
-  const handleSaveNew = async () => {
-    if (!formData.name || !formData.company) {
-      setError('Nombre y empresa son requeridos');
-      return;
-    }
-
+  const moveCard = async (id: string, stage: Stage) => {
+    const prev = cards;
+    setCards((cs) => cs.map((c) => (c.id === id ? { ...c, stage } : c)));
     try {
-      setLoadingAction('creating');
-      setError(null);
+      const res = await fetch('/api/crm/kanban', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'move', id, stage }),
+      });
+      if (!res.ok) throw new Error('move failed');
+    } catch {
+      setCards(prev); // rollback
+      setError('No se pudo mover la tarjeta.');
+    }
+  };
 
-      const response = await fetch('/api/crm', {
+  const saveDetail = async () => {
+    if (!detail) return;
+    setSavingDetail(true);
+    try {
+      const res = await fetch('/api/crm/kanban', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: formData.name,
-          company: formData.company,
-          email: formData.email,
-          phone: formData.phone,
-          value: parseInt(formData.value) || 0,
-          notes: formData.notes,
+          action: 'update',
+          id: detail.id,
+          fields: {
+            name: detail.name,
+            company: detail.company ?? '',
+            email: detail.email ?? '',
+            phone: detail.phone ?? '',
+            value: detail.value,
+            deadline: detail.deadline ?? '',
+            notes: detail.notes ?? '',
+          },
         }),
       });
-
-      if (!response.ok) {
-        throw new Error('Error al crear prospecto');
-      }
-
-      const newProspect = await response.json();
-      setProspects([newProspect, ...prospects]);
-      setShowNewModal(false);
-      setFormData({ name: '', company: '', email: '', phone: '', value: '', notes: '' });
-    } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
-      setError(errorMsg);
-      console.error('Error creating prospect:', err);
+      if (!res.ok) throw new Error('update failed');
+      setCards((cs) => cs.map((c) => (c.id === detail.id ? detail : c)));
+      setDetail(null);
+    } catch {
+      setError('No se pudo guardar.');
     } finally {
-      setLoadingAction(null);
+      setSavingDetail(false);
     }
-  };
-
-  const handleEditProspect = (prospect: Prospect) => {
-    setEditingProspect(prospect);
-    setFormData({
-      name: prospect.name,
-      company: prospect.company,
-      email: prospect.email,
-      phone: prospect.phone,
-      value: prospect.value.toString(),
-      notes: prospect.notes,
-    });
-    setError(null);
-    setShowEditModal(true);
-  };
-
-  const handleSaveEdit = async () => {
-    if (!editingProspect || !formData.name || !formData.company) {
-      setError('Nombre y empresa son requeridos');
-      return;
-    }
-
-    try {
-      setLoadingAction('editing');
-      setError(null);
-
-      const response = await fetch(`/api/crm/${editingProspect.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.name,
-          company: formData.company,
-          email: formData.email,
-          phone: formData.phone,
-          value: parseInt(formData.value) || 0,
-          notes: formData.notes,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al actualizar prospecto');
-      }
-
-      const updatedProspect = await response.json();
-      setProspects(
-        prospects.map((p) =>
-          p.id === editingProspect.id ? updatedProspect : p
-        )
-      );
-      setShowEditModal(false);
-      setEditingProspect(null);
-      setFormData({ name: '', company: '', email: '', phone: '', value: '', notes: '' });
-    } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
-      setError(errorMsg);
-      console.error('Error updating prospect:', err);
-    } finally {
-      setLoadingAction(null);
-    }
-  };
-
-  const handleDeleteProspect = async (id: string) => {
-    if (!window.confirm('¿Estás seguro de que deseas eliminar este prospecto?')) {
-      return;
-    }
-
-    try {
-      setLoadingAction(`deleting-${id}`);
-      setError(null);
-
-      const response = await fetch(`/api/crm/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al eliminar prospecto');
-      }
-
-      setProspects(prospects.filter((p) => p.id !== id));
-    } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
-      setError(errorMsg);
-      console.error('Error deleting prospect:', err);
-    } finally {
-      setLoadingAction(null);
-    }
-  };
-
-  const handleChangeStage = async (prospectId: string, newStage: string) => {
-    try {
-      setLoadingAction(`stage-${prospectId}`);
-      setError(null);
-
-      const response = await fetch(`/api/crm/${prospectId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ stage: newStage }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al cambiar etapa');
-      }
-
-      const updatedProspect = await response.json();
-      setProspects(
-        prospects.map((p) =>
-          p.id === prospectId ? updatedProspect : p
-        )
-      );
-    } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
-      setError(errorMsg);
-      console.error('Error changing stage:', err);
-      // Recargar para asegurar consistencia
-      fetchProspects();
-    } finally {
-      setLoadingAction(null);
-    }
-  };
-
-  const getStageColor = (stage: string) => {
-    const colors: Record<string, string> = {
-      lead: 'var(--t3)',
-      contacted: 'var(--blue)',
-      qualified: 'var(--orange)',
-      proposal: 'var(--purple)',
-      negotiation: 'var(--pink)',
-      won: 'var(--green)',
-      lost: '#EF4444',
-    };
-    return colors[stage] || 'var(--t3)';
-  };
-
-  const getStageLabel = (stage: string) => {
-    const labels: Record<string, string> = {
-      lead: 'Lead',
-      contacted: 'Contactado',
-      qualified: 'Calificado',
-      proposal: 'Propuesta',
-      negotiation: 'Negociación',
-      won: 'Ganado',
-      lost: 'Perdido',
-    };
-    return labels[stage] || stage;
   };
 
   return (
-    <div style={{ padding: '24px' }}>
-      {/* Error Alert */}
+    <div style={{ padding: 24, color: 'var(--p)' }}>
+      <style>{`
+        .kb-col{background:var(--bg2);border:1px solid var(--b);border-radius:14px;padding:12px;min-height:340px;transition:background .15s;}
+        .kb-col.over{background:var(--bg3);border-color:var(--blue);}
+        .kb-card{background:var(--bg);border:1px solid var(--b);border-radius:10px;padding:12px;margin-bottom:10px;cursor:grab;transition:all .12s;}
+        .kb-card:hover{border-color:var(--b2);transform:translateY(-1px);}
+        .kb-card:active{cursor:grabbing;}
+        .kb-input{padding:9px 12px;border:1px solid var(--b);border-radius:10px;background:var(--bg2);color:var(--p);font-size:13px;outline:none;}
+        .kb-input:focus{border-color:var(--blue);}
+      `}</style>
+
+      <h1 style={{ fontSize: 32, fontWeight: 700, marginBottom: 8 }}>CRM · Pipeline</h1>
+      <p style={{ color: 'var(--t2)', marginBottom: 20, fontSize: 14 }}>Arrastra las tarjetas entre etapas</p>
+
       {error && (
-        <div style={{
-          marginBottom: '16px',
-          padding: '12px 16px',
-          background: '#FEE2E2',
-          border: '1px solid #FCA5A5',
-          borderRadius: '8px',
-          color: '#DC2626',
-          fontSize: '14px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-          <span>{error}</span>
-          <button
-            onClick={() => setError(null)}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'inherit',
-              cursor: 'pointer',
-              fontSize: '18px',
-              padding: '0',
-            }}
-          >
-            ✕
-          </button>
+        <div style={{ padding: 12, background: 'rgba(248,113,113,.1)', border: '1px solid rgba(248,113,113,.25)', color: 'var(--red)', borderRadius: 10, marginBottom: 16, fontSize: 13 }}>
+          {error}
         </div>
       )}
 
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-        <div>
-          <h1 style={{ fontSize: '32px', fontWeight: 700, marginBottom: '8px' }}>💼 CRM</h1>
-          <p style={{ fontSize: '14px', color: 'var(--t3)' }}>
-            {loading ? 'Cargando...' : `Gestiona tu pipeline de ${prospects.length} prospectos`}
-          </p>
+      <div style={{ display: 'flex', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
+        <input className="kb-input" placeholder="Buscar cliente…" value={search} onChange={(e) => setSearch(e.target.value)} />
+        <input className="kb-input" type="number" placeholder="Valor mínimo" value={minValue} onChange={(e) => setMinValue(e.target.value)} style={{ width: 140 }} />
+        <input className="kb-input" type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
+      </div>
+
+      {loading ? (
+        <div style={{ color: 'var(--t3)', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Loader2 size={16} className="animate-spin" /> Cargando…
         </div>
-        <button
-          onClick={handleNewProspect}
-          disabled={loading || loadingAction !== null}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '10px 20px',
-            background: loading || loadingAction !== null ? 'var(--t3)' : 'var(--blue)',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            cursor: loading || loadingAction !== null ? 'not-allowed' : 'pointer',
-            fontWeight: 600,
-            opacity: loading || loadingAction !== null ? 0.6 : 1,
-          }}
-        >
-          <Plus size={16} />
-          Nuevo Prospecto
-        </button>
-      </div>
-
-      {/* Metrics */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '32px' }}>
-        {[
-          { label: 'Total', value: metrics.total },
-          { label: 'Valor Promedio', value: `$${metrics.avgValue.toLocaleString()}` },
-          { label: 'Ganados', value: metrics.won },
-          { label: 'Valor Ganado', value: `$${metrics.wonValue.toLocaleString()}` },
-        ].map((metric) => (
-          <div key={metric.label} style={{ padding: '16px', background: 'var(--bg2)', borderRadius: '8px', border: '1px solid var(--b)' }}>
-            <p style={{ fontSize: '12px', color: 'var(--t3)', marginBottom: '8px', textTransform: 'uppercase', fontWeight: 600 }}>
-              {metric.label}
-            </p>
-            <p style={{ fontSize: '24px', fontWeight: 700 }}>{metric.value}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Pipeline Stages */}
-      <div style={{ marginBottom: '32px' }}>
-        <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '12px' }}>Pipeline por Etapa</h3>
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          <button
-            onClick={() => setStageFilter(null)}
-            style={{
-              padding: '8px 14px',
-              background: !stageFilter ? 'var(--blue)' : 'var(--bg2)',
-              color: !stageFilter ? 'white' : 'var(--t2)',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontSize: '13px',
-              fontWeight: 500,
-            }}
-          >
-            Todos ({prospects.length})
-          </button>
-          {PIPELINE_STAGES.map((stage) => {
-            const count = prospects.filter((p) => p.stage === stage).length;
-            return (
-              <button
-                key={stage}
-                onClick={() => setStageFilter(stageFilter === stage ? null : stage)}
-                style={{
-                  padding: '8px 14px',
-                  background: stageFilter === stage ? 'var(--blue)' : 'var(--bg2)',
-                  color: stageFilter === stage ? 'white' : 'var(--t2)',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontSize: '13px',
-                  fontWeight: 500,
-                }}
-              >
-                {getStageLabel(stage)} ({count})
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Prospects Table */}
-      <div style={{ background: 'var(--bg2)', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--b)' }}>
-        {loading ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--t3)' }}>
-            <p>Cargando prospectos...</p>
-          </div>
-        ) : filteredProspects.length > 0 ? (
-          <>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: '2fr 1.5fr 1.5fr 1fr 120px',
-              gap: '16px',
-              padding: '16px',
-              background: 'var(--bg)',
-              borderBottom: '1px solid var(--b)',
-              fontWeight: 600,
-              fontSize: '12px',
-              textTransform: 'uppercase',
-            }}>
-              <div>Prospecto</div>
-              <div>Contacto</div>
-              <div>Valor</div>
-              <div>Etapa</div>
-              <div>Acciones</div>
-            </div>
-
-            {filteredProspects.map((prospect) => (
-              <div
-                key={prospect.id}
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '2fr 1.5fr 1.5fr 1fr 120px',
-                  gap: '16px',
-                  padding: '16px',
-                  borderBottom: '1px solid var(--b)',
-                  alignItems: 'center',
-                  fontSize: '14px',
-                }}
-              >
-                <div>
-                  <p style={{ fontWeight: 600 }}>{prospect.name}</p>
-                  <p style={{ fontSize: '12px', color: 'var(--t3)', marginTop: '4px' }}>{prospect.company}</p>
-                  {prospect.notes && <p style={{ fontSize: '12px', color: 'var(--t3)', marginTop: '4px' }}>📝 {prospect.notes}</p>}
-                </div>
-                <div>
-                  <p style={{ fontSize: '12px' }}>{prospect.email}</p>
-                  <p style={{ fontSize: '12px', color: 'var(--t3)' }}>{prospect.phone}</p>
-                </div>
-                <div style={{ fontWeight: 600 }}>${prospect.value.toLocaleString()}</div>
-                <select
-                  value={prospect.stage}
-                  onChange={(e) => handleChangeStage(prospect.id, e.target.value)}
-                  disabled={loadingAction !== null}
-                  style={{
-                    padding: '6px 8px',
-                    background: 'var(--bg2)',
-                    color: getStageColor(prospect.stage),
-                    border: `1px solid ${getStageColor(prospect.stage)}`,
-                    borderRadius: '4px',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    cursor: loadingAction !== null ? 'not-allowed' : 'pointer',
-                    opacity: loadingAction !== null ? 0.6 : 1,
-                  }}
-                >
-                  {PIPELINE_STAGES.map((stage) => (
-                    <option key={stage} value={stage}>
-                      {getStageLabel(stage)}
-                    </option>
-                  ))}
-                </select>
-                <div style={{ display: 'flex', gap: '6px' }}>
-                  <button
-                    onClick={() => handleEditProspect(prospect)}
-                    disabled={loadingAction !== null}
-                    style={{
-                      padding: '6px',
-                      background: 'var(--bg)',
-                      border: '1px solid var(--b)',
-                      borderRadius: '4px',
-                      cursor: loadingAction !== null ? 'not-allowed' : 'pointer',
-                      color: 'var(--t2)',
-                      opacity: loadingAction !== null ? 0.6 : 1,
-                    }}
-                  >
-                    <Edit2 size={14} />
-                  </button>
-                  <button
-                    onClick={() => handleDeleteProspect(prospect.id)}
-                    disabled={loadingAction !== null}
-                    style={{
-                      padding: '6px',
-                      background: 'rgba(239, 68, 68, 0.1)',
-                      border: '1px solid #EF4444',
-                      borderRadius: '4px',
-                      cursor: loadingAction !== null ? 'not-allowed' : 'pointer',
-                      color: '#EF4444',
-                      opacity: loadingAction !== null ? 0.6 : 1,
-                    }}
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                </div>
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(230px,1fr))', gap: 14 }}>
+          {COLUMNS.map((col) => (
+            <div
+              key={col.stage}
+              className="kb-col"
+              onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add('over'); }}
+              onDragLeave={(e) => e.currentTarget.classList.remove('over')}
+              onDrop={(e) => {
+                e.preventDefault();
+                e.currentTarget.classList.remove('over');
+                if (dragId) moveCard(dragId, col.stage);
+                setDragId(null);
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, padding: '0 4px' }}>
+                <span style={{ fontSize: 13, fontWeight: 700 }}>{col.label}</span>
+                <span style={{ fontSize: 11, color: 'var(--t3)' }}>{byStage(col.stage).length} · {fmt(colTotal(col.stage))}</span>
               </div>
-            ))}
-          </>
-        ) : (
-          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--t3)' }}>
-            <p>No hay prospectos en esta etapa</p>
-          </div>
-        )}
-      </div>
 
-      {/* New Prospect Modal */}
-      {showNewModal && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 100,
-          }}
-          onClick={() => !loadingAction && setShowNewModal(false)}
-        >
-          <div
-            style={{
-              background: 'var(--bg)',
-              borderRadius: '12px',
-              padding: '24px',
-              width: '90%',
-              maxWidth: '500px',
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>Nuevo Prospecto</h2>
-            {error && (
-              <div style={{
-                marginBottom: '16px',
-                padding: '10px 12px',
-                background: '#FEE2E2',
-                border: '1px solid #FCA5A5',
-                borderRadius: '6px',
-                color: '#DC2626',
-                fontSize: '13px',
-              }}>
-                {error}
-              </div>
-            )}
-            {['name', 'company', 'email', 'phone', 'value', 'notes'].map((field) => (
-              <input
-                key={field}
-                type="text"
-                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-                value={formData[field as keyof typeof formData]}
-                onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
-                disabled={loadingAction === 'creating'}
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  background: 'var(--bg2)',
-                  border: '1px solid var(--b)',
-                  borderRadius: '8px',
-                  color: 'var(--fg)',
-                  fontSize: '14px',
-                  marginBottom: '12px',
-                  opacity: loadingAction === 'creating' ? 0.6 : 1,
-                  cursor: loadingAction === 'creating' ? 'not-allowed' : 'text',
-                }}
-              />
-            ))}
-            <div style={{ display: 'flex', gap: '12px' }}>
-              <button
-                onClick={handleSaveNew}
-                disabled={loadingAction === 'creating'}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  background: loadingAction === 'creating' ? 'var(--t3)' : 'var(--blue)',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  cursor: loadingAction === 'creating' ? 'not-allowed' : 'pointer',
-                  fontWeight: 600,
-                  opacity: loadingAction === 'creating' ? 0.6 : 1,
-                }}
-              >
-                {loadingAction === 'creating' ? 'Creando...' : 'Crear'}
-              </button>
-              <button
-                onClick={() => setShowNewModal(false)}
-                disabled={loadingAction === 'creating'}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  background: 'var(--bg2)',
-                  color: 'var(--t2)',
-                  border: '1px solid var(--b)',
-                  borderRadius: '8px',
-                  cursor: loadingAction === 'creating' ? 'not-allowed' : 'pointer',
-                  fontWeight: 600,
-                  opacity: loadingAction === 'creating' ? 0.6 : 1,
-                }}
-              >
-                Cancelar
-              </button>
+              {byStage(col.stage).map((c) => {
+                const u = urgency(c.deadline);
+                return (
+                  <div
+                    key={c.id}
+                    className="kb-card"
+                    draggable
+                    onDragStart={() => setDragId(c.id)}
+                    onDragEnd={() => setDragId(null)}
+                    onClick={() => setDetail(c)}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--p)' }}>{c.name}</span>
+                      <span title="Urgencia" style={{ fontSize: 12 }}>{u.dot}</span>
+                    </div>
+                    {c.company && <div style={{ fontSize: 11, color: 'var(--t3)', marginTop: 2 }}>{c.company}</div>}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)' }}>{fmt(c.value)}</span>
+                      {c.deadline && <span style={{ fontSize: 10, color: u.color }}>{new Date(c.deadline).toLocaleDateString('es-MX')}</span>}
+                    </div>
+                  </div>
+                );
+              })}
+
+              {byStage(col.stage).length === 0 && (
+                <div style={{ fontSize: 12, color: 'var(--t4)', textAlign: 'center', padding: '24px 0' }}>Sin tarjetas</div>
+              )}
             </div>
-          </div>
+          ))}
         </div>
       )}
 
-      {/* Edit Modal */}
-      {showEditModal && editingProspect && (
+      {/* Detail modal */}
+      {detail && (
         <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 100,
-          }}
-          onClick={() => !loadingAction && setShowEditModal(false)}
+          onClick={() => setDetail(null)}
+          style={{ position: 'fixed', inset: 0, zIndex: 60, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}
         >
-          <div
-            style={{
-              background: 'var(--bg)',
-              borderRadius: '12px',
-              padding: '24px',
-              width: '90%',
-              maxWidth: '500px',
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>Editar Prospecto</h2>
-            {error && (
-              <div style={{
-                marginBottom: '16px',
-                padding: '10px 12px',
-                background: '#FEE2E2',
-                border: '1px solid #FCA5A5',
-                borderRadius: '6px',
-                color: '#DC2626',
-                fontSize: '13px',
-              }}>
-                {error}
+          <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 520, maxHeight: '90vh', overflowY: 'auto', background: 'var(--bg2)', border: '1px solid var(--b)', borderRadius: 16, boxShadow: 'var(--shadow-float)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid var(--b)' }}>
+              <h2 style={{ fontSize: 16, fontWeight: 700, margin: 0 }}>Detalle del cliente</h2>
+              <button onClick={() => setDetail(null)} style={{ background: 'none', border: 'none', color: 'var(--t2)', cursor: 'pointer' }}><X size={18} /></button>
+            </div>
+            <div style={{ padding: 20, display: 'grid', gap: 14 }}>
+              {([
+                ['name', 'Nombre', 'text'],
+                ['company', 'Empresa', 'text'],
+                ['email', 'Email', 'email'],
+                ['phone', 'Teléfono', 'tel'],
+              ] as const).map(([key, label, type]) => (
+                <div key={key}>
+                  <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 6, color: 'var(--t1)' }}>{label}</label>
+                  <input className="kb-input" style={{ width: '100%' }} type={type}
+                    value={(detail[key] as string) ?? ''}
+                    onChange={(e) => setDetail({ ...detail, [key]: e.target.value })} />
+                </div>
+              ))}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 6, color: 'var(--t1)' }}>Valor</label>
+                  <input className="kb-input" style={{ width: '100%' }} type="number"
+                    value={detail.value} onChange={(e) => setDetail({ ...detail, value: Number(e.target.value) || 0 })} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 6, color: 'var(--t1)' }}>Fecha límite</label>
+                  <input className="kb-input" style={{ width: '100%' }} type="date"
+                    value={detail.deadline ? detail.deadline.slice(0, 10) : ''}
+                    onChange={(e) => setDetail({ ...detail, deadline: e.target.value })} />
+                </div>
               </div>
-            )}
-            {['name', 'company', 'email', 'phone', 'value', 'notes'].map((field) => (
-              <input
-                key={field}
-                type="text"
-                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-                value={formData[field as keyof typeof formData]}
-                onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
-                disabled={loadingAction === 'editing'}
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  background: 'var(--bg2)',
-                  border: '1px solid var(--b)',
-                  borderRadius: '8px',
-                  color: 'var(--fg)',
-                  fontSize: '14px',
-                  marginBottom: '12px',
-                  opacity: loadingAction === 'editing' ? 0.6 : 1,
-                  cursor: loadingAction === 'editing' ? 'not-allowed' : 'text',
-                }}
-              />
-            ))}
-            <div style={{ display: 'flex', gap: '12px' }}>
-              <button
-                onClick={handleSaveEdit}
-                disabled={loadingAction === 'editing'}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  background: loadingAction === 'editing' ? 'var(--t3)' : 'var(--blue)',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  cursor: loadingAction === 'editing' ? 'not-allowed' : 'pointer',
-                  fontWeight: 600,
-                  opacity: loadingAction === 'editing' ? 0.6 : 1,
-                }}
-              >
-                {loadingAction === 'editing' ? 'Guardando...' : 'Guardar'}
-              </button>
-              <button
-                onClick={() => setShowEditModal(false)}
-                disabled={loadingAction === 'editing'}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  background: 'var(--bg2)',
-                  color: 'var(--t2)',
-                  border: '1px solid var(--b)',
-                  borderRadius: '8px',
-                  cursor: loadingAction === 'editing' ? 'not-allowed' : 'pointer',
-                  fontWeight: 600,
-                  opacity: loadingAction === 'editing' ? 0.6 : 1,
-                }}
-              >
-                Cancelar
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 6, color: 'var(--t1)' }}>Notas</label>
+                <textarea className="kb-input" style={{ width: '100%', minHeight: 90, resize: 'vertical' }}
+                  value={detail.notes ?? ''} onChange={(e) => setDetail({ ...detail, notes: e.target.value })} />
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: 12, padding: '16px 20px', borderTop: '1px solid var(--b)' }}>
+              <button onClick={() => setDetail(null)} style={{ flex: 1, padding: '10px 16px', borderRadius: 10, border: '1px solid var(--b)', background: 'var(--bg3)', color: 'var(--p)', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>Cancelar</button>
+              <button onClick={saveDetail} disabled={savingDetail} style={{ flex: 2, padding: '10px 16px', borderRadius: 10, border: '1px solid var(--blue)', background: 'var(--blue)', color: '#fff', fontWeight: 600, fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                {savingDetail && <Loader2 size={15} className="animate-spin" />}
+                {savingDetail ? 'Guardando…' : 'Guardar'}
               </button>
             </div>
           </div>

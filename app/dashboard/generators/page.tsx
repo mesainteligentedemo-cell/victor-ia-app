@@ -1,407 +1,210 @@
 'use client';
 
 import { useState } from 'react';
-import { Wand2, Loader } from 'lucide-react';
+import {
+  Image as ImageIcon,
+  Video,
+  Mic,
+  Music,
+  Mail,
+  Presentation,
+  FileText,
+} from 'lucide-react';
 import { useAnalytics, ANALYTICS_EVENTS } from '@/lib/hooks/useAnalytics';
 import ImageGeneratorModal from '@/components/prospeccion/ImageGeneratorModal';
 import VideoGeneratorModal from '@/components/prospeccion/VideoGeneratorModal';
+import VoiceStudioModal from '@/components/modals/VoiceStudioModal';
+import MusicGeneratorModal from '@/components/modals/MusicGeneratorModal';
+import PresentationGeneratorModal from '@/components/modals/PresentationGeneratorModal';
+import ProposalGeneratorModal from '@/components/modals/ProposalGeneratorModal';
+import EmailGeneratorModal from '@/components/modals/EmailGeneratorModal';
 import type { ImageGenerationParams, VideoGenerationParams } from '@/lib/prospeccion-types';
 
-const GENERATORS = [
+type ModalKey =
+  | 'image'
+  | 'video'
+  | 'voice'
+  | 'music'
+  | 'presentation'
+  | 'proposal'
+  | 'email'
+  | null;
+
+interface GenItem {
+  key: Exclude<ModalKey, null>;
+  icon: React.ReactNode;
+  title: string;
+  desc: string;
+}
+
+const GROUPS: { group: string; items: GenItem[] }[] = [
   {
-    id: 'websites',
-    icon: '🌐',
-    title: 'Sitios Web',
-    description: 'Sitio web completo en 60 minutos',
-    fields: [
-      { name: 'nombre', label: 'Nombre/Empresa', type: 'text', placeholder: 'Ej: Costa Negra' },
-      { name: 'tipo', label: 'Tipo de Sitio', type: 'select', options: ['Landing Page', 'E-commerce', 'Blog', 'Portfolio', 'SaaS'] },
-      { name: 'descripcion', label: 'Descripción', type: 'textarea', placeholder: 'Describe el proyecto...' }
-    ]
+    group: 'Imágenes',
+    items: [
+      { key: 'image', icon: <ImageIcon size={22} />, title: 'Generar Imagen', desc: 'Imágenes 4K con IA' },
+    ],
   },
   {
-    id: 'videos',
-    icon: '🎬',
-    title: 'Videos',
-    description: 'Videos con VO, música y efectos',
-    fields: [
-      { name: 'titulo', label: 'Título', type: 'text', placeholder: 'Ej: Presentación Costa Negra' },
-      { name: 'duracion', label: 'Duración (seg)', type: 'number', placeholder: '30' },
-      { name: 'aspecto', label: 'Aspecto', type: 'select', options: ['16:9', '9:16', '1:1', '4:3'] },
-      { name: 'script', label: 'Script', type: 'textarea', placeholder: 'Escribe el guión...' }
-    ]
+    group: 'Videos',
+    items: [
+      { key: 'video', icon: <Video size={22} />, title: 'Generar Video', desc: 'Video con VO, música y efectos' },
+    ],
   },
   {
-    id: 'images',
-    icon: '🖼️',
-    title: 'Imágenes',
-    description: 'Imágenes 4K con IA',
-    fields: [
-      { name: 'prompt', label: 'Descripción', type: 'textarea', placeholder: 'Describe la imagen...' },
-      { name: 'aspecto', label: 'Aspecto', type: 'select', options: ['1:1', '16:9', '9:16', '4:3'] },
-      { name: 'resolucion', label: 'Resolución', type: 'select', options: ['1K', '2K', '4K'] }
-    ]
+    group: 'Voz & Música',
+    items: [
+      { key: 'voice', icon: <Mic size={22} />, title: 'Voice Studio', desc: 'Voces MX/USA con ElevenLabs' },
+      { key: 'music', icon: <Music size={22} />, title: 'Music Generator', desc: 'Pistas originales por mood' },
+    ],
   },
   {
-    id: 'documents',
-    icon: '📄',
-    title: 'Documentos',
-    description: 'PDFs y presentaciones',
-    fields: [
-      { name: 'titulo', label: 'Título', type: 'text', placeholder: 'Ej: Propuesta Comercial' },
-      { name: 'tipo', label: 'Tipo', type: 'select', options: ['Presentación', 'PDF', 'Propuesta', 'Reporte'] },
-      { name: 'contenido', label: 'Contenido', type: 'textarea', placeholder: 'Describe el contenido...' }
-    ]
+    group: 'Documentos & Presentaciones',
+    items: [
+      { key: 'email', icon: <Mail size={22} />, title: 'Email Generator', desc: 'Emails HTML luxury' },
+      { key: 'presentation', icon: <Presentation size={22} />, title: 'Presentation Generator', desc: 'Slides con notas' },
+      { key: 'proposal', icon: <FileText size={22} />, title: 'Proposal Generator', desc: 'Propuestas en PDF' },
+    ],
   },
-  {
-    id: 'emails',
-    icon: '✉️',
-    title: 'Emails',
-    description: 'Emails HTML luxury',
-    fields: [
-      { name: 'asunto', label: 'Asunto', type: 'text', placeholder: 'Ej: Bienvenido' },
-      { name: 'contenido', label: 'Contenido', type: 'textarea', placeholder: 'Escribe el mensaje...' }
-    ]
-  },
-  {
-    id: 'voice',
-    icon: '🎤',
-    title: 'Audio/VO',
-    description: 'Voces con ElevenLabs',
-    fields: [
-      { name: 'script', label: 'Script', type: 'textarea', placeholder: 'Texto a leer...' },
-      { name: 'voz', label: 'Voz', type: 'select', options: ['Rachel', 'Bella', 'Josh', 'Victor', 'Charlotte'] }
-    ]
-  }
 ];
 
 export default function GeneratorsPage() {
-  const [selectedGenerator, setSelectedGenerator] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<Record<string, any>>({});
   const { track } = useAnalytics();
+  const [openModal, setOpenModal] = useState<ModalKey>(null);
 
-  // Modal states
-  const [showImageModal, setShowImageModal] = useState(false);
-  const [showVideoModal, setShowVideoModal] = useState(false);
+  // image/video keep their dedicated handlers
   const [imageGenerating, setImageGenerating] = useState(false);
   const [videoGenerating, setVideoGenerating] = useState(false);
   const [imageError, setImageError] = useState<string | null>(null);
   const [videoError, setVideoError] = useState<string | null>(null);
-  const [lastResult, setLastResult] = useState<any>(null);
+  const [lastResult, setLastResult] = useState<{ type: string; jobId?: string; url?: string } | null>(null);
 
-  const currentGenerator = GENERATORS.find(g => g.id === selectedGenerator);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currentGenerator) return;
-
-    setLoading(true);
-
-    try {
-      // Map generator ID to API type
-      const typeMap: Record<string, string> = {
-        websites: 'website',
-        videos: 'video',
-        images: 'image',
-        documents: 'document',
-        emails: 'email',
-        voice: 'audio',
-      };
-
-      const generationType = typeMap[currentGenerator.id];
-      const prompt = formData.contenido || formData.script || formData.prompt || formData.descripcion || '';
-
-      // Call generation API
-      const response = await fetch('/api/generate/advanced', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: generationType,
-          prompt,
-          options: {
-            aspecto: formData.aspecto,
-            resolucion: formData.resolucion,
-            duracion: formData.duracion,
-          },
-        }),
-      });
-
-      if (!response.ok) throw new Error('Generation failed');
-
-      const result = await response.json();
-
-      // Track analytics
-      await track(ANALYTICS_EVENTS.GENERATOR_USED, {
-        generatorType: currentGenerator.id,
-        jobId: result.jobId,
-        timestamp: new Date().toISOString(),
-      });
-
-      alert('✅ Generación iniciada!');
-      setSelectedGenerator(null);
-      setFormData({});
-    } catch (error) {
-      console.error('Generation error:', error);
-      alert('❌ Error en la generación. Intenta nuevamente.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Handlers para imagen
-  const handleOpenImageModal = () => {
+  const open = (key: Exclude<ModalKey, null>) => {
     setImageError(null);
-    setShowImageModal(true);
+    setVideoError(null);
+    setOpenModal(key);
   };
-
-  const handleCloseImageModal = () => {
-    setShowImageModal(false);
-    setImageError(null);
-  };
+  const close = () => setOpenModal(null);
 
   const handleGenerateImage = async (params: ImageGenerationParams) => {
     setImageGenerating(true);
     setImageError(null);
-
     try {
       const response = await fetch('/api/generate/image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(params),
       });
-
-      if (!response.ok) {
-        throw new Error('Image generation failed');
-      }
-
+      if (!response.ok) throw new Error('No se pudo generar la imagen.');
       const result = await response.json();
-      setLastResult({
-        type: 'image',
-        ...result,
-      });
-
-      // Track analytics
-      await track(ANALYTICS_EVENTS.GENERATOR_USED, {
-        generatorType: 'images',
-        jobId: result.jobId,
-        timestamp: new Date().toISOString(),
-      });
-
-      handleCloseImageModal();
+      setLastResult({ type: 'image', ...result });
+      await track(ANALYTICS_EVENTS.GENERATOR_USED, { generatorType: 'images', jobId: result.jobId });
+      close();
     } catch (error) {
-      console.error('Image generation error:', error);
       setImageError(error instanceof Error ? error.message : 'Error al generar imagen');
     } finally {
       setImageGenerating(false);
     }
   };
 
-  // Handlers para video
-  const handleOpenVideoModal = () => {
-    setVideoError(null);
-    setShowVideoModal(true);
-  };
-
-  const handleCloseVideoModal = () => {
-    setShowVideoModal(false);
-    setVideoError(null);
-  };
-
   const handleGenerateVideo = async (params: VideoGenerationParams) => {
     setVideoGenerating(true);
     setVideoError(null);
-
     try {
       const response = await fetch('/api/generate/video', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(params),
       });
-
-      if (!response.ok) {
-        throw new Error('Video generation failed');
-      }
-
+      if (!response.ok) throw new Error('No se pudo generar el video.');
       const result = await response.json();
-      setLastResult({
-        type: 'video',
-        ...result,
-      });
-
-      // Track analytics
-      await track(ANALYTICS_EVENTS.GENERATOR_USED, {
-        generatorType: 'videos',
-        jobId: result.jobId,
-        timestamp: new Date().toISOString(),
-      });
-
-      handleCloseVideoModal();
+      setLastResult({ type: 'video', ...result });
+      await track(ANALYTICS_EVENTS.GENERATOR_USED, { generatorType: 'videos', jobId: result.jobId });
+      close();
     } catch (error) {
-      console.error('Video generation error:', error);
       setVideoError(error instanceof Error ? error.message : 'Error al generar video');
     } finally {
       setVideoGenerating(false);
     }
   };
 
-  if (selectedGenerator && currentGenerator) {
-    return (
-      <div className="max-w-2xl mx-auto">
-        <button
-          onClick={() => setSelectedGenerator(null)}
-          className="mb-6 text-sm font-medium hover:underline"
-        >
-          ← Volver
-        </button>
-
-        <div className="space-y-6">
-          <div className="flex items-center gap-4">
-            <div className="text-5xl">{currentGenerator.icon}</div>
-            <div>
-              <h1 className="text-3xl font-bold">{currentGenerator.title}</h1>
-              <p className="text-gray-600 dark:text-gray-400">{currentGenerator.description}</p>
-            </div>
-          </div>
-
-          <form onSubmit={handleSubmit} className="border border-gray-200 dark:border-gray-800 rounded-lg p-6 space-y-4">
-            {currentGenerator.fields.map(field => (
-              <div key={field.name}>
-                <label className="block text-sm font-medium mb-2">{field.label}</label>
-                {field.type === 'select' ? (
-                  <select
-                    value={formData[field.name] || ''}
-                    onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-800"
-                  >
-                    <option value="">Seleccionar...</option>
-                    {field.options?.map(opt => (
-                      <option key={opt} value={opt}>{opt}</option>
-                    ))}
-                  </select>
-                ) : field.type === 'textarea' ? (
-                  <textarea
-                    placeholder={field.placeholder}
-                    value={formData[field.name] || ''}
-                    onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
-                    rows={4}
-                    className="w-full px-4 py-2 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-800"
-                  />
-                ) : (
-                  <input
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    value={formData[field.name] || ''}
-                    onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-800"
-                  />
-                )}
-              </div>
-            ))}
-
-            <div className="flex gap-3 pt-4">
-              <button
-                type="button"
-                onClick={() => setSelectedGenerator(null)}
-                className="flex-1 px-4 py-2 border border-gray-200 dark:border-gray-800 rounded-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex-1 px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium disabled:opacity-50 flex items-center justify-center gap-2"
-              >
-                {loading && <Loader size={18} className="animate-spin" />}
-                {loading ? 'Generando...' : '✨ Generar'}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Generadores de Contenido</h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-2">Crea contenido profesional en minutos</p>
+    <div style={{ padding: 24, color: 'var(--p)' }}>
+      <style>{`
+        .gen-card {
+          text-align:left; padding:20px; border:1px solid var(--b); border-radius:14px;
+          background:var(--bg2); cursor:pointer; transition:all .15s; width:100%;
+          display:flex; flex-direction:column; gap:10px;
+        }
+        .gen-card:hover { border-color:var(--blue); transform:translateY(-2px); }
+        .gen-icon {
+          width:44px; height:44px; border-radius:11px; background:var(--gd);
+          display:flex; align-items:center; justify-content:center; color:var(--blue);
+        }
+        .gen-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+        .gen-group-title { font-size:13px; font-weight:700; color:var(--t2); text-transform:uppercase; letter-spacing:.05em; margin:24px 0 12px; }
+      `}</style>
+
+      <div style={{ marginBottom: 8 }}>
+        <h1 style={{ fontSize: 32, fontWeight: 700, margin: 0 }}>Generadores de Contenido</h1>
+        <p style={{ color: 'var(--t2)', marginTop: 6, fontSize: 14 }}>
+          Crea contenido profesional en minutos
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {GENERATORS.map(gen => (
-          <button
-            key={gen.id}
-            onClick={() => {
-              if (gen.id === 'images') {
-                handleOpenImageModal();
-              } else if (gen.id === 'videos') {
-                handleOpenVideoModal();
-              } else {
-                setSelectedGenerator(gen.id);
-              }
-            }}
-            className="text-left p-6 border border-gray-200 dark:border-gray-800 rounded-lg hover:shadow-lg transition hover:border-black dark:hover:border-white"
-          >
-            <div className="text-4xl mb-4">{gen.icon}</div>
-            <h3 className="font-bold text-lg mb-2">{gen.title}</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{gen.description}</p>
-            <div className="flex items-center gap-2 text-sm font-medium">
-              <Wand2 size={16} />
-              Comenzar
-            </div>
-          </button>
-        ))}
-      </div>
-
-      {/* Resultado de generación */}
-      {lastResult && (
-        <div className="border-t border-gray-200 dark:border-gray-800 pt-8">
-          <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-6">
-            <h3 className="font-bold text-green-700 dark:text-green-400 mb-2">
-              ✅ {lastResult.type === 'image' ? 'Imagen' : 'Video'} generado
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Job ID: {lastResult.jobId}
-            </p>
-            {lastResult.url && (
-              <a
-                href={lastResult.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block mt-3 px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg text-sm font-medium hover:opacity-90"
-              >
-                Ver {lastResult.type === 'image' ? 'imagen' : 'video'}
-              </a>
-            )}
+      {GROUPS.map((g) => (
+        <div key={g.group}>
+          <div className="gen-group-title">{g.group}</div>
+          <div className="gen-grid">
+            {g.items.map((item) => (
+              <button key={item.key} className="gen-card" onClick={() => open(item.key)}>
+                <div className="gen-icon">{item.icon}</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--p)' }}>{item.title}</div>
+                <div style={{ fontSize: 13, color: 'var(--t2)' }}>{item.desc}</div>
+              </button>
+            ))}
           </div>
+        </div>
+      ))}
+
+      {lastResult && (
+        <div style={{ marginTop: 32, padding: 20, background: 'rgba(34,197,94,.1)', border: '1px solid rgba(34,197,94,.25)', borderRadius: 14 }}>
+          <div style={{ fontWeight: 700, color: 'var(--green)', marginBottom: 6 }}>
+            ✅ {lastResult.type === 'image' ? 'Imagen' : 'Video'} en proceso
+          </div>
+          {lastResult.jobId && <div style={{ fontSize: 12, color: 'var(--t2)' }}>Job ID: {lastResult.jobId}</div>}
+          {lastResult.url && (
+            <a href={lastResult.url} target="_blank" rel="noopener noreferrer" className="sm-btn primary"
+              style={{ display: 'inline-flex', marginTop: 10, textDecoration: 'none' }}>
+              Ver resultado
+            </a>
+          )}
         </div>
       )}
 
-      <div className="border-t border-gray-200 dark:border-gray-800 pt-8">
-        <h2 className="text-xl font-bold mb-6">Generaciones Recientes</h2>
-        <div className="p-8 text-center border border-gray-200 dark:border-gray-800 rounded-lg">
-          <p className="text-gray-600 dark:text-gray-400">Sin generaciones aún. ¡Crea tu primera!</p>
-        </div>
-      </div>
-
-      {/* Modales */}
+      {/* Image / Video (existing modals) */}
       <ImageGeneratorModal
-        isOpen={showImageModal}
-        onClose={handleCloseImageModal}
+        isOpen={openModal === 'image'}
+        onClose={close}
         onGenerate={handleGenerateImage}
         isGenerating={imageGenerating}
         error={imageError}
       />
-
       <VideoGeneratorModal
-        isOpen={showVideoModal}
-        onClose={handleCloseVideoModal}
+        isOpen={openModal === 'video'}
+        onClose={close}
         onGenerate={handleGenerateVideo}
         isGenerating={videoGenerating}
         error={videoError}
       />
+
+      {/* Voice & Music */}
+      <VoiceStudioModal isOpen={openModal === 'voice'} onClose={close} />
+      <MusicGeneratorModal isOpen={openModal === 'music'} onClose={close} />
+
+      {/* Documents & Presentations */}
+      <EmailGeneratorModal isOpen={openModal === 'email'} onClose={close} />
+      <PresentationGeneratorModal isOpen={openModal === 'presentation'} onClose={close} />
+      <ProposalGeneratorModal isOpen={openModal === 'proposal'} onClose={close} />
     </div>
   );
 }
