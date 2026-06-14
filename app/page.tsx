@@ -1,3 +1,5 @@
+'use client';
+
 import Link from "next/link";
 import { SignIn } from "@clerk/nextjs";
 import { BarChart3, MessageCircle, Users, BookOpen, TrendingUp, Headphones, Settings, Scale, Zap, Library } from 'lucide-react';

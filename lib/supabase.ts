@@ -143,7 +143,7 @@ export async function getProjects(userId: string) {
   return data;
 }
 
-export async function createClient(client: any) {
+export async function createClientRecord(client: any) {
   try {
     const { data, error } = await supabase.from('clients').insert([client]).select();
     if (error) throw error;

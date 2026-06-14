@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { Anthropic } from "@anthropic-ai/sdk";
 import { checkRateLimit } from "@/lib/security/rate-limiter";
 import { validateText } from "@/lib/security/validation";
 import { logger } from "@/lib/logger";

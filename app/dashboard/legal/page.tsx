@@ -6,7 +6,7 @@ export default function LegalPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '32px' }}>
         <div style={{ padding: '16px', background: 'var(--bg2)', borderRadius: '8px' }}>
           <p style={{ fontSize: '12px', color: 'var(--t3)' }}>DOCUMENTOS</p>
-          <p style={{ fontSize: '28px', fontWeight: 700' }}>4</p>
+          <p style={{ fontSize: '28px', fontWeight: 700 }}>4</p>
         </div>
         <div style={{ padding: '16px', background: 'var(--bg2)', borderRadius: '8px' }}>
           <p style={{ fontSize: '12px', color: 'var(--t3)' }}>CUMPLIMIENTO</p>

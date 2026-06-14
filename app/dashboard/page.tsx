@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { AlertCircle, Zap } from 'lucide-react';
 
 const PROJECTS = [
@@ -210,10 +211,6 @@ export default function DashboardPage() {
           <p>📋 CRM - Próximamente</p>
         </div>
       )}
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* Pipeline Visualization */}
       <div style={{ padding: '20px', background: 'var(--bg2)', border: '1px solid var(--b)', borderRadius: 'var(--r)' }}>

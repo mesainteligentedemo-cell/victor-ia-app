@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { PRICING_TIERS } from '@/lib/billing/stripe-service';
-import Button from '@/components/ui/Button';
+import { Button } from '@/components/shared/Button';
 
 export function PricingPlans() {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');

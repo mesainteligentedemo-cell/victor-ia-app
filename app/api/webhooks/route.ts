@@ -4,7 +4,7 @@
  *
  * Request body:
  * {
- *   payload: { /* any JSON data */ },
+ *   payload: { ...any JSON data... },
  *   signature: "hex-encoded HMAC-SHA256",
  *   nonce: "UUID v4",
  *   timestamp: "ISO 8601 or milliseconds"
