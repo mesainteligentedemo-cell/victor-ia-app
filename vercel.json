@@ -1,6 +1,9 @@
 {
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
-  "installCommand": "npm install",
-  "framework": "nextjs"
+  "installCommand": "npm install --legacy-peer-deps",
+  "framework": "nextjs",
+  "env": {
+    "NEXT_PUBLIC_AGENTS_COUNT": "142"
+  }
 }
