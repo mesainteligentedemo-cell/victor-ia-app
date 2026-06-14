@@ -3,35 +3,5 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "nodeVersion": "18.x",
-  "env": [
-    {
-      "key": "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
-      "description": "Clerk public key for authentication"
-    },
-    {
-      "key": "CLERK_SECRET_KEY",
-      "description": "Clerk secret key (server-side only)"
-    },
-    {
-      "key": "NEXT_PUBLIC_SUPABASE_URL",
-      "description": "Supabase project URL"
-    },
-    {
-      "key": "ANTHROPIC_API_KEY",
-      "description": "Claude API key"
-    },
-    {
-      "key": "STRIPE_SECRET_KEY",
-      "description": "Stripe secret key"
-    },
-    {
-      "key": "ELEVENLABS_API_KEY",
-      "description": "ElevenLabs API key"
-    },
-    {
-      "key": "HIGGSFIELD_API_KEY",
-      "description": "Higgsfield API key"
-    }
-  ]
+  "nodeVersion": "18.x"
 }

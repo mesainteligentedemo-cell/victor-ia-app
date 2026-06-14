@@ -2,15 +2,18 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, MessageCircle, Zap, Library, BarChart3, BookOpen, Users, Megaphone, TrendingUp, Headphones, Settings, Scale, Trophy, Cpu, HelpCircle } from 'lucide-react';
+import { Home, MessageCircle, Zap, Library, BarChart3, BookOpen, Users, Megaphone, TrendingUp, Headphones, Settings, Scale, Trophy, Cpu, HelpCircle, Wand2, Contact, Network } from 'lucide-react';
 
 const NAVIGATION = [
   { id: 'inicio', label: 'Inicio', icon: Home, href: '/dashboard' },
   { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
   { id: 'separator1', label: '', icon: null, href: '#' },
   { id: 'agentes', label: 'Agentes', icon: Zap, href: '/dashboard/agents' },
+  { id: 'generadores', label: 'Generadores', icon: Wand2, href: '/dashboard/generators' },
   { id: 'biblioteca', label: 'Biblioteca', icon: Library, href: '/dashboard/library' },
+  { id: 'crm', label: 'CRM', icon: Contact, href: '/dashboard/crm' },
   { id: 'dashboard', label: 'Dashboard', icon: BarChart3, href: '/dashboard/analytics' },
+  { id: 'graphify', label: 'Graphify', icon: Network, href: '/dashboard/graphify' },
   { id: 'separator2', label: '', icon: null, href: '#' },
   { id: 'capacitaciones', label: 'Capacitaciones', icon: BookOpen, href: '/dashboard/training' },
   { id: 'recursos', label: 'Recursos Humanos', icon: Users, href: '/dashboard/hr' },
