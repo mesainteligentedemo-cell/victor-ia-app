@@ -5,31 +5,31 @@
 @tailwind utilities;
 
 :root {
-  /* DARK MODE (Default) */
-  --bg: #060609;
-  --bg1: #0C0C12;
-  --bg2: #131317;
-  --bg3: #1b1b1f;
-  --b: rgba(255, 255, 255, 0.09);
-  --b2: rgba(255, 255, 255, 0.2);
-  --p: #FFFFFF;
-  --p2: #F0F0F0;
-  --pd: rgba(255, 255, 255, 0.07);
-  --g: rgba(255, 255, 255, 0.45);
-  --gd: rgba(59, 130, 246, 0.06);
-  --t1: #e5e1e7;
-  --t2: rgba(229, 225, 231, 0.58);
-  --t3: rgba(229, 225, 231, 0.32);
-  --t4: rgba(229, 225, 231, 0.13);
+  /* WHITE-FIRST MINIMALISTA (Default) */
+  --bg: #FFFFFF;
+  --bg1: #FAFAFA;
+  --bg2: #FFFFFF;
+  --bg3: #F5F5F5;
+  --b: rgba(0, 0, 0, 0.08);
+  --b2: rgba(0, 0, 0, 0.12);
+  --p: #000000;
+  --p2: #1A1A1A;
+  --pd: rgba(0, 0, 0, 0.05);
+  --g: rgba(0, 0, 0, 0.45);
+  --gd: rgba(0, 0, 0, 0.04);
+  --t1: #000000;
+  --t2: rgba(0, 0, 0, 0.66);
+  --t3: #666666;
+  --t4: rgba(0, 0, 0, 0.08);
 
-  /* Status Colors */
-  --green: #22C55E;
-  --red: #f87171;
-  --blue: #3B82F6;
-  --orange: #eec04e;
-  --gold: #D8B4FE;
-  --accent: #3B82F6;
-  --accent2: #D8B4FE;
+  /* Status Colors (Neutral) */
+  --green: #059669;
+  --red: #DC2626;
+  --blue: #1A1A1A;
+  --orange: #92400E;
+  --gold: #1A1A1A;
+  --accent: #1A1A1A;
+  --accent2: #666666;
 
   /* Typography */
   --font-display: 'Plus Jakarta Sans', sans-serif;

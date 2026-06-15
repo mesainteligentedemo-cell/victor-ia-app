@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz@0,9..144;1,9..144&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
         </head>
-        <body className="bg-black text-white antialiased">
+        <body className="bg-white text-black antialiased">
           <GSAPInitializer>
             <ErrorBoundary>{children}</ErrorBoundary>
           </GSAPInitializer>
