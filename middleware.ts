@@ -157,8 +157,8 @@ function getSecurityHeaders(): Record<string, string> {
     'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
     'Referrer-Policy': 'strict-origin-when-cross-origin',
     'Permissions-Policy': 'geolocation=(), microphone=(), camera=()',
-    'Content-Security-Policy':
-      "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: blob:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https://fonts.googleapis.com https://fonts.gstatic.com; connect-src 'self' https:; worker-src 'self' blob:; frame-ancestors 'none';",
+    // CSP intentionally omitted here — also disabled in next.config.js while
+    // stabilizing the deployment. Re-enable in BOTH places together once verified.
   };
 }
 
@@ -336,8 +336,13 @@ export default clerkMiddleware(async (auth, request) => {
   const pathname = request.nextUrl.pathname;
 
   // Rutas públicas (sin autenticación requerida)
-  const publicRoutes = ['/sign-in', '/sign-up', '/', '/api/webhooks', '/api/health'];
-  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
+  // OJO: '/' debe ser coincidencia EXACTA; el resto coinciden por prefijo.
+  // Usar startsWith('/') marcaría TODA ruta como pública y desactivaría el auth.
+  const exactPublicRoutes = ['/'];
+  const prefixPublicRoutes = ['/sign-in', '/sign-up', '/api/webhooks', '/api/health'];
+  const isPublicRoute =
+    exactPublicRoutes.includes(pathname) ||
+    prefixPublicRoutes.some(route => pathname.startsWith(route));
 
   // Si es ruta pública, permitir
   if (isPublicRoute) {
