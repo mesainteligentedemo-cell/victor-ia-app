@@ -10,7 +10,7 @@
  */
 
 import { useDeferredValue, useMemo, useState } from 'react';
-import { Search, SlidersHorizontal, Bot } from 'lucide-react';
+import { VictorIcon } from '@/components/Icons/victor-icons/VictorIcons';
 
 import manifestRaw from '@/lib/agents-manifest.json';
 import AgentCategorySection from './AgentCategorySection';
@@ -71,7 +71,7 @@ export default function AgentsGrid() {
       {/* Controls */}
       <div className="vi-agents__controls">
         <div className="vi-agents__search" role="search">
-          <Search size={16} aria-hidden style={{ color: 'var(--t3)' }} />
+          <VictorIcon name="search" size={16} aria-hidden style={{ color: 'var(--t3)' }} />
           <input
             type="text"
             value={query}
@@ -83,7 +83,7 @@ export default function AgentsGrid() {
         </div>
 
         <label className="vi-agents__filter">
-          <SlidersHorizontal size={15} aria-hidden style={{ color: 'var(--t3)' }} />
+          <svg width={15} height={15} viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth={2} strokeLinecap="butt" strokeLinejoin="miter" aria-hidden style={{ color: 'var(--t3)' }}><line x1="4" y1="6" x2="20" y2="6"/><circle cx="8" cy="6" r="2"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="16" cy="12" r="2"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="10" cy="18" r="2"/></svg>
           <span className="vi-agents__filter-label">Categoría</span>
           <select
             value={activeCat}
@@ -103,7 +103,7 @@ export default function AgentsGrid() {
 
       {/* Result meta */}
       <p className="vi-agents__meta">
-        <Bot size={14} aria-hidden />
+        <svg width={14} height={14} viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth={2} strokeLinecap="butt" strokeLinejoin="miter" aria-hidden><rect x="4" y="8" width="16" height="12"/><line x1="9" y1="13" x2="9" y2="13.2"/><line x1="15" y1="13" x2="15" y2="13.2"/><line x1="12" y1="8" x2="12" y2="4"/><line x1="9" y1="4" x2="15" y2="4"/></svg>
         <span>
           <strong>{resultCount}</strong> de {manifest.total} agentes
           {activeCat !== 'all' && ' · 1 categoría'}

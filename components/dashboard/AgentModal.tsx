@@ -11,7 +11,7 @@
  */
 
 import { useCallback, useEffect, useRef } from 'react';
-import { X, Terminal, Cpu, Target, Cog, ExternalLink } from 'lucide-react';
+import { VictorIcon } from '@/components/Icons/victor-icons/VictorIcons';
 import type { Agent } from './agents-types';
 
 export interface AgentModalProps {
@@ -113,25 +113,25 @@ export default function AgentModal({ agent, onClose }: AgentModalProps) {
             onClick={onClose}
             aria-label="Cerrar"
           >
-            <X size={18} aria-hidden />
+            <VictorIcon name="close" size={18} aria-hidden />
           </button>
         </header>
 
         {/* Body */}
         <div className="vi-modal__body">
-          <Block icon={<Cog size={15} />} title="Qué hace" id="vi-modal-what">
+          <Block icon={<svg width={15} height={15} viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth={2} strokeLinecap="butt" strokeLinejoin="miter"><polygon points="12 8 16 12 12 16 8 12"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="5" y1="5" x2="7" y2="7"/><line x1="17" y1="17" x2="19" y2="19"/><line x1="19" y1="5" x2="17" y2="7"/><line x1="7" y1="17" x2="5" y2="19"/></svg>} title="Qué hace" id="vi-modal-what">
             {agent.whatItDoes}
           </Block>
-          <Block icon={<Cpu size={15} />} title="Cómo lo hace">
+          <Block icon={<svg width={15} height={15} viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth={2} strokeLinecap="butt" strokeLinejoin="miter"><rect x="7" y="7" width="10" height="10"/><line x1="9" y1="4" x2="9" y2="7"/><line x1="12" y1="4" x2="12" y2="7"/><line x1="15" y1="4" x2="15" y2="7"/><line x1="9" y1="17" x2="9" y2="20"/><line x1="12" y1="17" x2="12" y2="20"/><line x1="15" y1="17" x2="15" y2="20"/><line x1="4" y1="9" x2="7" y2="9"/><line x1="4" y1="12" x2="7" y2="12"/><line x1="4" y1="15" x2="7" y2="15"/><line x1="17" y1="9" x2="20" y2="9"/><line x1="17" y1="12" x2="20" y2="12"/><line x1="17" y1="15" x2="20" y2="15"/></svg>} title="Cómo lo hace">
             {agent.howItDoes}
           </Block>
-          <Block icon={<Target size={15} />} title="Para qué lo hace">
+          <Block icon={<svg width={15} height={15} viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth={2} strokeLinecap="butt" strokeLinejoin="miter"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>} title="Para qué lo hace">
             {agent.whyItDoes}
           </Block>
 
           <div className="vi-modal__meta">
             <div className="vi-modal__invocation">
-              <Terminal size={14} aria-hidden />
+              <svg width={14} height={14} viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth={2} strokeLinecap="butt" strokeLinejoin="miter" aria-hidden><rect x="3" y="4" width="18" height="16"/><polyline points="7 9 10 12 7 15"/><line x1="12" y1="15" x2="17" y2="15"/></svg>
               <code>{agent.invocation}</code>
             </div>
             <div className="vi-modal__tags">
@@ -151,7 +151,7 @@ export default function AgentModal({ agent, onClose }: AgentModalProps) {
           </button>
           <button type="button" className="vi-modal__btn is-primary" onClick={handleRun}>
             Ejecutar Agente
-            <ExternalLink size={15} aria-hidden />
+            <svg width={15} height={15} viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth={2} strokeLinecap="butt" strokeLinejoin="miter" aria-hidden><polyline points="14 4 20 4 20 10"/><line x1="20" y1="4" x2="11" y2="13"/><polyline points="11 7 4 7 4 20 17 20 17 13"/></svg>
           </button>
         </footer>
       </div>

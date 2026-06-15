@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CheckCircle, AlertCircle, Info, X } from 'lucide-react';
+import { VictorIcon } from '@/components/Icons/victor-icons/VictorIcons';
 
 export interface ToastProps {
   id: string;
@@ -63,17 +63,17 @@ function Toast({ id, type, message, onClose }: ToastProps & { onClose: () => voi
   const getColor = () => {
     switch (type) {
       case 'success':
-        return { bg: 'var(--green)', icon: CheckCircle };
+        return { bg: 'var(--green)', iconName: 'success' as const };
       case 'error':
-        return { bg: 'var(--red)', icon: AlertCircle };
+        return { bg: 'var(--red)', iconName: 'error' as const };
       case 'warning':
-        return { bg: 'var(--orange)', icon: AlertCircle };
+        return { bg: 'var(--orange)', iconName: 'warning' as const };
       default:
-        return { bg: 'var(--blue)', icon: Info };
+        return { bg: 'var(--blue)', iconName: 'info' as const };
     }
   };
 
-  const { bg, icon: Icon } = getColor();
+  const { bg, iconName } = getColor();
 
   return (
     <div
@@ -90,7 +90,7 @@ function Toast({ id, type, message, onClose }: ToastProps & { onClose: () => voi
         minWidth: '280px',
       }}
     >
-      <Icon size={18} />
+      <VictorIcon name={iconName} size={18} />
       <span style={{ fontSize: '13px', fontWeight: 500, flex: 1 }}>{message}</span>
       <button
         onClick={onClose}
@@ -105,7 +105,7 @@ function Toast({ id, type, message, onClose }: ToastProps & { onClose: () => voi
           justifyContent: 'center',
         }}
       >
-        <X size={16} />
+        <VictorIcon name="close" size={16} />
       </button>
     </div>
   );

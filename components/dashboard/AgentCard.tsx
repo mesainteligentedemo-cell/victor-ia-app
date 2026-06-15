@@ -15,8 +15,8 @@
  */
 
 import { memo } from 'react';
-import { ArrowUpRight } from 'lucide-react';
 import { AgentIcon, CATEGORY_ICON } from '@/components/Icons/AgentIcons';
+import { VictorIcon } from '@/components/Icons/victor-icons/VictorIcons';
 import type { Agent } from './agents-types';
 
 export interface AgentCardProps {
@@ -66,7 +66,7 @@ function AgentCardBase({ agent, onOpen }: AgentCardProps) {
 
       <span className="vi-agent-card__more" aria-hidden>
         Ver más
-        <ArrowUpRight size={14} />
+        <VictorIcon name="arrow" size={14} />
       </span>
 
       <style jsx>{`

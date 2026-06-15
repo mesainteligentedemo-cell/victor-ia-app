@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Send, Mic, X } from 'lucide-react';
+import { VictorIcon } from '@/components/Icons/victor-icons/VictorIcons';
 
 interface InputBarProps {
   onSendMessage: (message: string) => void;
@@ -140,7 +140,7 @@ export default function InputBar({ onSendMessage, isLoading }: InputBarProps) {
           }}
           title={isListening ? 'Detener grabación' : 'Iniciar grabación de voz'}
         >
-          {isListening ? <X size={18} /> : <Mic size={18} />}
+          {isListening ? <VictorIcon name="close" size={18} /> : <svg width={18} height={18} viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth={2} strokeLinecap="butt" strokeLinejoin="miter"><rect x="9" y="2" width="6" height="11"/><path d="M5 11 A7 7 0 0 0 19 11"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>}
         </button>
 
         {/* Text Input */}
@@ -201,7 +201,7 @@ export default function InputBar({ onSendMessage, isLoading }: InputBarProps) {
               ⟳
             </div>
           ) : (
-            <Send size={18} />
+            <VictorIcon name="send" size={18} />
           )}
         </button>
       </div>
