@@ -27,9 +27,15 @@ interface SecurityConfig {
 
 let rateLimitStore: RateLimitStore = {};
 
+// Tipado del global para el handle del cleanup interval
+declare global {
+  // eslint-disable-next-line no-var
+  var rateLimitCleanup: ReturnType<typeof setInterval> | undefined;
+}
+
 // Limpiar store cada 5 minutos para evitar memory leak
-if (global.rateLimitCleanup === undefined) {
-  global.rateLimitCleanup = setInterval(() => {
+if (globalThis.rateLimitCleanup === undefined) {
+  globalThis.rateLimitCleanup = setInterval(() => {
     const now = Date.now();
     for (const key in rateLimitStore) {
       if (rateLimitStore[key].blockedUntil && now > rateLimitStore[key].blockedUntil!) {
@@ -220,7 +226,8 @@ async function securityHandler(request: NextRequest) {
   const origin = request.headers.get('origin');
 
   // 1. VALIDACIÓN DE BOTS SOSPECHOSOS
-  if (isSuspiciousBot(userAgent)) {
+  //    Excepción: /api/health debe responder a monitores de uptime y health checks
+  if (pathname !== '/api/health' && isSuspiciousBot(userAgent)) {
     logAccess(clientIP, method, pathname, 403, 0, { allowed: false, remaining: 0 });
     return new NextResponse('Forbidden', { status: 403 });
   }
@@ -329,7 +336,7 @@ export default clerkMiddleware(async (auth, request) => {
   const pathname = request.nextUrl.pathname;
 
   // Rutas públicas (sin autenticación requerida)
-  const publicRoutes = ['/sign-in', '/sign-up', '/', '/api/webhooks'];
+  const publicRoutes = ['/sign-in', '/sign-up', '/', '/api/webhooks', '/api/health'];
   const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
 
   // Si es ruta pública, permitir
