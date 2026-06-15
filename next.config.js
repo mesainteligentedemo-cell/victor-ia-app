@@ -19,10 +19,11 @@ const nextConfig = {
       {
         source: '/(.*)',
         headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: blob:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; connect-src 'self' https:; worker-src 'self' blob:; frame-ancestors 'none';",
-          },
+          // CSP temporarily removed to debug deployment issues
+          // {
+          //   key: 'Content-Security-Policy',
+          //   value: "...",
+          // },
           {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
