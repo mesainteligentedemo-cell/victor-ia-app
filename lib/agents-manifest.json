@@ -2748,7 +2748,7 @@
       "howItDoes": "Cubre tanto creación (componentes, shaders, animación) como cirugía visual (audit de 7 niveles, tipografía, grid 8pt, responsive), consultando design-intelligence.",
       "whyItDoes": "Entrega sitios de vanguardia visual que diferencian a Victor IA en el mercado.",
       "invocation": "/web-4o",
-      "model": "claude-sonnet",
+      "model": "claude-opus",
       "tags": [
         "web4",
         "three-js",
@@ -2784,7 +2784,7 @@
       "howItDoes": "Audita tipografía, espaciado, grid de 8pt, alineaciones, logos y responsive con un checklist de 35 puntos y corrige cada detalle.",
       "whyItDoes": "Eleva interfaces buenas a excelentes, el nivel que distingue trabajo amateur de premium.",
       "invocation": "/pixel-perfecto",
-      "model": "claude-sonnet",
+      "model": "claude-opus",
       "tags": [
         "pixel-perfect",
         "polish",
@@ -2828,6 +2828,27 @@
       ]
     },
     {
+      "id": "design-system-tokens",
+      "category": "diseno-especializado",
+      "categoryLabel": "🎨 Diseño especializado",
+      "name": "Design System & Tokens",
+      "emoji": "🎨",
+      "shortDesc": "Arquitectura de tokens, sistema de diseño escalable",
+      "whatItDoes": "Diseña y documenta sistemas de diseño completos incluyendo tokens (colores, tipografía, espacios, sombras), jerarquías de escala, variables de tema, dark mode, y exportación a múltiples formatos (CSS, Tailwind, Figma tokens). Define convenciones de nomenclatura, cubre edge cases visuales (contrast ratios, accesibilidad), y planifica evolución futura del sistema sin romper existente.",
+      "howItDoes": "Analiza el proyecto visual, define capas de tokens (primitivos → componentes → themes), mapea decisiones de diseño en valores reutilizables, crea documentación en Figma/Storybook, genera código exportable (JSON, CSS variables, Tailwind config), y establece procesos de auditoría visual (coverage, usage stats). Usa design tokens W3C estándar para máxima portabilidad.",
+      "whyItDoes": "Un design system bien architected reduce inconsistencias visuales en 80%, facilita el onboarding de nuevos diseñadores, permite temas dinámicos (light/dark/custom), y escala con SaaS en crecimiento. Sin esto, cada pantalla se rediseña desde cero. Es la base invisible que mantiene coherencia en 100+ componentes.",
+      "invocation": "/design-system-tokens",
+      "model": "claude-opus",
+      "tags": [
+        "design-system",
+        "tokens",
+        "architecture",
+        "consistency",
+        "scalability",
+        "theme"
+      ]
+    },
+    {
       "id": "higgsfield-content-factory",
       "category": "fabrica-de-contenido",
       "categoryLabel": "🏭 Fábrica de Contenido",
@@ -2861,24 +2882,6 @@
         "pwa",
         "ux",
         "tracker"
-      ]
-    },
-    {
-      "id": "perfect-media-deployment",
-      "category": "otros",
-      "categoryLabel": "🧩 Otros",
-      "name": "Perfect Media Deployment",
-      "emoji": "🚀",
-      "shortDesc": "Deploy de media sin fricción",
-      "whatItDoes": "Despliega media (imágenes/videos) sin fricción ni errores en cualquier sitio y framework.",
-      "howItDoes": "Sigue el protocolo universal: optimización con colores exactos, subida a CDN, integración framework-agnostic y validación de 0 errores.",
-      "whyItDoes": "Garantiza que cualquier despliegue de media salga perfecto a la primera.",
-      "invocation": "/perfect-media-deployment",
-      "model": "claude-sonnet",
-      "tags": [
-        "media",
-        "deploy",
-        "cdn"
       ]
     },
     {
