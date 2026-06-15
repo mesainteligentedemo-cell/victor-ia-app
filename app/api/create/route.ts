@@ -57,16 +57,14 @@ async function saveCreation(
     await supabaseAdmin.from('creations').insert({
       id: crypto.randomUUID(),
       user_id: userId,
-      action,
+      action_type: action,                          // matches SQL schema column name
       config,
-      status: result.status,
+      status: result.status === 'success' ? 'completed' : result.status === 'processing' ? 'processing' : 'processing',
       result_url: result.result_url ?? null,
-      html_content: result.html_content
-        ? result.html_content.slice(0, 50_000)
-        : null,
-      job_id: result.job_id ?? null,
+      content: result.html_content                 // SQL column is 'content', not 'html_content'
+        ? { html: result.html_content.slice(0, 50_000), job_id: result.job_id ?? null }
+        : result.job_id ? { job_id: result.job_id } : null,
       metadata: result.metadata ?? {},
-      created_at: new Date().toISOString(),
     });
   } catch {
     // Supabase not connected — ignore silently
