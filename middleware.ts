@@ -60,7 +60,7 @@ const securityConfig: SecurityConfig = {
     'http://127.0.0.1:3000',
   ],
   blockList: new Set<string>(),
-  suspiciousBots: /bot|crawler|spider|scraper|curl|wget|python|java(?!script)|perl|ruby/i,
+  suspiciousBots: /bot|crawler|spider|scraper|java(?!script)/i,
 };
 
 // ==========================================

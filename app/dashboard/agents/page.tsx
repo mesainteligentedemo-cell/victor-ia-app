@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * Dashboard de Agentes — 155 Skills como Agentes Interactivos
  *
