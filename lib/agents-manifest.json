@@ -1,6 +1,6 @@
 {
   "version": "2026-06-14",
-  "total": 155,
+  "total": 157,
   "categories": [
     {
       "slug": "agente-maestro",
@@ -95,7 +95,7 @@
     {
       "slug": "diseno-especializado",
       "label": "🎨 Diseño especializado",
-      "count": 5
+      "count": 8
     },
     {
       "slug": "fabrica-de-contenido",
@@ -2900,6 +2900,48 @@
         "discovery",
         "skills",
         "routing"
+      ]
+    },
+    {
+      "id": "core-web-vitals-optimizer",
+      "category": "diseno-especializado",
+      "categoryLabel": "🎨 Diseño especializado",
+      "name": "Core Web Vitals Optimizer",
+      "emoji": "⚡",
+      "shortDesc": "Optimiza LCP, CLS, FID para máxima velocidad",
+      "whatItDoes": "Reduce tiempos de carga mejorando LCP mediante lazy loading e image optimization, elimina cambios visuales inesperados (CLS) asegurando estabilidad, optimiza interactividad (FID) minimizando JavaScript blocking. Audita bundle size, estrategias de caching, compresión Gzip/Brotli, font loading, y propone cambios concretos con impacto estimado (\"LCP -0.5s\", \"CLS -0.05\"). Usa Next.js Image, dynamic imports, route prefetching, CSS containment, y worker threads.",
+      "howItDoes": "Mide Core Web Vitals en laboratorio (Lighthouse, WebPageTest) y campo (Real User Monitoring via Next.js Analytics), identifica culprits específicos (qué imagen rompe LCP, qué layout shift causa CLS), propone fixes ordenadas por ROI (costo vs impacto), valida mejoras iterativamente ejecutando auditoría post-fix. Documenta cambios en matriz de causas.",
+      "whyItDoes": "Google rankea por Core Web Vitals desde 2021 (page experience signal). Un sitio lento pierde 10% de conversión por cada segundo extra. Diseño premium + carga en 5s = rebote. Este skill cierra la brecha entre \"hermoso\" y \"hermoso + rápido\", protegiendo inversión en diseño.",
+      "invocation": "/core-web-vitals-optimizer",
+      "model": "claude-sonnet",
+      "tags": [
+        "performance",
+        "core-web-vitals",
+        "optimization",
+        "lcp",
+        "cls",
+        "fid"
+      ]
+    },
+    {
+      "id": "cro-ab-testing-ui",
+      "category": "diseno-especializado",
+      "categoryLabel": "🎨 Diseño especializado",
+      "name": "CRO & A-B Testing UI",
+      "emoji": "🧪",
+      "shortDesc": "Experimentos de conversión basados en psicología del usuario",
+      "whatItDoes": "Define hipótesis de conversión basadas en Jobs-to-be-Done, LIFT Model, y persuasion psychology (colores, urgencia, social proof, scarcity). Diseña A/B tests contra métricas explícitas (CTR, conversion rate, LTV, time-on-page) con rigor estadístico (sample size, significance level, power analysis). Analiza resultados identificando winners y losers, propone next experiments basados en learnings. Ejecuta multivariate cuando es apropiado para reducir test count.",
+      "howItDoes": "Audita user journey completo desde landing → conversión, mapea abandonment points (funnel analysis), genera N hipótesis de mejora (\"rojo convierte más que azul porque X psicológico\"), ejecuta tests en paralelo minimizando tiempo, valida significance (p<0.05, minimum sample size), documenta leaderboard de cambios que funcionan. Itera sprint-by-sprint.",
+      "whyItDoes": "Diseño hermoso ≠ diseño que vende. A/B testing separa opinión de data. 2% improvement en conversion rate = $500k-$2M extra en ingresos anuales en SaaS de $10M ARR. Sin CRO, inviertes en diseño premium y luego pierdes ventas por UX friction. Este skill protege el ROI del diseño.",
+      "invocation": "/cro-ab-testing-ui",
+      "model": "claude-opus",
+      "tags": [
+        "cro",
+        "conversion-rate-optimization",
+        "a-b-testing",
+        "psychology",
+        "experimentation",
+        "analytics"
       ]
     }
   ]
