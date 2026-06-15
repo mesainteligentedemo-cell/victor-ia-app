@@ -32,6 +32,8 @@ function NavIcon({ id, size }: { id: string; size: number }) {
       return <svg {...base}><line x1="12" y1="4" x2="12" y2="20"/><line x1="5" y1="8" x2="19" y2="8"/><polyline points="5 8 3 14 7 14 5 8"/><polyline points="19 8 17 14 21 14 19 8"/><line x1="8" y1="20" x2="16" y2="20"/></svg>;
     case 'generadores': // Wand2 — diagonal stick with sparkle lines
       return <svg {...base}><line x1="4" y1="20" x2="16" y2="8"/><polyline points="13 5 16 8"/><line x1="19" y1="3" x2="19" y2="7"/><line x1="17" y1="5" x2="21" y2="5"/></svg>;
+    case 'tracker': // Activity — heartbeat line
+      return <svg {...base}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>;
     case 'crm': // Contact — person silhouette
       return <svg {...base}><polygon points="12 3 15 8 9 8"/><polyline points="4 21 8 12 16 12 20 21"/></svg>;
     case 'graphify': // Network — 3 nodes connected by lines
@@ -49,6 +51,7 @@ const NAVIGATION = [
   { id: 'separator1', label: '', href: '#' },
   { id: 'agentes', label: 'Agentes', href: '/dashboard/agents' },
   { id: 'generadores', label: 'Generadores', href: '/dashboard/generators' },
+  { id: 'tracker', label: 'Tracker', href: '/dashboard/tracker' },
   { id: 'biblioteca', label: 'Biblioteca', href: '/dashboard/library' },
   { id: 'crm', label: 'CRM', href: '/dashboard/crm' },
   { id: 'dashboard', label: 'Dashboard', href: '/dashboard/analytics' },
