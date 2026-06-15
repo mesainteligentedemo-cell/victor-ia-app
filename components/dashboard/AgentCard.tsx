@@ -16,7 +16,7 @@
 
 import { memo } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { AgentIcon, CATEGORY_ICON } from '@/components/icons/AgentIcons';
+import { AgentIcon, CATEGORY_ICON } from '@/components/Icons/AgentIcons';
 import type { Agent } from './agents-types';
 
 export interface AgentCardProps {
