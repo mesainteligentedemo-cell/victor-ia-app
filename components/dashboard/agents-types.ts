@@ -15,8 +15,10 @@ export interface Agent {
   categoryLabel: string;
   /** Display name, e.g. "CEO — Director General". */
   name: string;
-  /** Single representative emoji. */
+  /** Single representative emoji (legacy, kept for backward compat). */
   emoji: string;
+  /** Monochrome SVG icon ID from AgentIcons.tsx (replaces emoji in UI). */
+  iconId?: string;
   /** ~60 char tagline shown on the card. */
   shortDesc: string;
   /** "QUÉ HACE" — 4–5 lines. */
