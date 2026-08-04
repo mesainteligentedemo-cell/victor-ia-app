@@ -1,0 +1,97 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    SETUP RÁPIDO — SUPABASE SQL (5 MIN)                        ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+OBJETIVO: Crear tablas bookings, reminders_sent, webhook_logs en Supabase.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PASO 1: ABRIR SUPABASE
+
+  1. https://app.supabase.com
+  2. Login (email + password)
+  3. Seleccionar proyecto: victor-ia-app
+  4. Sidebar izquierda: SQL Editor (icono consola)
+  5. Click "+ New Query"
+
+RESULTADO ESPERADO: Editor SQL vacío en pantalla
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PASO 2: COPIAR SQL
+
+  1. Abrir archivo: docs/supabase-schema-bookings.sql
+  2. Seleccionar TODO el contenido (Ctrl+A)
+  3. Copiar (Ctrl+C)
+  4. Ir a editor Supabase
+  5. Pegar (Ctrl+V)
+
+RESULTADO ESPERADO: ~250 líneas de SQL en el editor
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PASO 3: EJECUTAR
+
+  Botón azul "▶ RUN" (esquina superior derecha)
+
+  ESPERADO: ✓ Successfully executed 6 commands
+
+  Si ves ERROR:
+    → Ver "Troubleshooting" en: SUPABASE_SETUP_INSTRUCTIONS.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PASO 4: VERIFICAR TABLAS
+
+  Ejecutar en editor Supabase:
+
+    SELECT table_name FROM information_schema.tables
+    WHERE table_schema = 'public'
+    ORDER BY table_name;
+
+  ESPERADO: 3 filas
+    - bookings
+    - reminders_sent
+    - webhook_logs
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PASO 5: VERIFICAR ÍNDICES
+
+  Ejecutar:
+
+    SELECT indexname FROM pg_indexes
+    WHERE tablename = 'bookings'
+    ORDER BY indexname;
+
+  ESPERADO: 6+ índices (idx_bookings_email, idx_bookings_datetime, etc)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PASO 6: VERIFICAR RLS
+
+  Ejecutar:
+
+    SELECT tablename, rowsecurity FROM pg_tables
+    WHERE tablename IN ('bookings', 'reminders_sent', 'webhook_logs');
+
+  ESPERADO: rowsecurity = true para las 3 tablas
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ LISTO
+
+Si completaste los 6 pasos sin errores, tu schema está configurado.
+
+PRÓXIMOS PASOS:
+  1. Llenar variables .env.local (CAL_COM_API_KEY, RESEND_API_KEY, etc)
+  2. Configurar Cal.com webhook
+  3. Testear endpoints API
+  4. Deploy a Vercel
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PARA DETALLES COMPLETOS: Ver SUPABASE_SETUP_INSTRUCTIONS.md
+ERRORES?: Ver Troubleshooting en CAL_COM_INTEGRATION.md
+
+╚══════════════════════════════════════════════════════════════════════════════╝
